@@ -41,53 +41,235 @@
 
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
+				<!-- title slide -->
 				<section>
 					<h2>A brief introduction to machine learning and its potential application to CFD</h2>
 					<p>
-						<small>Andre Weiner, <a href="https://www.mma.tu-darmstadt.de/index/index.en.jsp">Mathematical Modeling and Analysis</a>, Technical University of Darmstadt</small><br>
+						<small>Andre Weiner, <a href="https://www.mma.tu-darmstadt.de/index/index.en.jsp">Mathematical Modeling and Analysis</a> (Chair of Prof. D. Bothe), TU Darmstadt</small><br>
 						<small>Get in touch: <a href="mailto:weiner@mma.tu-darmstadt.de">weiner@mma.tu-darmstadt.de</a></small><br>
 						<small>Slides available at: <a href="https://andreweiner.github.io/reveal.js/ofw2019_slides.html#/">andreweiner.github.io/reveal.js/ofw2019_slides.html</a></small><br>
 						<small>Code and instructions: <a href="https://github.com/AndreWeiner/machine-learning-applied-to-cfd">github.com/AndreWeiner/machine-learning-applied-to-cfd</a></small>
 					</p>
 				</section>
-
+				<!-- warm up questions -->
 				<section>
-					<h2>Hello There</h2>
-					<p>
-						reveal.js enables you to create beautiful interactive slide decks using HTML. This presentation will show you examples of what it can do.
-					</p>
+					<section>
+						<h2>Some warm-up questions</h2>
+						<p>
+						<p style="color:red;">answer by a show of hands</p>
+						</p>
+					</section>
+					<section>
+						<h2>What is machine learning?</h2>
+					</section>
+					<section>
+						<h2>Who has some hands-on experience with machine learning?</h2>
+					</section>
+					<section>
+						<h2>Who uses machine learning professionally?</h2>
+					</section>
+					<section>
+						<h2>Who knows the difference between ...</h2>
+						<p>
+							<ul>
+								<li>Artificial intelligence</li>
+								<li>Machine learning</li>
+								<li>Deep learning</li>
+							</ul>
+						</p>
+						<p> Just different names for the same thing? </p>
+					</section>
+					<section>
+						<h2>Jupyter notebooks</h2>
+						<p> <a href="https://www.anaconda.com/distribution/">learn more</a> </p>
+					</section>
+					<section>
+						<h2>Google Colaboratory "colab"</h2>
+						<p> <a href="https://colab.research.google.com/">learn more</a> </p>
+					</section>
+					<section>
+						<h2>Docker</h2>
+						<p> <a href="https://www.docker.com/why-docker">Why Docker?</a> </p>
+					</section>
+					<section>
+						<h2>Basic Python knowledge</h2>
+					</section>
+					<section>
+						<h2>Do you know <a href="https://pytorch.org/">PyTorch</a>? </h2>
+					</section>
+					<section>
+						<h2>Who is working with PyTorch?</h2>
+					</section>
 				</section>
 
-				<!-- Example of nested vertical slides -->
+				<!-- outline -->
 				<section>
-					<section>
-						<h2>Vertical Slides</h2>
-						<p>Slides can be nested inside of each other.</p>
-						<p>Use the <em>Space</em> key to navigate through all slides.</p>
-						<br>
-						<a href="#" class="navigate-down">
-							<img width="178" height="238" data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
-						</a>
-					</section>
-					<section>
-						<h2>Basement Level 1</h2>
-						<p>Nested slides are useful for adding additional detail underneath a high level horizontal slide.</p>
-					</section>
-					<section>
-						<h2>Basement Level 2</h2>
-						<p>That's it, time to go back up.</p>
-						<br>
-						<a href="#/2">
-							<img width="178" height="238" data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Up arrow" style="transform: rotate(180deg); -webkit-transform: rotate(180deg);">
-						</a>
-					</section>
+					<h2>Outline</h2>
+					<ol>
+						<li>Machine learning terminology <span style="color:red;">~10min</span></li>
+						<li>Classifying stability regions of bubbles <span style="color:red;">~20min</span></li>
+						<li>Learning the shape of a bubble (2D) <span style="color:red;">~10min</span></li>
+						<li>Detecting volume fragments <span style="color:red;">~5min</span></li>
+						<li>Learning the shape of a bubble (4D) <span style="color:red;">~10min</span></li>
+						<li>A PyTorch-based boundary condition <span style="color:red;">~15min</span></li>
+						<li>Disscussion: application of ML in your work <span style="color:red;">~20min</span></li>
+					</ol>
 				</section>
 
 				<section>
-					<h2>Slides</h2>
-					<p>
-						Not a coder? Not a problem. There's a fully-featured visual editor for authoring these, try it out at <a href="https://slides.com" target="_blank">https://slides.com</a>.
-					</p>
+					<section>
+						<h2>Machine learning terminology</h2>
+						<p>Just enough to get you started</p>
+					</section>
+					<section>
+						<h2>Artificial intelligence</h2>
+						<blockquote>
+							&ldquo;[AI is] the theory and development of computer systems able to perform tasks normally requiring human intelligence, such as visual perception, speech recognition, decision-making, and translation between languages.&rdquo; <b>Wikipedia</b>
+						</blockquote>
+					</section>
+					<section data-background-iframe="https://en.wikipedia.org/wiki/Deep_Blue_versus_Garry_Kasparov" data-background-interactive>
+						<div style="position: absolute; width: 40%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 20px; text-align: left;">
+							<p>Deep Blue versus Garry Kasparov</p>
+							<p>Deep Blue was the fist chess computer to beet the world chess champion Garry Kasparov.</p>
+							<p>Source: <a href="https://en.wikipedia.org/wiki/Deep_Blue_versus_Garry_Kasparov">Wikipedia</a></p>
+						</div>
+					</section>
+					<section data-background-iframe="https://mathpix.com/" data-background-interactive>
+						<div style="position: absolute; width: 40%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 20px; text-align: left;">
+							<p>Mathpix</p>
+							<p>Mathpix can tranform images of handwritten notes, PDFs or books to math (LaTex) and text.</p>
+							<p>Source: <a href="https://mathpix.com/">www.mathpix.com</a></p>
+						</div>
+					</section>
+					<section>
+						<h2>Machine learning</h2>
+						<blockquote>
+							&ldquo;Machine learning is the science (and art) of programming computers so they can learn from data.&rdquo; <b>Aurélien Géron</b> (2017)
+						</blockquote>
+					</section>
+					<section>
+						<h2>Machine learning</h2>
+						<blockquote>
+							&ldquo;[Machine Learning s the] field of study that gives computers the ability to learn without being explicitly programmed.&rdquo; <b>Arthur Samuel</b> (1959)
+						</blockquote>
+					</section>
+					<section>
+						<h2>Machine learning</h2>
+						<blockquote>
+							&ldquo;A computer program is said to learn from experience E with respect to some Task T and some performance measure P, it its performance on T, as measured by P, improves with experience E.&rdquo; <b>Tom Mitchel</b> (1997)
+						</blockquote>
+					</section>
+					<section>
+						<p>Onion AI + ML</p>
+					</section>
+					<section>
+						<h2>Deep learning</h2>
+						<p>Definitions, Network picture</p>
+					</section>
+					<section>
+						<p>Onion AI + ML + DL</p>
+					</section>
+
+					<section data-background="images/formula1_car_transparent.png">
+						<h2>Data with labels</h2>
+						<table>
+							<thead>
+								<tr>
+									<th><span style="color:red;">Feature 1</span> $Re$</th>
+									<th><span style="color:red;">Feature 2</span> $A$</th>
+									<th>...</th>
+									<th><span style="color:green;">Label 1</span> $c_d$</th>
+									<th><span style="color:green;">Label 2</span> regime</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>334</td>
+									<td>0.832</td>
+									<td>...</td>
+									<td>0.123</td>
+									<td>laminar</td>
+								</tr>
+								<tr>
+									<td>2934</td>
+									<td>0.943</td>
+									<td>...</td>
+									<td>0.384</td>
+									<td>laminar</td>
+								</tr>
+								<tr>
+									<td>12004</td>
+									<td>1.263</td>
+									<td>...</td>
+									<td>0.573</td>
+									<td>turbulent</td>
+								</tr>
+								<tr>
+									<td>98204</td>
+									<td>2.284</td>
+									<td>...</td>
+									<td>0.834</td>
+									<td>turbulent</td>
+								</tr>
+								<tr>
+									<td>...</td>
+									<td>...</td>
+									<td>...</td>
+									<td>...</td>
+									<td>...</td>
+								</tr>
+							</tbody>
+						</table>
+						<p>Image source: <a href="https://www.flickr.com/photos/kitware/2293740417">Kitware Inc., Flickr</a></p>
+					</section>
+					<section>
+							<h2>Data without labels</h2>
+							<table>
+								<thead>
+									<tr>
+										<th><span style="color:red;">Feature 1</span> $Re$</th>
+										<th><span style="color:red;">Feature 2</span> $A$</th>
+										<th><span style="color:red;">Feature 3</span> $c_d$</th>
+										<th><span style="color:red;">Feature 4</span> regime</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>334</td>
+										<td>0.832</td>
+										<td>0.123</td>
+										<td>laminar</td>
+									</tr>
+									<tr>
+										<td>2934</td>
+										<td>0.943</td>
+										<td>0.384</td>
+										<td>laminar</td>
+									</tr>
+									<tr>
+										<td>12004</td>
+										<td>1.263</td>
+										<td>0.573</td>
+										<td>turbulent</td>
+									</tr>
+									<tr>
+										<td>98204</td>
+										<td>2.284</td>
+										<td>0.834</td>
+										<td>turbulent</td>
+									</tr>
+								</tbody>
+							</table>
+						</section>
+						<section>
+							<h2>Supervised learning</h2>
+						</section>
+						<section>
+							<h2><span style="color:red;">Un</span>supervised learning</h2>
+						</section>
+						<section>
+							<h2>Reinforcement learning</h2>
+						</section>
 				</section>
 
 				<section>
@@ -263,55 +445,6 @@ function Example() {
 				</section>
 
 				<section>
-					<h2>Marvelous List</h2>
-					<ul>
-						<li>No order here</li>
-						<li>Or here</li>
-						<li>Or here</li>
-						<li>Or here</li>
-					</ul>
-				</section>
-
-				<section>
-					<h2>Fantastic Ordered List</h2>
-					<ol>
-						<li>One is smaller than...</li>
-						<li>Two is smaller than...</li>
-						<li>Three!</li>
-					</ol>
-				</section>
-
-				<section>
-					<h2>Tabular Tables</h2>
-					<table>
-						<thead>
-							<tr>
-								<th>Item</th>
-								<th>Value</th>
-								<th>Quantity</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>Apples</td>
-								<td>$1</td>
-								<td>7</td>
-							</tr>
-							<tr>
-								<td>Lemonade</td>
-								<td>$2</td>
-								<td>18</td>
-							</tr>
-							<tr>
-								<td>Bread</td>
-								<td>$3</td>
-								<td>2</td>
-							</tr>
-						</tbody>
-					</table>
-				</section>
-
-				<section>
 					<h2>Clever Quotes</h2>
 					<p>
 						These guys come in two forms, inline: <q cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">The nice thing about standards is that there are so many to choose from</q> and block:
@@ -417,7 +550,8 @@ Reveal.addEventListener( 'customevent', function() {
 					{ src: 'plugin/highlight/highlight.js', async: true },
 					{ src: 'plugin/search/search.js', async: true },
 					{ src: 'plugin/zoom-js/zoom.js', async: true },
-					{ src: 'plugin/notes/notes.js', async: true }
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/math/math.js', async: true }
 				]
 			});
 
