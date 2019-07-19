@@ -107,15 +107,23 @@
 					<h2>Outline</h2>
 					<ol>
 						<li>Machine learning terminology <span style="color:red;">~10min</span></li>
-						<li>Classifying stability regions of bubbles <span style="color:red;">~20min</span></li>
-						<li>Learning the shape of a bubble (2D) <span style="color:red;">~10min</span></li>
-						<li>Detecting volume fragments <span style="color:red;">~5min</span></li>
-						<li>Learning the shape of a bubble (4D) <span style="color:red;">~10min</span></li>
-						<li>A PyTorch-based boundary condition <span style="color:red;">~15min</span></li>
-						<li>Disscussion: application of ML in your work <span style="color:red;">~20min</span></li>
+						<li>Classifying stability regions of bubbles <span style="color:red;">~30min</span></li>
+						<li>Learning the shape of a bubble (4D) <span style="color:red;">~25min</span></li>
+						<li>A PyTorch-based boundary condition <span style="color:red;">~25min</span></li>
+						<hr> </hr>
+						<li>Disscussion: application of ML in your work</li>
+						<li>Learning the shape of a bubble (2D)</li>
+						<li>Detecting volume fragments</li>
 					</ol>
 				</section>
 
+				<!-- questions -->
+				<section>
+					<h2>Its a training ...</h2>
+					<p>Feel free to ask <span style="color:red;">questions</span> at any time!</p>
+				</section>
+
+				<!-- machine learning terminology -->
 				<section>
 					<section>
 						<h2>Machine learning terminology</h2>
@@ -159,6 +167,13 @@
 							&ldquo;A computer program is said to learn from experience E with respect to some Task T and some performance measure P, it its performance on T, as measured by P, improves with experience E.&rdquo; <b>Tom Mitchel</b> (1997)
 						</blockquote>
 					</section>
+					<section>
+						<h2>Machine learning</h2>
+						<blockquote>
+							&ldquo;Tools and algorithm to generate function approximations (mappings) based on examples (function arguments and the corresponding function values).&rdquo; my personal point of view
+						</blockquote>
+					</section>
+
 					<section>
 						<p>Onion AI + ML</p>
 					</section>
@@ -263,6 +278,7 @@
 						</section>
 						<section>
 							<h2>Supervised learning</h2>
+							<p>Label can be continuous or discrete</p>
 						</section>
 						<section>
 							<h2><span style="color:red;">Un</span>supervised learning</h2>
@@ -270,260 +286,93 @@
 						<section>
 							<h2>Reinforcement learning</h2>
 						</section>
-				</section>
-
-				<section>
-					<h2>Point of View</h2>
-					<p>
-						Press <strong>ESC</strong> to enter the slide overview.
-					</p>
-					<p>
-						Hold down the <strong>alt</strong> key (<strong>ctrl</strong> in Linux) and click on any element to zoom towards it using <a href="http://lab.hakim.se/zoom-js">zoom.js</a>. Click again to zoom back out.
-					</p>
-					<p>
-						(NOTE: Use ctrl + click in Linux.)
-					</p>
-				</section>
-
-				<section>
-					<h2>Touch Optimized</h2>
-					<p>
-						Presentations look great on touch devices, like mobile phones and tablets. Simply swipe through your slides.
-					</p>
-				</section>
-
-				<section data-markdown>
-					<script type="text/template">
-						## Markdown support
-
-						Write content using inline or external Markdown.
-						Instructions and more info available in the [readme](https://github.com/hakimel/reveal.js#markdown).
-
-						```
-						<section data-markdown>
-						  ## Markdown support
-
-						  Write content using inline or external Markdown.
-						  Instructions and more info available in the [readme](https://github.com/hakimel/reveal.js#markdown).
+						<section>
+							<h2>ML is interdisciplinary</h2>
+							<p>
+								<ul>
+									<li>data analysis</li>
+									<li>data visualization</li>
+									<li>dimensionality reduction</li>
+									<li>non-linear optimization</li>
+									<li>high-performance computing</li>
+									<li>probabilistic thinking</li>
+									<li>domain knowledge</li>
+									<li>...</li>
+								</ul>
+							</p>
 						</section>
-						```
-					</script>
+						<section>
+							<h2>Why should you use ML?</h2>
+							<h3 class="fragment" style="color:red;">Accuracy</h3>
+							<p class="fragment">and</p>
+							<h3 class="fragment" style="color:red;">Performance</h3>
+							<p class="fragment">Leverage data that is already available!</p>
+						</section>
+						<section>
+							<h2>When should you use ML?</h2>
+							<ul>
+								<li>high dimensional parameter spaces</li>
+								<li>data is avaiable</li>
+								<li>when you can live with small imperfections</li>
+							</ul>
+						</section>
+						<section>
+							<h2>When shouldn't you use ML?</h2>
+							<ul>
+								<li>classical approaches are available</li>
+								<li>available data is insufficient or of low quality</li>
+								<li>when you can <b>not</b> live with small imperfections</li>
+							</ul>
+						</section>
 				</section>
 
+				<!-- Hands-on: Jupyter -->
 				<section>
-					<section id="fragments">
-						<h2>Fragments</h2>
-						<p>Hit the next arrow...</p>
-						<p class="fragment">... to step through ...</p>
-						<p><span class="fragment">... a</span> <span class="fragment">fragmented</span> <span class="fragment">slide.</span></p>
-
-						<aside class="notes">
-							This slide has fragments which are also stepped through in the notes window.
-						</aside>
+					<h2>Hans-on: Jupyter notebooks</h2>
+					<pre><code data-trim data-line-numbers="1,2">
+~$ cd notebooks
+~$ jupyter-notebook
+					</code></pre>
+					<img src="images/jupyter_start_screen.png" alt="Jupyter" width="850", style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<h2>Classifying stability regions of rising bubbles</h2>
+						<img src="" alt="Simulation data" width="850", style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section data-background-video="videos/plic_with_background.ogv">
+					<h2 style="position: absolute;top: -300px;">Learning the shape of a bubble</h2>
+				</section>
+				<section>
+					<section>
+						<h2>A PyTorch-based boundary condition in OpenFOAM&reg;</h2>
+						<p>explain why docker</p>
 					</section>
 					<section>
-						<h2>Fragment Styles</h2>
-						<p>There's different types of fragments, like:</p>
-						<p class="fragment grow">grow</p>
-						<p class="fragment shrink">shrink</p>
-						<p class="fragment fade-out">fade-out</p>
-						<p>
-							<span style="display: inline-block;" class="fragment fade-right">fade-right, </span>
-							<span style="display: inline-block;" class="fragment fade-up">up, </span>
-							<span style="display: inline-block;" class="fragment fade-down">down, </span>
-							<span style="display: inline-block;" class="fragment fade-left">left</span>
-						</p>
-						<p class="fragment fade-in-then-out">fade-in-then-out</p>
-						<p class="fragment fade-in-then-semi-out">fade-in-then-semi-out</p>
-						<p>Highlight <span class="fragment highlight-red">red</span> <span class="fragment highlight-blue">blue</span> <span class="fragment highlight-green">green</span></p>
+						<p>Pull the Docker image and create a container</p>
+						<pre><code data-trim data-line-numbers="1-7">
+# pull the image from Dockerhub
+# (use sudo if your user is not in the docker group)
+~$ docker pull andreweiner/of_pytorch:of1906-py1.1-cpu
+~$ cd ../OpenFOAM
+~$ ls
+apps  cases  runContainer.sh
+~$ ./runContainer
+						</code></pre>
+						<p>Working directory in the container</p>
+						<pre><code data-trim data-line-numbers="1-3">
+weiner@01f4d1ff183a:/home$ ls
+apps  cases  runContainer.sh
+						</code></pre>
 					</section>
-				</section>
 
-				<section id="transitions">
-					<h2>Transition Styles</h2>
-					<p>
-						You can select from different transitions, like: <br>
-						<a href="?transition=none#/transitions">None</a> -
-						<a href="?transition=fade#/transitions">Fade</a> -
-						<a href="?transition=slide#/transitions">Slide</a> -
-						<a href="?transition=convex#/transitions">Convex</a> -
-						<a href="?transition=concave#/transitions">Concave</a> -
-						<a href="?transition=zoom#/transitions">Zoom</a>
-					</p>
-				</section>
-
-				<section id="themes">
-					<h2>Themes</h2>
-					<p>
-						reveal.js comes with a few themes built in: <br>
-						<!-- Hacks to swap themes after the page has loaded. Not flexible and only intended for the reveal.js demo deck. -->
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/black.css'); return false;">Black (default)</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/white.css'); return false;">White</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/league.css'); return false;">League</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/sky.css'); return false;">Sky</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/beige.css'); return false;">Beige</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/simple.css'); return false;">Simple</a> <br>
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/serif.css'); return false;">Serif</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/blood.css'); return false;">Blood</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/night.css'); return false;">Night</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/moon.css'); return false;">Moon</a> -
-						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/solarized.css'); return false;">Solarized</a>
-					</p>
-				</section>
-
-				<section>
-					<section data-background="#dddddd">
-						<h2>Slide Backgrounds</h2>
-						<p>
-							Set <code>data-background="#dddddd"</code> on a slide to change the background color. All CSS color formats are supported.
-						</p>
-						<a href="#" class="navigate-down">
-							<img width="178" height="238" data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
-						</a>
-					</section>
-					<section data-background="https://s3.amazonaws.com/hakim-static/reveal-js/image-placeholder.png">
-						<h2>Image Backgrounds</h2>
-						<pre><code class="hljs html">&lt;section data-background="image.png"&gt;</code></pre>
-					</section>
-					<section data-background="https://s3.amazonaws.com/hakim-static/reveal-js/image-placeholder.png" data-background-repeat="repeat" data-background-size="100px">
-						<h2>Tiled Backgrounds</h2>
-						<pre><code class="hljs html" style="word-wrap: break-word;">&lt;section data-background="image.png" data-background-repeat="repeat" data-background-size="100px"&gt;</code></pre>
-					</section>
-					<section data-background-video="https://s3.amazonaws.com/static.slid.es/site/homepage/v1/homepage-video-editor.mp4,https://s3.amazonaws.com/static.slid.es/site/homepage/v1/homepage-video-editor.webm" data-background-color="#000000">
-						<div style="background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px;">
-							<h2>Video Backgrounds</h2>
-							<pre><code class="hljs html" style="word-wrap: break-word;">&lt;section data-background-video="video.mp4,video.webm"&gt;</code></pre>
-						</div>
-					</section>
-					<section data-background="http://i.giphy.com/90F8aUepslB84.gif">
-						<h2>... and GIFs!</h2>
-					</section>
-				</section>
-
-				<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
-					<h2>Background Transitions</h2>
-					<p>
-						Different background transitions are available via the backgroundTransition option. This one's called "zoom".
-					</p>
-					<pre><code class="hljs javascript">Reveal.configure({ backgroundTransition: 'zoom' })</code></pre>
-				</section>
-
-				<section data-transition="slide" data-background="#b5533c" data-background-transition="zoom">
-					<h2>Background Transitions</h2>
-					<p>
-						You can override background transitions per-slide.
-					</p>
-					<pre><code class="hljs html" style="word-wrap: break-word;">&lt;section data-background-transition="zoom"&gt;</code></pre>
-				</section>
-
-				<section data-background-iframe="https://hakim.se" data-background-interactive>
-					<div style="position: absolute; width: 40%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 20px; text-align: left;">
-						<h2>Iframe Backgrounds</h2>
-						<p>Since reveal.js runs on the web, you can easily embed other web content. Try interacting with the page in the background.</p>
-					</div>
-				</section>
-
-				<section>
-					<h2>Pretty Code</h2>
-					<pre><code class="hljs" data-trim data-line-numbers="4,8-11">
-import React, { useState } from 'react';
-
-function Example() {
-  const [count, setCount] = useState(0);
-
-  return (
-    &lt;div&gt;
-      &lt;p&gt;You clicked {count} times&lt;/p&gt;
-      &lt;button onClick={() =&gt; setCount(count + 1)}&gt;
-        Click me
-      &lt;/button&gt;
-    &lt;/div&gt;
-  );
-}
-					</code></pre>
-					<p>Code syntax highlighting courtesy of <a href="http://softwaremaniacs.org/soft/highlight/en/description/">highlight.js</a>.</p>
-				</section>
-
-				<section>
-					<h2>Clever Quotes</h2>
-					<p>
-						These guys come in two forms, inline: <q cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">The nice thing about standards is that there are so many to choose from</q> and block:
-					</p>
-					<blockquote cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
-						&ldquo;For years there has been a theory that millions of monkeys typing at random on millions of typewriters would
-						reproduce the entire works of Shakespeare. The Internet has proven this theory to be untrue.&rdquo;
-					</blockquote>
-				</section>
-
-				<section>
-					<h2>Intergalactic Interconnections</h2>
-					<p>
-						You can link between slides internally,
-						<a href="#/2/3">like this</a>.
-					</p>
-				</section>
-
-				<section>
-					<h2>Speaker View</h2>
-					<p>There's a <a href="https://github.com/hakimel/reveal.js#speaker-notes">speaker view</a>. It includes a timer, preview of the upcoming slide as well as your speaker notes.</p>
-					<p>Press the <em>S</em> key to try it out.</p>
-
-					<aside class="notes">
-						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
-					</aside>
-				</section>
-
-				<section>
-					<h2>Export to PDF</h2>
-					<p>Presentations can be <a href="https://github.com/hakimel/reveal.js#pdf-export">exported to PDF</a>, here's an example:</p>
-					<iframe data-src="https://www.slideshare.net/slideshow/embed_code/42840540" width="445" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:3px solid #666; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
-				</section>
-
-				<section>
-					<h2>Global State</h2>
-					<p>
-						Set <code>data-state="something"</code> on a slide and <code>"something"</code>
-						will be added as a class to the document element when the slide is open. This lets you
-						apply broader style changes, like switching the page background.
-					</p>
-				</section>
-
-				<section data-state="customevent">
-					<h2>State Events</h2>
-					<p>
-						Additionally custom events can be triggered on a per slide basis by binding to the <code>data-state</code> name.
-					</p>
-					<pre><code class="javascript" data-trim contenteditable style="font-size: 18px;">
-Reveal.addEventListener( 'customevent', function() {
-	console.log( '"customevent" has fired' );
-} );
-					</code></pre>
-				</section>
-
-				<section>
-					<h2>Take a Moment</h2>
-					<p>
-						Press B or . on your keyboard to pause the presentation. This is helpful when you're on stage and want to take distracting slides off the screen.
-					</p>
-				</section>
-
-				<section>
-					<h2>Much more</h2>
-					<ul>
-						<li>Right-to-left support</li>
-						<li><a href="https://github.com/hakimel/reveal.js#api">Extensive JavaScript API</a></li>
-						<li><a href="https://github.com/hakimel/reveal.js#auto-sliding">Auto-progression</a></li>
-						<li><a href="https://github.com/hakimel/reveal.js#parallax-background">Parallax backgrounds</a></li>
-						<li><a href="https://github.com/hakimel/reveal.js#keyboard-bindings">Custom keyboard bindings</a></li>
-					</ul>
 				</section>
 
 				<section style="text-align: left;">
 					<h1>THE END</h1>
-					<p>
-						- <a href="https://slides.com">Try the online editor</a> <br>
-						- <a href="https://github.com/hakimel/reveal.js">Source code &amp; documentation</a>
-					</p>
+					<p><b>Thanks @mma:</b> Dennis Hillenbrand, Dirk Gründing, Johannes Kromer, Mathis Fricke, Matthias Niethammer, Tobias Tolle, Tomislav Marić</p>
+					<p><b>Thanks to you!</b> Let me know what you think!</p>
+					<p>Get in touch: <a href="mailto:weiner@mma.tu-darmstadt.de">weiner@mma.tu-darmstadt.de</a></p>
+					<p><b>Time for discussion ...</b></p>
 				</section>
 
 			</div>
