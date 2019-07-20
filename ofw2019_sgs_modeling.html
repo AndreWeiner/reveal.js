@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Data-driven subgrid-scale modeling for convection-dominated concentration boundary layers</title>
+
+		<meta name="description" content="ofw2019_presentation">
+		<meta name="author" content="Andre Weiner">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/white.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/monokai.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<!-- title slide -->
+				<section>
+					<h2>Data-driven subgrid-scale modeling for convection-dominated concentration boundary layers</h2>
+					<p>
+						<small><a href="mailto:weiner@mma.tu-darmstadt.de">Andre Weiner</a>, Dennis Hillenbrand, Holger Marschall, Dieter Bothe</small><br>
+						<small>Slides available at: <a href="https://andreweiner.github.io/reveal.js/ofw2019_sgs_modeling.html#/">andreweiner.github.io/reveal.js/ofw2019_sgs_modeling.html</a></small>
+					</p>
+
+					<style>
+						.row_logo {
+							display: table;
+						}
+						.column_logo {
+							display: table-cell;
+							vertical-align: middle;
+							text-align: center;
+							width: 50%;
+						}
+						.content_logo {
+							display: inline-block;
+						}
+					</style>
+					<div class="row_logo">
+ 						<div class="column_logo">
+							<div class="content_logo">
+	 							<img src="images/mma_logo.jpg" alt="mma_logo" style="background:none; border:none; box-shadow:none;">
+							</div>
+ 						</div>
+ 						<div class="column_logo">
+							<div class="content_logo">
+	 							<img src="images/spp1740_logo.svg" alt="spp1740_logo" style="background:none; border:none; box-shadow:none;">
+							</div>
+ 						</div>
+					</div>
+				</section>
+
+				<!-- outline -->
+				<section>
+					<h2>Outline</h2>
+					<ol>
+						<li>Mass transfer at rising bubbles</li>
+						<li>Subgrid-scale (SGS) modeling</li>
+						<li>Data-driven SGS modeling</li>
+						<li>Validation</li>
+						<li>Outlook</li>
+						<li>Summary</li>
+					</ol>
+				</section>
+
+				<!-- mass transfer at rising bubbles-->
+				<section>
+					<section>
+					<style>
+						.row_video {
+							display: table;
+							width: 100%;
+						}
+						.column_video {
+							display: table-cell;
+							text-align: center;
+							width: 50%;
+						}
+						.content_video {
+							display: inline-block;
+						}
+					</style>
+						<h2>Mass transfer at rising bubbles</h2>
+						<div class="row_video">
+	 						<div class="column_video">
+								<div class="content_video">
+									<small>water/air: $d_{eq}=3~mm$</small>
+									<video height="400" controls autoplay loop>
+										<source src="videos/b8_mesh_plic.ogv">
+									</video>
+								</div>
+	 						</div>
+	 						<div class="column_video">
+								<div class="content_video">
+									<small>water/air: $d_{eq}=5~mm$</small>
+									<video height="400" controls autoplay loop>
+										<source src="videos/b10_mesh_plic.ogv">
+									</video>
+								</div>
+	 						</div>
+						</div>
+					</section>
+					<section>
+						<h2>High fidelity data for closure models</h2>
+						<p>euler euler, bubble swarms</p>
+					</section>
+					<section>
+						<h2>High Péclet number problem</h2>
+						<p>bilder bc</p>
+					</section>
+				</section>
+
+				<!-- subgrid-scale modeling-->
+				<section>
+					<section>
+						<h2>Subgrid-scale modeling</h2>
+						<p>sketch</p>
+					</section>
+				</section>
+
+				<!-- data-driven modeling -->
+				<section>
+					<section>
+						<h2>Data-driven SGS modeling</h2>
+						<p>workflow</p>
+					</section>
+				</section>
+
+				<!-- validation -->
+				<section>
+					<section>
+						<h2>Validation</h2>
+						<p>results</p>
+					</section>
+				</section>
+
+				<!-- outlook -->
+				<section>
+					<section>
+						<h2>Outlook</h2>
+						<p>advanced validation</p>
+					</section>
+				</section>
+
+				<!-- summary -->
+				<section>
+					<section>
+						<h2>Summary</h2>
+						<p>workflow table</p>
+					</section>
+				</section>
+
+				<!-- end -->
+				<section style="text-align: left;">
+					<h1>THE END</h1>
+					<p>Thank you for your attention!
+					<p>Get in touch: <a href="mailto:weiner@mma.tu-darmstadt.de">weiner@mma.tu-darmstadt.de</a></p>
+					<p>Time for discussion ...</p>
+					<div class="row_logo">
+ 						<div class="column_logo">
+							<div class="content_logo">
+	 							<img src="images/mma_logo.jpg" alt="mma_logo" style="background:none; border:none; box-shadow:none;">
+							</div>
+ 						</div>
+ 						<div class="column_logo">
+							<div class="content_logo">
+	 							<img src="images/spp1740_logo.svg" alt="spp1740_logo" style="background:none; border:none; box-shadow:none;">
+							</div>
+ 						</div>
+					</div>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				center: true,
+				hash: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true },
+					{ src: 'plugin/search/search.js', async: true },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/math/math.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
