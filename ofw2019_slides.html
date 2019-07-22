@@ -369,6 +369,7 @@
 					<section>
 						<h2>Hans-on: Jupyter notebooks</h2>
 						<pre><code data-trim data-line-numbers="1,2">
+~$ git clone https://github.com/AndreWeiner/machine-learning-applied-to-cfd.git
 ~$ cd notebooks
 ~$ jupyter-notebook
 						</code></pre>
@@ -502,10 +503,71 @@ class SimpleClassifier():
 						<img src="images/perceptron_classification.png" alt="perceptron_classification" width="800" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
+						<h2>Conditional probabilities</h2>
+						<p>
+							What is probability of a point $X_i$ to be in region II
+							$$ p(y_i=1|X_i) $$
+						</p>
+						<ul>
+							<li>for points far in region II?</li>
+							<li>for points far in region I?</li>
+							<li>for points close to the decision boundary?</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Sigmoid function</h2>
+						<p>
+							$$ \sigma_i = \sigma (z_i) = \frac{1}{1+e^{-z_i}} $$
+						</p>
 						<img src="images/sigmoid_function.png" alt="sigmoid" width="800" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
 						<img src="images/logit_probabilities.png" alt="data_probabilities" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Maximum likelihood</h2>
+						<p>
+							For all points $i$:
+						</p>
+						<ul>
+							<li>
+								maximize $p(y_i=0|X_i)$ if $X_i$ in I
+							</li>
+							<li>
+								maximize $p(y_i=1|X_i)$ if $X_i$ in II
+							</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Binary cross entropy</h2>
+						<p><small>
+							$$
+  							L(w) = -\frac{1}{N}\sum\limits_{i=1}^N y_i \mathrm{ln}(\hat{y}_i(X_i,w)) + (1-y_i) \mathrm{ln}(1-\hat{y}_i(X_i,w))
+							$$
+							$ \hat{y}_i = \sigma (z(X_i,w)) $
+							$$
+								\frac{\partial L}{\partial w} = -\frac{1}{N}\sum\limits_{i=1}^N (y_i - \hat{y}_i)
+								\begin{pmatrix}Ga^\prime_i\\
+							 		Eo^\prime_i\\
+							 		1
+								\end{pmatrix}
+							$$
+						</small></p>
+					</section>
+					<section>
+						<h2>Logistic regression</h2>
+						<pre class="python"><code data-trim data-line-numbers="5-10">
+class LogClassifier():
+  '''Implemention of a logistic-regression classifier.
+  '''
+  ...
+  def probability(self, X):
+    z = np.dot(np.concatenate((X, np.ones((X.shape[0], 1))), axis=1), self.weights_)
+    return 1.0 / (1.0 + np.exp(-z))
+
+  def predict(self, X):
+    return np.heaviside(self.probability(X) - 0.5, 0.0)
+						</code></pre>
 					</section>
 					<section>
 						<img src="images/logit_loss.png" alt="logit_loss" width="800" style="background:none; border:none; box-shadow:none;">
@@ -514,13 +576,119 @@ class SimpleClassifier():
 						<img src="images/logit_classification.png" alt="logit_classification" width="800" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
+						<h2>Non-linear decision boundaries</h2>
+						<img src="images/path_regime_data.png" alt="regime_data" width="600" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<pre class="python"><code data-trim data-line-numbers="2-3,6-7">
+# classifier to separate region I and II
+classifier_I_II = LogClassifier()
+classifier_I_II.train(X_I_II, y_I_II, tol=0.1)
+...
+# classifier to separate region I and III
+classifier_I_III = LogClassifier()
+classifier_I_III.train(X_I_III, y_I_III, tol=0.05)
+						</code></pre>
 						<img src="images/two_linear_models.png" alt="two_linear_models" width="800" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
+						<h2>Combining linear models</h2>
+						<p>
+							$ \hat{y}_{i,II,III} = \sigma (w_{21}\hat{y}_{i,II} + w_{22}\hat{y}_{i,III} + b_2) $
+						</p>
 						<img src="images/nonlinear_boundary.png" alt="nonlinear_boundary" width="800" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
 						<img src="images/combined_linear_models.svg" alt="combined_models" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Multi-class classification I</h2>
+						<p>
+							One-hot encoding
+						</p>
+						<img src="images/one_hot_encoding.png" alt="one_hot" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Multi-class classification II</h2>
+						<p>
+							Softmax function for class $j$ with $K$ classes
+							$$
+  							p(y_{ij}=1 | X_i) = \frac{e^{z_{ij}}}{\sum_{j=0}^{K-1} e^{z_{ij}}}
+							$$
+						</p>
+					</section>
+					<section>
+						<h2>Multi-class classification III</h2>
+						<p>
+							Categorial cross entropy for point $i$ and class $j$
+							$$
+  							L(w) = -\frac{1}{N} \sum\limits_{j=0}^{K-1}\sum\limits_{i=1}^{N} y_{ij} \mathrm{ln}\left( \hat{y}_{ij} \right)
+							$$
+						</p>
+					</section>
+					<section>
+						<h2>PyTorch</h2>
+						<ul>
+							<li>
+								Deep-learning framework
+							</li>
+							<li>
+								layers, optimizers, automatic diff., ...
+							</li>
+							<li>
+								frontend: Python and C++
+							</li>
+							<li>
+								backend: C++ and Cuda
+							</li>
+							<li><span style="color:red;">
+								easy model serialization
+							</span></li>
+						</ul>
+					</section>
+					<section>
+						<h2>PyTorch classifier</h2>
+						<pre class="python"><code data-trim data-line-numbers="1-15">
+class PyTorchClassifier(nn.Module):
+  '''Multi-layer perceptron with 3 hidden layers.
+  '''
+  def __init__(self, n_features=2, n_classes=5, n_neurons=60, activation=torch.sigmoid):
+    super().__init__()
+    self.activation = activation
+    self.layer_1 = nn.Linear(n_features, n_neurons)
+    self.layer_2 = nn.Linear(n_neurons, n_neurons)
+    self.layer_3 = nn.Linear(n_neurons, n_classes)
+
+  def forward(self, x):
+    x = self.activation(self.layer_1(x))
+    x = self.activation(self.layer_2(x))
+    return F.log_softmax(self.layer_3(x), dim=1)
+						</code></pre>
+					</section>
+					<section>
+						<h2>Training loop</h2>
+						<pre class="python"><code data-trim data-line-numbers="1-20">
+regimeClassifier = PyTorchClassifier()
+# categorial cross entropy taking logarithmic probabilities
+criterion = nn.NLLLoss()
+# stochastic gradient decent: ADAM
+optimizer = optim.Adam(regimeClassifier.parameters(), lr=0.005)
+...
+# convert feature and label arrays into PyTorch tensors
+featureTensor = torch.from_numpy(np.float32(logData[["Ga", "Eo"]].values))
+labelTensor = torch.tensor(y_numeric, dtype=torch.long)
+
+for e in range(1, epochs):
+  optimizer.zero_grad()
+  # run forward pass through the network
+  log_prob = regimeClassifier(featureTensor)
+  # compute cross entropy
+  loss = criterion(log_prob, labelTensor)
+  # compute gradient of the loss function w.r.t. to the model weights
+  loss.backward()
+  # update weights
+  optimizer.step()
+						</code></pre>
 					</section>
 					<section>
 						<img src="images/multiclass_classification.png" alt="multiple_classes" width="800" style="background:none; border:none; box-shadow:none;">
@@ -542,22 +710,211 @@ class SimpleClassifier():
 						</ol>
 					</section>
 					<section>
-						<img src="images/4D_bubble_cartesian_polar_plot.png" alt="bubble_data_plot" width="800" style="background:none; border:none; box-shadow:none;">
+						<h2>The data set</h2>
+						<img src="images/4D_shape_data_set.png" alt="4D_data_set" width="600" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Shape parameterization</h2>
+						<p>
+							$ p(x_i,y_i,z_i,t_i) \rightarrow r(\varphi_i, \vartheta_i, t_i) $
+						</p>
+						<img src="images/4D_bubble_cartesian_polar_plot.png" alt="bubble_data_plot" width="600" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
 						<img src="images/3D_polar_coord_plot.png" alt="3D_polar_plot" width="650" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
+						<h2>Using domain knowledge</h2>
+						<p>
+							The shape will be always roughly ellipsoidal.<br />
+							How can be use this knowledge?
+						</p>
+						<pre class="python"><code data-trim data-line-numbers="1-10">
+def estimate_half_axis(x, y, z):
+  ''' Estimate the half axis of an ellipsoid from a point cloud.'''
+  ...
+  a = 0.5 * (np.amax(x) - np.amin(x))
+  b = 0.5 * (np.amax(y) - np.amin(y))
+  c = 0.5 * (np.amax(z) - np.amin(z))
+  return a, b, c
+						</code></pre>
+					</section>
+					<section>
+						<p>
+							half-axis mapping $ f:\mathbb{R^1}\rightarrow\mathbb{R^3} $
+						</p>
 						<img src="images/aspect_ratio_time.png" alt="aspect_over_time" width="800" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
+							<h2>Function approximator</h2>
+							<pre class="python"><code data-trim data-line-numbers="1-30">
+class SimpleMLP(torch.nn.Module):
+  def __init__(self, n_inputs=1, n_outputs=1, n_layers=1, n_neurons=10, activation=torch.sigmoid, batch_norm=False):
+    super().__init__()
+    self.n_inputs = n_inputs
+    self.n_outputs = n_outputs
+    self.n_layers = n_layers
+    self.n_neurons = n_neurons
+    self.activation = activation
+    ...
+    # input layer to first hidden layer
+    self.layers.append(torch.nn.Linear(self.n_inputs, self.n_neurons))
+    # add more hidden layers if specified
+    if self.n_layers > 1:
+    for hidden in range(self.n_layers-1):
+      self.layers.append(torch.nn.Linear(self.n_neurons, self.n_neurons))
+    # last hidden layer to output layer
+    self.layers.append(torch.nn.Linear(self.n_neurons, self.n_outputs))
+    print("Created model with {} weights.".format(self.model_parameters()))
+
+  def forward(self, x):
+...
+    for i_layer in range(len(self.layers)-1):
+      x = self.activation(self.layers[i_layer](x))
+      return self.layers[-1](x)
+
+  def model_parameters(self):
+    return sum(p.numel() for p in self.parameters() if p.requires_grad)
+							</code></pre>
+					</section>
+					<section>
+							<h2>Training loop</h2>
+							<pre class="python"><code data-trim data-line-numbers="1-40">
+def approximate_function(x_train, y_train, x_val, y_val, model, l_rate=0.001, batch_size=128,
+                         max_iter=1000, path=None, device='cpu', verbose=100):
+  ...
+  # convert numpy arrays to torch tensors
+  x_train_tensor = torch.from_numpy(x_train.astype(np.float32))
+  y_train_tensor = torch.from_numpy(y_train.astype(np.float32))
+  ...
+  # define loss function
+  criterion = torch.nn.MSELoss()
+  # define optimizer
+  optimizer = torch.optim.Adam(params=model.parameters(), lr=l_rate)
+  ...
+  # move model and data to gpu if available
+  model.to(device)
+
+  for e in range(1, max_iter+1):
+    # backpropagation
+    model = model.train()
+    loss_sum_batches = 0.0
+    for b in range(int(n_batches)):
+      x_batch = x_train_tensor[b*batch_size:min(x_train_tensor.shape[0], (b+1)*batch_size)].to(device)
+      y_batch = y_train_tensor[b*batch_size:min(x_train_tensor.shape[0], (b+1)*batch_size)].to(device)
+      optimizer.zero_grad()
+	    output_train = model(x_batch)
+      loss_train = criterion(output_train.squeeze(dim=1), y_batch)
+      loss_train.backward()
+      optimizer.step()
+      loss_sum_batches += loss_train.item()
+      history_train.append(loss_sum_batches / n_batches)
+...
+    if history_train[-1] < best_loss:
+      best_loss = history_train[-1]
+      if path is not None:
+        torch.save(model.state_dict(), path)
+  return model.eval(), np.asarray(history_train), np.asarray(history_val)
+							</code></pre>
+					</section>
+					<section>
+						<pre class="python"><code data-trim data-line-numbers="1-10">
+axis_model = SimpleMLP(n_inputs=1, n_outputs=3, n_layers=2, n_neurons=10,
+                       activation=torch.sigmoid, batch_norm=False)
+...
+axis_model, train_loss, val_loss = \
+     approximate_function(X_train, axis_train, X_val, axis_val,
+        axis_model, max_iter=10000, l_rate=0.01, batch_size=100,
+        path=set_path("3mm_axis_model.pt"), device='cpu', verbose=1000)
+						</code></pre>
 						<img src="images/aspect_ratio_approx.png" alt="aspect_approximation" width="800" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
+						<p>
+							$$ \tilde{r}_i = r_i / r_{elli} $$
+						</p>
+						<pre class="python"><code data-trim data-line-numbers="1-10">
+def ellipsoidal_radius(phi, theta, t, axis_model):
+  '''Compute the radius of an ellipsoid with instantaneous half axis.'''
+...
+  t_tensor = torch.from_numpy(t.astype(np.float32))
+   a, b, c = axis_model(t_tensor).detach().numpy().T
+   radius = np.sqrt(np.square(a * np.sin(phi) * np.cos(theta))
+                  + np.square(b * np.cos(phi))
+                  + np.square(c * np.sin(phi) * np.sin(theta)))
+   return radius
+						</code></pre>
+						<p>
+							Mean/stdev of original radius: 0.5306/0.0938 <br />
+							Mean/stdev of rescaled radius: 0.9090/0.0965<br />
+							Mean/stdev of rescaled radius [0,1]: 0.5877/0.1882
+						</p>
+					</section>
+					<section>
+						<h2>Training, validation, and test data</h2>
+						<pre class="python"><code data-trim data-line-numbers="1-10">
+X = np.vstack([phi, theta, data.t.values]).T
+X_train, X_tv, r_train, r_tv = train_test_split(X, data.rad_01.values, test_size=0.2, random_state=42)
+X_val, X_test, r_val, r_test = train_test_split(X_tv, r_tv, test_size=0.5, random_state=42)
+...
+"The training set contains 934983 points."
+"The validation set contains 116873 points."
+"The test set contains 116873 points."
+						</code></pre>
+					</section>
+					<section>
+						<pre class="python"><code data-trim data-line-numbers="1-10">
+radius_model = SimpleMLP(n_inputs=3, n_outputs=1, n_layers=8, n_neurons=40, activation=torch.relu, batch_norm=False)
+radius_model, train_loss, val_loss = approximate_function(X_train, r_train, X_val, r_val, radius_model, max_iter=1000,
+    l_rate=0.001, batch_size=50000, path=set_path("3mm_radius_model.pt"), device=device, verbose=10)
+						</code></pre>
 						<img src="images/4D_shape_loss.png" alt="shape_loss" width="800" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
+						<p>
+							Test set: aximum/mean relative error 4.42/0.29 %
+						</p>
 						<img src="images/radius_error.png" alt="radius_error" width="1000" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Final model</h2>
+						<pre class="python"><code data-trim data-line-numbers="1-30">
+class ShapeModel(torch.nn.Module):
+  def __init__(self, axis_model, radius_model, rs_min, rs_max,):
+  super().__init__()
+  self.axis_model = axis_model
+  self.radius_model = radius_model
+  self.rs_min = torch.tensor(rs_min, dtype=torch.float32)
+  self.rs_max = torch.tensor(rs_max, dtype=torch.float32)
+
+  def forward(self, x):
+    # scaled model radius
+    rs = self.radius_model(x).squeeze(1)
+    # ellipsoidal radius
+    re = self.ellipsoidal_radius(x)
+    # transform back
+    r = (rs * (self.rs_max - self.rs_min) + self.rs_min) * re
+    return r
+
+  def ellipsoidal_radius(self, x):
+    axis = self.axis_model(x[:,2].unsqueeze(-1))
+    re = torch.sqrt(
+         (axis[:,0] * torch.sin(x[:,0]) * torch.cos(x[:,1]))**2
+       + (axis[:,1] * torch.cos(x[:,0]))**2
+       + (axis[:,2] * torch.sin(x[:,0]) * torch.sin(x[:,1]))**2
+       )
+    return re
+						</code></pre>
+					</section>
+					<section>
+						<h2>Tracing the model</h2>
+						<pre class="python"><code data-trim data-line-numbers="1-30">
+traced_shape_model = torch.jit.trace(shape_model, X_0_tensor[0].unsqueeze(0))
+traced_shape_model.save(set_path("shape_model.pt"))
+						</code></pre>
+						<p>
+							It is really that simple!
+						</p>
 					</section>
 				</section>
 
@@ -565,7 +922,15 @@ class SimpleClassifier():
 				<section>
 					<section>
 						<h2>A PyTorch-based boundary condition in OpenFOAM&reg;</h2>
-						<p>explain why docker</p>
+					</section>
+					<section>
+						<h2>Why a Docker image?</h2>
+						<p>
+							Compiling OF + PyTorch requires to re-compile OF with<br />
+							<b>-D_GLIBCXX_USE_CXX11_ABI=0</b><br />
+							For details, check out the <a href="https://github.com/AndreWeiner/of_pytorch_docker">Github repo</a> for the Dockerfile.
+						</p>
+
 					</section>
 					<section>
 						<p>Pull the Docker image and create a container</p>
@@ -655,7 +1020,64 @@ void pyTorchDisplacementPointPatchVectorField::updateCoeffs()
 }
 						</code></pre>
 					</section>
-
+					<section>
+						<h2>Compile the BC</h2>
+						<pre class="bash"><code data-trim data-line-numbers="1-20">
+EXE_INC = \
+... \
+-I$(TORCH_LIBRARIES)/include \
+-I$(TORCH_LIBRARIES)/include/torch/csrc/api/include
+...
+EXE_LIBS = \
+...\
+-rdynamic \
+-Wl,-rpath,$(TORCH_LIBRARIES)/lib $(TORCH_LIBRARIES)/lib/libtorch.so $(TORCH_LIBRARIES)/lib/libc10.so \
+-Wl,--no-as-needed,$(TORCH_LIBRARIES)/lib/libcaffe2.so \
+-Wl,--as-needed $(TORCH_LIBRARIES)/lib/libc10.so \
+-lpthread
+						</code></pre>
+						<pre class="bash"><code data-trim data-line-numbers="1">
+~$ wmake
+						</code></pre>
+						<p>
+							Don't worry about the warning messages!
+						</p>
+					</section>
+					<section>
+						<h2>moving_boundary</h2>
+						<pre class="bash"><code data-trim data-line-numbers="1-3">
+~$ cd ../../cases/moving_boundary
+~$ ls
+0  Allclean  Allrun  constant  shape_model.pt  system
+						</code></pre>
+						<p>
+							system/controlDict
+						</p>
+						<pre class="cpp"><code data-trim data-line-numbers="1-3">
+libs ( "libPyTorchMotion.so");
+						</code></pre>
+						<p>
+							0/pointDisplacement
+						</p>
+						<pre class="cpp"><code data-trim data-line-numbers="1-10">
+wall
+{
+  type     pyTorchDisplacement;
+  center   (0 0 0);
+  model    "shape_model.pt";
+  value    uniform (0 0 0);
+}
+						</code></pre>
+					</section>
+					<section>
+						<h2>Clip of initial mesh</h2>
+						<img src="images/initial_sphere_mesh.png" alt="initial_mesh" width="500" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<video height="600px" controls autoplay loop>
+							<source src="videos/mesh_deformation.ogv">
+						</video>
+					</section>
 				</section>
 
 				<section style="text-align: left;">
