@@ -391,6 +391,7 @@
 				<section>
 					<section>
 						<h2>Classifying stability regions of rising bubbles</h2>
+						<p style="color:red;">path_regime_classification.ipynb</p>
 					</section>
 					<section>
 						<img src="images/path_regimes.png" alt="path_regimes" width="700" style="background:none; border:none; box-shadow:none;">
@@ -400,10 +401,102 @@
 						<img src="images/path_regime_data.png" alt="regime_data" width="800" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
+						<h2>Manual binary classification</h2>
+						<p>For now, consider only regions I and II.</p>
+						<p>$$ z(Ga^\prime, Eo^\prime) = w_1Ga^\prime + w_2Eo^\prime + b $$</p>
+						<p>$ Ga^\prime = log(Ga) $, $ Eo^\prime = log(Eo) $</p>
+						<p>
+							$$
+								H(z (Ga^\prime, Eo^\prime)) = \left\{\begin{array}{lr}
+						    0, & \text{if } z \leq 0\\
+						    1, & \text{if } z \gt 0
+						    \end{array}\right.
+							$$
+						</p>
+					</section>
+					<section>
+						<p>$ w_1=8.0 $, $ w_2=1.0 $, $b=-12.0$</p>
 						<img src="images/manual_binary_classification.png" alt="Jupyter" width="800" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
+						<h2>Performance metric I</h2>
+						<p>True label:
+							$$
+								y_i = \left\{\begin{array}{lr}
+						    0, & \text{for region I }\\
+						    1, & \text{for region II}
+						    \end{array}\right.
+							$$
+						</p>
+						<p>Predicted label:
+							$$
+								\hat{y}_i = H(z) = \left\{\begin{array}{lr}
+						    0, & \text{if } z < 0\\
+						    1, & \text{if } z \ge 0
+						    \end{array}\right.
+							$$
+						</p>
+					</section>
+					<section>
+						<h2>Performance metric II</h2>
+						<p>Linearly weighted inputs
+							$$
+								z_i=z(X_i)=\sum\limits_{j=1}^{N_f}w_jX_{ij}+b
+							$$
+						</p>
+						<p>with
+							$$
+								X_i = \left[ Ga^\prime_i, Eo^\prime_i \right],\quad w = \left[ w_1, w_2 \right]^T
+							$$
+						</p>
+					</section>
+					<section>
+						<h2>Performance metric III</h2>
+						<p>Loss function
+							$$
+								L(w) = \frac{1}{2}\sum\limits_{i=1}^N \left(y_i - \hat{y}_i(X_i,w) \right)^2
+							$$
+						</p>
+						<p>The term in parenthesis can take the values<br>$1$, $0$, or $-1$.</p>
+					</section>
+					<section>
+						<h2>Gradient decent</h2>
+						<p>Simple update rule for the weights <small>
+							$$
+								w^{n+1} = w^n - \eta \frac{\partial L(w)}{\partial w} =
+								\begin{pmatrix}w_1^n\\
+									w_2^n\\
+									b^n
+								\end{pmatrix} + \eta
+								\sum\limits_{i=1}^N \left(y_i - \hat{y}_i(X_i,w^n) \right)
+								\begin{pmatrix}Ga^\prime_i\\
+									Eo^\prime_i\\
+									1
+								\end{pmatrix}
+							$$</small>
+						</p>
+						<p>$\eta$ - learning rate</p>
+					</section>
+					<section>
+						<h2>Perceptron algorithm</h2>
+						<pre class="python"><code data-trim data-line-numbers="5-11">
+class SimpleClassifier():
+  '''Implementation of a simple *perceptron* and the perceptron learning rule.
+  '''
+  ...
+  def train(self, X, y):
+    for e in range(self.epochs_):
+      self.weights_ += self.eta_ * self.lossGradient(X, y)
+      self.loss_.append(self.loss(X, y))
+      if self.loss_[-1] < 1.0E-6:
+        print("Training converged after {} epochs.".format(e))
+        break
+						</code></pre>
+					</section>
+					<section>
 						<img src="images/perceptron_loss.png" alt="perceptron_loss" width="800" style="background:none; border:none; box-shadow:none;">
+						<p>Why is the loss changing so randomly?
+						<p>What would happen if the data was not linearly separable?</p>
 					</section>
 					<section>
 						<img src="images/perceptron_classification.png" alt="perceptron_classification" width="800" style="background:none; border:none; box-shadow:none;">
@@ -442,6 +535,7 @@
 					<section>
 						<h2>GPU support in colab</h2>
 						<ol>
+							<li><span style="color:red;">4D_shape_approximation.ipynb</span></li>
 							<li>Edit -> Notebook settings</li>
 							<li>Hardware accelerator -> select GPU</li>
 							<li>Check: <b>Executing PyTorch operations using cuda.</b></li>
