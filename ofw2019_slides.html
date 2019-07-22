@@ -137,7 +137,7 @@
 						<li>Learning the shape of a bubble (4D) <span style="color:red;">~25min</span></li>
 						<li>A PyTorch-based boundary condition <span style="color:red;">~25min</span></li>
 						<hr> </hr>
-						<li>Disscussion: application of ML in your work</li>
+						<li>Discussion: application of ML in your work</li>
 						<li>Learning the shape of a bubble (2D)</li>
 						<li>Detecting volume fragments</li>
 					</ol>
@@ -184,31 +184,34 @@
 					<section>
 						<h2>Machine learning (ML)</h2>
 						<blockquote>
-							&ldquo;[Machine Learning s the] field of study that gives computers the ability to learn without being explicitly programmed.&rdquo; <b>Arthur Samuel</b> (1959)
+							&ldquo;[Machine Learning is the] field of study that gives computers the ability to learn without being explicitly programmed.&rdquo; <b>Arthur Samuel</b> (1959)
 						</blockquote>
 					</section>
 					<section>
 						<h2>Machine learning (ML)</h2>
 						<blockquote>
-							&ldquo;A computer program is said to learn from experience E with respect to some Task T and some performance measure P, it its performance on T, as measured by P, improves with experience E.&rdquo; <b>Tom Mitchel</b> (1997)
+							&ldquo;A computer program is said to learn from experience E with respect to some Task T and some performance measure P, if its performance on T, as measured by P, improves with experience E.&rdquo; <b>Tom Mitchel</b> (1997)
 						</blockquote>
 					</section>
 					<section>
 						<h2>Machine learning (ML)</h2>
 						<blockquote>
-							&ldquo;Tools and algorithm to generate function approximations (mappings) based on examples (function arguments and the corresponding function values).&rdquo; my personal point of view
+							&ldquo;Tools and algorithms to generate function approximations (mappings) based on examples (function arguments and the corresponding function values).&rdquo; my personal point of view
 						</blockquote>
 					</section>
 
 					<section>
-						<p>Onion AI + ML</p>
+						<img src="images/ai_ml_onion.svg" alt="AI ML onion" width="850" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
 						<h2>Deep learning (DL)</h2>
-						<p>Definitions, Network picture</p>
+						<blockquote>
+							&ldquo;Tools and algorithms to create and optimize deep neural networks.&rdquo;
+						</blockquote>
+						<img src="images/combined_linear_models.svg" alt="Neural Network" width="450" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
-						<p>Onion AI + ML + DL</p>
+						<img src="images/ai_ml_dl_onion.svg" alt="AI ML DL onion" width="850" style="background:none; border:none; box-shadow:none;">
 					</section>
 
 					<section data-background="images/formula1_car_transparent.png">
@@ -304,17 +307,21 @@
 						</section>
 						<section>
 							<h2>Supervised learning</h2>
-							<p>Label can be continuous or discrete</p>
+							<p>Learning based on pairs of <b>features</b> and <b>labels</b></p>
+							<img src="images/regression_classification_web.svg" alt="Regression and Classification" width="800" style="background:none; border:none; box-shadow:none;">
 						</section>
 						<section>
 							<h2><span style="color:red;">Un</span>supervised learning</h2>
+							<p>Finding groups of similar data points</b></p>
+							<img src="images/clustering_web.svg" alt="Clustering" width="800" style="background:none; border:none; box-shadow:none;">
 						</section>
 						<section>
 							<h2>Reinforcement learning</h2>
+							<img src="images/reinforcement_web.svg" alt="Reinforcement" width="800" style="background:none; border:none; box-shadow:none;">
 						</section>
 						<section>
 							<h2>Active flow control for drag reduction</h2>
-							<img src="videos/2D_flow_control.gif" alt="flow_control" width="700", style="background:none; border:none; box-shadow:none;">
+							<img src="videos/2D_flow_control.gif" alt="flow_control" width="700" style="background:none; border:none; box-shadow:none;">
 							<p>Source: Jean Rabault et al., <a href="https://github.com/jerabaul29/Cylinder2DFlowControlDRL"> check out the code!</a></p>
 						</section>
 						<section>
@@ -334,10 +341,10 @@
 						</section>
 						<section>
 							<h2>Why should you use ML?</h2>
-							<h3 class="fragment" style="color:red;">Accuracy</h3>
-							<p class="fragment">and</p>
-							<h3 class="fragment" style="color:red;">Performance</h3>
-							<p class="fragment">Leverage data that is already available!</p>
+							<h3 style="color:red;">Accuracy</h3>
+							<p>and</p>
+							<h3 style="color:red;">Performance</h3>
+							<p>Leverage data that is already available!</p>
 						</section>
 						<section>
 							<h2>When should you use DL?</h2>
@@ -365,25 +372,102 @@
 ~$ cd notebooks
 ~$ jupyter-notebook
 						</code></pre>
-						<img src="images/jupyter_start_screen.png" alt="Jupyter" width="850", style="background:none; border:none; box-shadow:none;">
+						<img src="images/jupyter_start_screen.png" alt="Jupyter" width="850" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
+						<small>
 						<ol>
 							<li><a href="https://colab.research.google.com">Go to colab.research.google.com</a></li>
 							<li>Switch to the GITHUB tab</li>
 							<li>Search for <b>AndreWeiner</b></li>
-							<li>Select the repository <b>machine-learning-applied-to-cfd</b></li>
+							<li>Select the repository <b>machine-learning-applied-...</b></li>
 						</ol>
-						<img src="images/colab_import_from_github.png" alt="Jupyter" width="100", style="background:none; border:none; box-shadow:none;">
+						</small>
+						<img src="images/colab_import_from_github.png" alt="Jupyter" width="800" style="background:none; border:none; box-shadow:none;">
 					</section>
 				</section>
+
+				<!-- classification example -->
 				<section>
-					<h2>Classifying stability regions of rising bubbles</h2>
-						<img src="" alt="Simulation data" width="850", style="background:none; border:none; box-shadow:none;">
+					<section>
+						<h2>Classifying stability regions of rising bubbles</h2>
+					</section>
+					<section>
+						<img src="images/path_regimes.png" alt="path_regimes" width="700" style="background:none; border:none; box-shadow:none;">
+						<p>Source: <a href="https://www.nature.com/articles/ncomms7268">M. K. Tripathi et al. 2015,</a> figure 1.</p>
+					</section>
+					<section>
+						<img src="images/path_regime_data.png" alt="regime_data" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<img src="images/manual_binary_classification.png" alt="Jupyter" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<img src="images/perceptron_loss.png" alt="perceptron_loss" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<img src="images/perceptron_classification.png" alt="perceptron_classification" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<img src="images/sigmoid_function.png" alt="sigmoid" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<img src="images/logit_probabilities.png" alt="data_probabilities" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<img src="images/logit_loss.png" alt="logit_loss" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<img src="images/logit_classification.png" alt="logit_classification" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<img src="images/two_linear_models.png" alt="two_linear_models" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<img src="images/nonlinear_boundary.png" alt="nonlinear_boundary" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<img src="images/combined_linear_models.svg" alt="combined_models" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<img src="images/multiclass_classification.png" alt="multiple_classes" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
 				</section>
-				<section data-background-video="videos/plic_with_background.ogv">
-					<h2 style="position: absolute;top: -300px;">Learning the shape of a bubble</h2>
+
+				<!-- regression example -->
+				<section>
+					<section data-background-video="videos/plic_with_background.ogv">
+						<h2 style="position: absolute;top: -300px;">Learning the shape of a bubble</h2>
+					</section>
+					<section>
+						<h2>GPU support in colab</h2>
+						<ol>
+							<li>Edit -> Notebook settings</li>
+							<li>Hardware accelerator -> select GPU</li>
+							<li>Check: <b>Executing PyTorch operations using cuda.</b></li>
+						</ol>
+					</section>
+					<section>
+						<img src="images/4D_bubble_cartesian_polar_plot.png" alt="bubble_data_plot" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<img src="images/3D_polar_coord_plot.png" alt="3D_polar_plot" width="650" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<img src="images/aspect_ratio_time.png" alt="aspect_over_time" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<img src="images/aspect_ratio_approx.png" alt="aspect_approximation" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<img src="images/4D_shape_loss.png" alt="shape_loss" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<img src="images/radius_error.png" alt="radius_error" width="1000" style="background:none; border:none; box-shadow:none;">
+					</section>
 				</section>
+
+				<!-- PyTorch and OpenFOAM -->
 				<section>
 					<section>
 						<h2>A PyTorch-based boundary condition in OpenFOAM&reg;</h2>
@@ -391,7 +475,7 @@
 					</section>
 					<section>
 						<p>Pull the Docker image and create a container</p>
-						<pre><code data-trim data-line-numbers="1-7">
+						<pre class="bash"><code data-trim data-line-numbers="1-7">
 # pull the image from Dockerhub
 # (use sudo if your user is not in the docker group)
 ~$ docker pull andreweiner/of_pytorch:of1906-py1.1-cpu
@@ -401,9 +485,80 @@ apps  cases  runContainer.sh
 ~$ ./runContainer
 						</code></pre>
 						<p>Working directory in the container</p>
-						<pre><code data-trim data-line-numbers="1-3">
+						<pre class="bash"><code data-trim data-line-numbers="1-3">
 weiner@01f4d1ff183a:/home$ ls
 apps  cases  runContainer.sh
+						</code></pre>
+					</section>
+					<section>
+						<p>First things first</p>
+						<pre class="bash"><code data-trim data-line-numbers="1-3">
+~$ source /opt/OpenFOAM/OpenFOAM-v1906/etc/bashrc
+~$ cd apps/pyTorchDisplacement/
+						</code></pre>
+						<p>In pyTorchDisplacementPointPatchVectorField.H</p>
+						<pre class="cpp"><code data-trim data-line-numbers="1-6">
+#include &lt;torch/script.h&gt;
+...
+// private data
+vector center_;
+word model_name_;
+std::shared_ptr&lt;torch::jit::script::Module&gt; pyTorch_model_;
+						</code></pre>
+					</section>
+					<section>
+						<p>In pyTorchDisplacementPointPatchVectorField.C</p>
+						<pre class="cpp"><code data-trim data-line-numbers="8-12">
+pyTorchDisplacementPointPatchVectorField::
+pyTorchDisplacementPointPatchVectorField
+(
+...
+)
+:
+  fixedValuePointPatchField&lt;vector&gt;(p, iF, dict),
+  center_(dict.lookup("center")),
+  model_name_(dict.lookupOrDefault&lt;word&gt;("model", "shape_model.pt"))
+{
+  pyTorch_model_ = torch::jit::load(model_name_);
+  assert(pyTorch_model_ != nullptr);
+  ...
+}
+						</code></pre>
+					</section>
+					<section>
+						<p>In pyTorchDisplacementPointPatchVectorField.C</p>
+						<pre class="cpp"><code data-trim data-line-numbers="4,16-18,20-23,27-28">
+void pyTorchDisplacementPointPatchVectorField::updateCoeffs()
+{
+  ...
+  torch::Tensor featureTensor = torch::ones({localPoints.size(), 3});
+  forAll(localPoints, i)
+  {
+    scalar pi = constant::mathematical::pi;
+    vector x = localPoints[i] - center_;
+    scalar r = sqrt(x & x);
+    scalar phi = acos(x.y() / r);
+    scalar theta = std::fmod((atan2(x.x(), x.z()) + pi), pi);
+    if (x.x() &lt; 0.0)
+    {
+      phi = 2.0 * pi - phi;
+    }
+    featureTensor[i][0] = phi;
+    featureTensor[i][1] = theta;
+    featureTensor[i][2] = t.value();
+  }
+  std::vector&lt;torch::jit::IValue&gt; modelFeatures{featureTensor};
+  torch::Tensor radTensor = pyTorch_model_-&gt;forward(modelFeatures).toTensor();
+  auto radAccessor = radTensor.accessor&lt;float,1&gt;();
+  vectorField result(localPoints.size(), Zero);
+  forAll(result, i)
+  {
+  vector x = localPoints[i] - center_;
+  result[i] = x / mag(x) * (radAccessor[i] - mag(x));
+  }
+  Field&lt;vector&gt;::operator=(result);
+  ...
+}
 						</code></pre>
 					</section>
 

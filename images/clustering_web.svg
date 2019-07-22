@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg width="110.99mm" height="51.554mm" version="1.1" viewBox="0 0 110.99 51.554" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <defs>
+  <marker id="marker1379" overflow="visible" orient="auto">
+   <path transform="scale(-.6)" d="m8.7186 4.0337-10.926-4.0177 10.926-4.0177c-1.7455 2.3721-1.7354 5.6175-6e-7 8.0354z" fill-rule="evenodd" stroke="#000" stroke-linejoin="round" stroke-width=".625"/>
+  </marker>
+  <marker id="marker1209" overflow="visible" orient="auto">
+   <path transform="scale(-.6)" d="m8.7186 4.0337-10.926-4.0177 10.926-4.0177c-1.7455 2.3721-1.7354 5.6175-6e-7 8.0354z" fill-rule="evenodd" stroke="#000" stroke-linejoin="round" stroke-width=".625"/>
+  </marker>
+  <marker id="Arrow2Mend" overflow="visible" orient="auto">
+   <path transform="scale(-.6)" d="m8.7186 4.0337-10.926-4.0177 10.926-4.0177c-1.7455 2.3721-1.7354 5.6175-6e-7 8.0354z" fill-rule="evenodd" stroke="#000" stroke-linejoin="round" stroke-width=".625"/>
+  </marker>
+ </defs>
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g transform="translate(-26.026 -3.4221)">
+  <path d="m31.75 49.615v-39.688" fill="none" marker-end="url(#Arrow2Mend)" stroke="#000" stroke-width=".5"/>
+  <path d="m31.75 49.615h43.656" fill="none" marker-end="url(#marker1209)" stroke="#000" stroke-width=".5"/>
+  <g fill="#000000" font-family="Sans" font-size="4.9389px" letter-spacing="0px" stroke-width=".26458px" word-spacing="0px">
+   <text x="50.190926" y="53.436268" style="line-height:125%" xml:space="preserve"><tspan x="50.190926" y="53.436268" stroke-width=".26458px">x</tspan></text>
+   <text transform="rotate(-90)" x="-32.343552" y="29.77846" style="line-height:125%" xml:space="preserve"><tspan x="-32.343552" y="29.77846" stroke-width=".26458px">y</tspan></text>
+   <text x="35.945724" y="7.1744776" style="line-height:125%" xml:space="preserve"><tspan x="35.945724" y="7.1744776" stroke-width=".26458px">unlabeled data</tspan></text>
+  </g>
+  <g>
+   <circle cx="38.324" cy="44.217" r="1.3229"/>
+   <circle cx="41.397" cy="45.42" r="1.3229"/>
+   <circle cx="40.061" cy="30.319" r="1.3229"/>
+   <circle cx="42.466" cy="32.457" r="1.3229"/>
+   <circle cx="64.382" cy="22.434" r="1.3229"/>
+   <circle cx="63.848" cy="19.361" r="1.3229"/>
+   <circle cx="67.189" cy="20.964" r="1.3229"/>
+   <circle cx="68.659" cy="17.49" r="1.3229"/>
+   <circle cx="71.732" cy="18.559" r="1.3229"/>
+  </g>
+  <path d="m92.604 49.615v-39.688" fill="none" marker-end="url(#marker1379)" stroke="#000" stroke-width=".5"/>
+  <path d="m92.604 49.615h43.656" fill="none" marker-end="url(#marker1209)" stroke="#000" stroke-width=".5"/>
+  <g fill="#000000" font-family="Sans" font-size="4.9389px" letter-spacing="0px" stroke-width=".26458px" word-spacing="0px">
+   <text x="111.04508" y="53.302631" style="line-height:125%" xml:space="preserve"><tspan x="111.04508" y="53.302631" stroke-width=".26458px">x</tspan></text>
+   <text transform="rotate(-90)" x="-32.209919" y="90.498993" style="line-height:125%" xml:space="preserve"><tspan x="-32.209919" y="90.498993" stroke-width=".26458px">y</tspan></text>
+   <text x="100.80893" y="7.1744776" style="line-height:125%" xml:space="preserve"><tspan x="100.80893" y="7.1744776" stroke-width=".26458px">Clustering</tspan></text>
+  </g>
+  <g>
+   <circle cx="64.917" cy="27.245" r="1.3229"/>
+   <circle cx="64.382" cy="24.172" r="1.3229"/>
+   <circle cx="67.723" cy="25.775" r="1.3229"/>
+   <circle cx="69.193" cy="22.301" r="1.3229"/>
+   <circle cx="72.267" cy="23.37" r="1.3229"/>
+   <circle cx="52.489" cy="42.079" r="1.3229"/>
+   <circle cx="65.986" cy="35.798" r="1.3229"/>
+   <circle cx="41.798" cy="21.499" r="1.3229"/>
+   <circle cx="43.134" cy="23.904" r="1.3229"/>
+   <circle cx="44.738" cy="18.96" r="1.3229"/>
+   <circle cx="55.295" cy="30.586" r="1.3229"/>
+  </g>
+  <g>
+   <circle cx="99.395" cy="44.217" r="1.3229" fill="#00f"/>
+   <circle cx="102.47" cy="45.42" r="1.3229" fill="#00f"/>
+   <circle cx="101.13" cy="30.319" r="1.3229" fill="#0000f5"/>
+   <circle cx="103.54" cy="32.457" r="1.3229" fill="#0000f5"/>
+  </g>
+  <g fill="#f00">
+   <circle cx="125.45" cy="22.434" r="1.3229"/>
+   <circle cx="124.92" cy="19.361" r="1.3229"/>
+   <circle cx="128.26" cy="20.964" r="1.3229"/>
+   <circle cx="129.73" cy="17.49" r="1.3229"/>
+   <circle cx="132.8" cy="18.559" r="1.3229"/>
+   <circle cx="125.99" cy="27.245" r="1.3229"/>
+   <circle cx="125.45" cy="24.172" r="1.3229"/>
+   <circle cx="128.79" cy="25.775" r="1.3229"/>
+   <circle cx="130.26" cy="22.301" r="1.3229"/>
+   <circle cx="133.34" cy="23.37" r="1.3229"/>
+  </g>
+  <circle cx="113.56" cy="42.079" r="1.3229" fill="#00f"/>
+  <circle cx="127.06" cy="35.798" r="1.3229" fill="#00f"/>
+  <g fill="#0000f5">
+   <circle cx="102.87" cy="21.499" r="1.3229"/>
+   <circle cx="104.21" cy="23.904" r="1.3229"/>
+   <circle cx="105.81" cy="18.96" r="1.3229"/>
+   <circle cx="116.37" cy="30.586" r="1.3229"/>
+  </g>
+ </g>
+</svg>
