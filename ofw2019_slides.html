@@ -431,9 +431,9 @@
 						</p>
 						<p>Predicted label:
 							$$
-								\hat{y}_i = H(z) = \left\{\begin{array}{lr}
-						    0, & \text{if } z < 0\\
-						    1, & \text{if } z \ge 0
+								\hat{y}_i = H(z_i) = \left\{\begin{array}{lr}
+						    0, & \text{if } z_i < 0\\
+						    1, & \text{if } z_i \ge 0
 						    \end{array}\right.
 							$$
 						</p>
@@ -442,12 +442,12 @@
 						<h2>Performance metric II</h2>
 						<p>Linearly weighted inputs
 							$$
-								z_i=z(X_i)=\sum\limits_{j=1}^{N_f}w_jX_{ij}+b
+								z_i=z(X_i)=\sum\limits_{j=1}^{N_f}w_jX_{ij}
 							$$
 						</p>
 						<p>with
 							$$
-								X_i = \left[ Ga^\prime_i, Eo^\prime_i \right],\quad w = \left[ w_1, w_2 \right]^T
+								X_i = \left[ Ga^\prime_i, Eo^\prime_i, 1 \right],\quad w = \left[ w_1, w_2, b \right]^T
 							$$
 						</p>
 					</section>
