@@ -129,11 +129,35 @@
 					</section>
 					<section>
 						<h2>High fidelity data for closure models</h2>
-						<p>euler euler, bubble swarms</p>
+						<img src="images/bubbles_euler_lagrange.png" alt="euler_lagrange" width="600px" style="background:none; border:none; box-shadow:none;">
+						<p>Image source: <a href="https://www.appliedccm.com/portfolio-item/bubble/">appliedccm.com/portfolio-item/bubble</a></p>
 					</section>
 					<section>
 						<h2>High Péclet number problem</h2>
-						<p>bilder bc</p>
+						<img src="images/high_pe_bl.png" alt="high_pe" width="800px" style="background:none; border:none; box-shadow:none;">
+						<small>
+							<p>Image source: U. D. Kück et al.: Analyse des Grenzschichtnahen Stofftransports an frei aufsteigenden Gasblasen. CIT (2009), 1599-1606</p>
+						</small>
+					</section>
+					<section>
+						<h2>Specimen calculation</h2>
+						<p>
+							$d_b=1~mm$ water/oxygen at room temperature
+						</p>
+						<ul>
+							<li>
+								$Pe = Sc\ Re = U_b d_b/D = 10^4 ... 10^7 $
+							</li>
+							<li>
+								$$ Re\approx 250;\quad \delta_h/d_b \propto Re^{-1/2};\quad\delta_h\approx 45~\mu m $$
+							</li>
+							<li>
+								$$ Sc\approx 500;\quad \delta_c/\delta_h \propto Sc^{-1/2};\quad\delta_c\approx 2.5~\mu m $$
+							</li>
+						</ul>
+						<p>
+							$\delta_c/\delta_h$ typically <b style="color:red;">10 ... 100</b>
+						</p>
 					</section>
 				</section>
 
@@ -141,7 +165,48 @@
 				<section>
 					<section>
 						<h2>Subgrid-scale modeling</h2>
-						<p>sketch</p>
+						<p>What happens if the mesh is not fine enough?</p>
+						<img src="images/linApproxHR.png" alt="lin_approx" width="650px" style="background:none; border:none; box-shadow:none;"><br />
+						<a href="https://www.sciencedirect.com/science/article/pii/S0021999117304941">A. Weiner, D. Bothe (2017)</a>
+					</section>
+					<section>
+						<h2>Solution I</h2>
+						<img src="images/sgs_subs_problem_org.png" alt="lin_approx" width="650px" style="background:none; border:none; box-shadow:none;">
+						<p>
+							$$ c(x,\delta) = c_\Sigma + (c_\infty - c_\Sigma) \mathrm{erf}(x/\delta) $$
+						</p>
+					</section>
+					<section>
+						<h2>Solution II</h2>
+						<img src="images/cube_sgs_profile.png" alt="cube_sgs" width="400px" style="background:none; border:none; box-shadow:none;">
+						<p>
+							$$ \langle c \rangle_V \overset{!}{=} \frac{1}{V}\int_V \left[c_\Sigma + (c_\infty - c_\Sigma) \mathrm{erf}(x/\delta)\right] \mathrm{d}x $$
+						</p>
+					</section>
+					<section>
+						<h2>Workflow</h2>
+						<img src="images/workflow_sgs_org.png" alt="cube_sgs" width="850px" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Surfactant influence</h2>
+						<img src="images/pesci_local_marangoni.png" alt="cube_sgs" width="650px" style="background:none; border:none; box-shadow:none;">
+						<p>
+							<a href="https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/computational-analysis-of-single-rising-bubbles-influenced-by-soluble-surfactant/74FFCE053782E4E0901EFD77CDAF4518">C. Pesci, A. Weiner, H. Marschall, D.Bothe (2018)</a>
+						</p>
+					</section>
+					<section>
+						<h2>Surfactant + mass transfer</h2>
+						<img src="images/weiner_kl_db.png" alt="cube_sgs" width="850px" style="background:none; border:none; box-shadow:none;">
+						<p>
+							<a href="https://www.sciencedirect.com/science/article/pii/S2590140019300140">A. Weiner et al. (2019)</a>
+						</p>
+					</section>
+					<section>
+						<h2>Complex reactions?</h2>
+						<img src="images/consecutive_reaction.png" alt="cube_sgs" width="500px" style="background:none; border:none; box-shadow:none;">
+						<p>
+							$A+B\rightarrow P\quad A+P\rightarrow S$
+						</p>
 					</section>
 				</section>
 
@@ -149,7 +214,61 @@
 				<section>
 					<section>
 						<h2>Data-driven SGS modeling</h2>
-						<p>workflow</p>
+						<img src="images/workflow_sgs_data.png" alt="cube_sgs" width="850px" style="background:none; border:none; box-shadow:none;">
+						<p><a href="https://onlinelibrary.wiley.com/doi/full/10.1002/ceat.201900044">A. Weiner, D. Hillenbrand, H.Marschall, D. Bothe (2019)</a></p>
+					</section>
+					<section>
+						<h2>Data generation</h2>
+						<img src="images/elliptical_mesh.png" alt="mesh" width="850px" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>IBV problems</h2>
+						<ul>
+							<li>
+								Single phase incompressible Navier-Stokes, inletOutlet velocity, free slip at $ \Sigma $, $\mathbf{u}(t=0)=\mathbf{0}$
+							</li>
+							<p>
+								$$\partial_t c + \nabla \cdot (\mathbf{u}c-D\nabla c) = -kc$$
+						    $$ c_\Sigma (t) = 1,\quad c_\Omega(t=0) = 0 $$
+							</p>
+						</ul>
+					</section>
+					<section>
+						<h2>Parameter variation</h2>
+						<img src="images/parameter_range.png" alt="mesh" width="850px" style="background:none; border:none; box-shadow:none;">
+						<p>
+							132 simultions, $70~GB$ raw data, $16~GB$ reduced
+						</p>
+					</section>
+					<section>
+						<h2>Feature engineering</h2>
+						<img src="images/feature_engineering.png" alt="mesh" width="700px" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Sequential backward selection</h2>
+						<img src="images/ML_model_score_error.png" alt="sgs" width="850px" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>MLP models</h2>
+						<ul>
+							<li>
+								three models (PyTorch), one model per label
+							</li>
+							<li>
+								353 parameters per model
+							</li>
+							<li>
+								30min training time on a GTX 960
+							</li>
+						</ul>
+						<img src="images/combined_linear_models.svg" alt="sgs" width="400px" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Model errors</h2>
+						<img src="images/histogram_ML_errors.png" alt="sgs" width="850px" style="background:none; border:none; box-shadow:none;">
+						<p>
+							Data compression: $16GB\rightarrow 3\times 353$ parameters
+						</p>
 					</section>
 				</section>
 
@@ -157,7 +276,32 @@
 				<section>
 					<section>
 						<h2>Validation</h2>
-						<p>results</p>
+						<img src="images/validation_cases.png" alt="sgs" width="850px" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Inference</h2>
+						<ul>
+							<li>
+								models loaded at run-time
+							</li>
+							<li>
+								overhead: ~$0.2\%$ per time step
+							</li>
+							<li>
+								no iterative inversion
+							</li>
+							<li>
+								overhead should be even lower in 3D
+							</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Local Sherwood number</h2>
+						<img src="images/localSh_validation.png" alt="local_sh" width="850px" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Global Sherwood number</h2>
+						<img src="images/global_sh_table.png" alt="global_sh" width="850px" style="background:none; border:none; box-shadow:none;">
 					</section>
 				</section>
 
@@ -165,7 +309,7 @@
 				<section>
 					<section>
 						<h2>Outlook</h2>
-						<p>advanced validation</p>
+						<img src="images/shape_variety.png" alt="local_sh" width="850px" style="background:none; border:none; box-shadow:none;">
 					</section>
 				</section>
 
@@ -173,7 +317,7 @@
 				<section>
 					<section>
 						<h2>Summary</h2>
-						<p>workflow table</p>
+						<img src="images/workflow_table.png" alt="workflow" width="800px" style="background:none; border:none; box-shadow:none;">
 					</section>
 				</section>
 
