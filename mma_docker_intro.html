@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>A brief introduction to machine learning and its potential applications to CFD</title>
+
+		<meta name="description" content="A brief introduction to machine learning">
+		<meta name="author" content="Andre Weiner">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/white.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/monokai.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+	<style>
+	.column {
+	  float: left;
+	  width: 33.33%;
+	  padding: 0px;
+	}
+
+	/* Clear floats after image containers */
+	.row::after {
+	  content: "";
+	  clear: both;
+	  display: table;
+	}
+	</style>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<!-- title slide -->
+				<section>
+					<h2>An introduction to Docker and its role in sustainable research</h2>
+					<p>
+						<small>Andre Weiner, <a href="https://www.mma.tu-darmstadt.de/index/index.en.jsp">Mathematical Modeling and Analysis</a> (Chair of Prof. D. Bothe), TU Darmstadt</small><br>
+						<small>Get in touch: <a href="mailto:weiner@mma.tu-darmstadt.de">weiner@mma.tu-darmstadt.de</a></small><br>
+						<small>Slides available at: <a href="https://andreweiner.github.io/reveal.js/ofw2019_slides.html#/">andreweiner.github.io/reveal.js/mma_docker_intro.html</a></small><br>
+					</p>
+					<style>
+						.row_img {
+							display: table;
+						}
+						.column_img {
+							display: table-cell;
+							vertical-align: middle;
+							text-align: center;
+							width: 50%;
+						}
+						.content_img {
+							display: inline-block;
+						}
+					</style>
+					<div class="row_img">
+ 						<div class="column_img">
+							<div class="content_img">
+	 							<img src="images/mma_logo.jpg" alt="mma_logo" style="background:none; border:none; box-shadow:none;">
+							</div>
+ 						</div>
+ 						<div class="column_img">
+							<div class="content_img">
+	 							<img src="images/spp1740_logo.svg" alt="spp1740_logo" style="background:none; border:none; box-shadow:none;">
+							</div>
+ 						</div>
+					</div>
+				</section>
+
+				<!-- warm up questions -->
+				<section>
+					<section>
+						<h2>Some warm-up questions</h2>
+						<p>
+						<p style="color:red;">answer by a show of hands</p>
+						</p>
+					</section>
+					<section>
+						<h2>What is Docker?</h2>
+					</section>
+					<section>
+						<h2>Who is using Docker images?</h2>
+					</section>
+					<section>
+						<h2>Who has created Docker images?</h2>
+					</section>
+					<section>
+						<h2>What is Git and Github/Bitbucket?</h2>
+					</section>
+					<section>
+						<h2>Who is working with Git and Github/Bitbucket?</h2>
+					</section>
+				</section>
+
+				<!-- outline -->
+				<section>
+					<h2>Outline</h2>
+					<ol>
+						<li>Introduction to Docker</li>
+						<li>Using a Docker image</li>
+						<li>Containerizing an applicaton</li>
+						<li>Containerizing OpenFOAM</li>
+						<li>Containerizing a single application more effectively</li>
+						<li>Containerizing a Jupyter notebook</li>
+						<li>Distributing images</li>
+					</ol>
+				</section>
+
+				<!-- questions -->
+				<section>
+					<h2>Its a training ...</h2>
+					<p>Feel free to ask <span style="color:red;">questions</span> at any time!</p>
+				</section>
+
+				<!-- introduction to Docker -->
+				<section>
+					<section>
+						<h2>Introduction to Docker&reg;</h2>
+						<p>Just enough to get you started</p>
+					</section>
+					<section>
+						<h2>What is Docker?</h2>
+						<p>Docker is a tool to create an <b>isolated environment</b> inside your OS. The environment is called <b>container</b>.</p>
+					</section>
+					<section>
+						<h2>What is Docker?</h2>
+						<p>Docker is a tool for <b>OS-level virtualization</b>. OS-level virtualization allows the existence of multiple isolated user-space instances, so-called <b>containers</b>.</p>
+					</section>
+					<section>
+						<h2>VM versus Docker</h2>
+						<div class="row_img">
+	 						<div class="column_img">
+								<div class="content_img">
+		 							<img src="images/docker/container-vm.png" alt="vm" style="background:none; border:none; box-shadow:none;">
+								</div>
+	 						</div>
+	 						<div class="column_img">
+								<div class="content_img">
+		 							<img src="images/docker/docker-containerized.png" alt="docker" style="background:none; border:none; box-shadow:none;">
+								</div>
+	 						</div>
+						</div>
+					</section>
+					<section>
+						<h2>Why call it container?</h2>
+						<img src="images/docker/docker_logo.svg" alt="docker_logo" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>What is a container?</h2>
+						<blockquote>
+							&ldquo;A container is a standard unit of software that packages up
+							code and all its dependencies so the application runs quickly and
+							reliably from one computing environment to another.&rdquo;
+						</blockquote> <a href="https://www.docker.com/resources/what-container">Source</a>
+					</section>
+					<section>
+						<h2>What is a container image?</h2>
+						<blockquote>
+							&ldquo;A Docker container image is a lightweight, standalone, executable
+							package of software that includes everything needed to run an application:
+							code, runtime, system tools, system libraries and settings.&rdquo;
+						</blockquote> <a href="https://www.docker.com/resources/what-container">Source</a>
+					</section>
+					<section>
+					<h2>Image versus Container</h2>
+						<img src="images/docker/cd-icon.png" alt="CD" style="background:none; border:none; box-shadow:none;">
+						<div class="row">
+							<div class="column">
+								<img src="images/docker/pc-icon.png" alt="PC" style="width:80%; background:none; border:none; box-shadow:none;">
+							</div>
+							<div class="column">
+								<img src="images/docker/pc-icon.png" alt="PC" style="width:80%; background:none; border:none; box-shadow:none;">
+							</div>
+							<div class="column">
+								<img src="images/docker/pc-icon.png" alt="PC" style="width:80%; background:none; border:none; box-shadow:none;">
+							</div>
+						</div>
+						<p>
+							<a href="http://www.iconarchive.com/show/crystal-clear-icons-by-everaldo/Device-cd-rom-icon.html">Image source CD,</a>
+							<a href="http://www.iconarchive.com/show/black-metal-icons-by-sirubico/PC-icon.html">Image source PC</a>
+						</p>
+					</section>
+					<section>
+						<h2>Containers in research</h2>
+						<p style="color:red;">Docker minimizes local dependencies!</p>
+						<ul>
+							<li>reproducible results (long term)</li>
+							<li>easy sharing of software</li>
+							<li>quick and risk free testing</li>
+							<li>automated testing and deployment</li>
+							<li>Cloud computing</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Compatibility</h2>
+						<ul>
+							<li>Linux kernel <b>3.10+</b> (30th June 2013)</li>
+							<li>Docker engine
+									<ul>
+										<li>Initial release: <b>0.1.0</b> (23rd March 2013)</li>
+										<li>Compatibility break: <b>1.10</b> (4th Febuary 2016)</li>
+										<li>Current release: <b>19.03.01</b> (25th July 2019)</li>
+									</ul>
+							</li>
+						</ul>
+					</section>
+				</section>
+
+				<!-- using a Docker image -->
+				<section>
+					<section>
+						<h2>Using a Docker image</h2>
+						<pre><code data-trim data-line-numbers="1,2">
+~$ git clone https://github.com/AndreWeiner/machine-learning-applied-to-cfd.git
+~$ cd notebooks
+~$ jupyter-notebook
+						</code></pre>
+						<img src="images/jupyter_start_screen.png" alt="Jupyter" width="850" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<small>
+						<ol>
+							<li><a href="https://colab.research.google.com">Go to colab.research.google.com</a></li>
+							<li>Switch to the GITHUB tab</li>
+							<li>Search for <b>AndreWeiner</b></li>
+							<li>Select the repository <b>machine-learning-applied-...</b></li>
+						</ol>
+						</small>
+						<img src="images/colab_import_from_github.png" alt="Jupyter" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+				</section>
+
+				<!-- containerizing an application -->
+				<section>
+					<section>
+						<h2>Containerizing an application</h2>
+						<p style="color:red;">path_regime_classification.ipynb</p>
+					</section>
+					<section>
+						<img src="images/path_regimes.png" alt="path_regimes" width="700" style="background:none; border:none; box-shadow:none;">
+						<p>Source: <a href="https://www.nature.com/articles/ncomms7268">M. K. Tripathi et al. 2015,</a> figure 1.</p>
+					</section>
+					<section>
+						<img src="images/path_regime_data.png" alt="regime_data" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Perceptron algorithm</h2>
+						<pre class="python"><code data-trim data-line-numbers="5-11">
+class SimpleClassifier():
+  '''Implementation of a simple *perceptron* and the perceptron learning rule.
+  '''
+  ...
+  def train(self, X, y):
+    for e in range(self.epochs_):
+      self.weights_ += self.eta_ * self.lossGradient(X, y)
+      self.loss_.append(self.loss(X, y))
+      if self.loss_[-1] < 1.0E-6:
+        print("Training converged after {} epochs.".format(e))
+        break
+						</code></pre>
+					</section>
+				</section>
+
+				<!-- Containerizing OpenFOAM -->
+				<section>
+					<section>
+						<h2>Containerizing OpenFOAM</h2>
+						<ol>
+							<li><span style="color:red;">4D_shape_approximation.ipynb</span></li>
+							<li>Edit -> Notebook settings</li>
+							<li>Hardware accelerator -> select GPU</li>
+							<li>Check: <b>Executing PyTorch operations using cuda.</b></li>
+						</ol>
+					</section>
+					<section>
+						<h2>Using domain knowledge</h2>
+						<p>
+							The shape will be always roughly ellipsoidal.<br />
+							How can be use this knowledge?
+						</p>
+						<pre class="python"><code data-trim data-line-numbers="1-10">
+def estimate_half_axis(x, y, z):
+  ''' Estimate the half axis of an ellipsoid from a point cloud.'''
+  ...
+  a = 0.5 * (np.amax(x) - np.amin(x))
+  b = 0.5 * (np.amax(y) - np.amin(y))
+  c = 0.5 * (np.amax(z) - np.amin(z))
+  return a, b, c
+						</code></pre>
+					</section>
+				</section>
+
+				<!-- containerizing a single application more effectively -->
+				<section>
+					<section>
+						<h2>Containerizing a single application more effectively</h2>
+					</section>
+					<section>
+						<p>Pull the Docker image and create a container</p>
+						<pre class="bash"><code data-trim data-line-numbers="1-7">
+# pull the image from Dockerhub
+# (use sudo if your user is not in the docker group)
+~$ docker pull andreweiner/of_pytorch:of1906-py1.1-cpu
+~$ cd ../OpenFOAM
+~$ ls
+apps  cases  runContainer.sh
+~$ ./runContainer
+						</code></pre>
+						<p>Working directory in the container</p>
+						<pre class="bash"><code data-trim data-line-numbers="1-3">
+weiner@01f4d1ff183a:/home$ ls
+apps  cases  runContainer.sh
+						</code></pre>
+					</section>
+				</section>
+
+				<!-- containerizing a Jupyter notebooks -->
+				<section>
+					<section>
+						<h2>Containerizing Jupyter notebooks</h2>
+					</section>
+				</section>
+
+				<!-- distributing an image -->
+				<section>
+					<section>
+						<h2>Distributing an image</h2>
+					</section>
+				</section>
+
+				<section style="text-align: left;">
+					<h1>THE END</h1>
+					<p><b>Thank you!</b> Let me know what you think!</p>
+					<p>Get in touch: <a href="mailto:weiner@mma.tu-darmstadt.de">weiner@mma.tu-darmstadt.de</a></p>
+					<p><b>Time for discussion ...</b></p>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				center: true,
+				hash: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true },
+					{ src: 'plugin/search/search.js', async: true },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/math/math.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
