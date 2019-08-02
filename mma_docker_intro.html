@@ -61,7 +61,7 @@
 					<p>
 						<small>Andre Weiner, <a href="https://www.mma.tu-darmstadt.de/index/index.en.jsp">Mathematical Modeling and Analysis</a> (Chair of Prof. D. Bothe), TU Darmstadt</small><br>
 						<small>Get in touch: <a href="mailto:weiner@mma.tu-darmstadt.de">weiner@mma.tu-darmstadt.de</a></small><br>
-						<small>Slides available at: <a href="https://andreweiner.github.io/reveal.js/ofw2019_slides.html#/">andreweiner.github.io/reveal.js/mma_docker_intro.html</a></small><br>
+						<small>Slides available at: <a href="https://andreweiner.github.io/reveal.js/mma_docker_intro.html#/">andreweiner.github.io/reveal.js/mma_docker_intro.html</a></small><br>
 					</p>
 					<style>
 						.row_img {
@@ -234,12 +234,21 @@
 				<section>
 					<section>
 						<h2>Using a Docker image</h2>
-						<pre><code data-trim data-line-numbers="1,2">
-~$ git clone https://github.com/AndreWeiner/machine-learning-applied-to-cfd.git
-~$ cd notebooks
-~$ jupyter-notebook
+						<p>Download the <a href="https://sourceforge.net/projects/openfoam/files/v1906/installOpenFOAM">installOpenFOAM</a> and
+						<a href="https://sourceforge.net/projects/openfoam/files/v1906/startOpenFOAM">startOpenFOAM</a> scripts (<a href="https://openfoam.com/download/install-binary-linux.php">ESI version</a>)</p>
+						<pre><code data-trim data-line-numbers="1-11">
+~$ chmod +x installOpenFOAM
+~$ ./installOpenFOAM
+~$ chmod +x startOpenFOAM
+~$ ./startOpenFOAM
+# in the container command line prompt
+~$ mkdir -p $FOAM_RUN
+~$ run
+~$ cp -r $FOAM_TUTORIALS/incompressible/icoFoam/cavity/cavity .
+~$ cd cavity
+~$ blockMesh
+~$ icoFoam
 						</code></pre>
-						<img src="images/jupyter_start_screen.png" alt="Jupyter" width="850" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
 						<small>
