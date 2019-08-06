@@ -236,7 +236,7 @@
 						<h2>Using a Docker image</h2>
 						<p>Download the <a href="https://sourceforge.net/projects/openfoam/files/v1906/installOpenFOAM">installOpenFOAM</a> and
 						<a href="https://sourceforge.net/projects/openfoam/files/v1906/startOpenFOAM">startOpenFOAM</a> scripts (<a href="https://openfoam.com/download/install-binary-linux.php">ESI version</a>)</p>
-						<pre><code data-trim data-line-numbers="1-11">
+						<pre class="bash"><code data-trim data-line-numbers="1-11">
 ~$ chmod +x installOpenFOAM
 ~$ ./installOpenFOAM
 ~$ chmod +x startOpenFOAM
@@ -251,15 +251,93 @@
 						</code></pre>
 					</section>
 					<section>
+						<h2>Observations</h2>
+						<ul>
+							<li class="fragment">Command line promt?</li>
+							<li class="fragment" style="color:red;">bash-4.2$</li>
+							<li class="fragment">HOST?</li>
+							<li class="fragment" style="color:red;">echo $HOSTNAME</li>
+							<li class="fragment">Username?</li>
+							<li class="fragment" style="color:red;">whoami</li>
+							<li class="fragment">Directory?</li>
+							<li class="fragment" style="color:red;">pwd</li>
+							<li class="fragment">Where is the data?</li>
+						</ul>
+					</section>
+					<section>
+						<p>installOpenFOAM</p>
+						<pre class="bash"><code data-trim data-line-numbers="1-18">
+username="$USER"
+user="$(id -u)"
+home="${1:-$HOME}"
+
+imageName="openfoamplus/of_v1906_centos73"
+containerName="of_v1906"
+
+docker run  -it -d --name ${containerName} --user=${user}  \
+  -e USER=${username}                                      \
+  --workdir="${home}"                                      \
+  --volume="${home}:${home}"                               \
+  --volume="/etc/group:/etc/group:ro"                      \
+  --volume="/etc/passwd:/etc/passwd:ro"                    \
+  --volume="/etc/shadow:/etc/shadow:ro"                    \
+  --volume="/etc/sudoers.d:/etc/sudoers.d:ro"              \
+  -v=/tmp/.X11-unix:/tmp/.X11-unix ${imageName}            \
+  /bin/bash --rcfile /opt/OpenFOAM/setImage_v1906.sh
+						</code></pre>
+					</section>
+					<section>
+						<p>Show images</p>
 						<small>
-						<ol>
-							<li><a href="https://colab.research.google.com">Go to colab.research.google.com</a></li>
-							<li>Switch to the GITHUB tab</li>
-							<li>Search for <b>AndreWeiner</b></li>
-							<li>Select the repository <b>machine-learning-applied-...</b></li>
-						</ol>
+							<pre class="bash"><code data-trim data-line-numbers="1-18">
+docker image ls
+...
+REPOSITORY                       TAG                 IMAGE ID            CREATED             SIZE
+openfoamplus/of_v1906_centos73   latest              6e63df7efb1e        5 weeks ago         2.23GB
+							</code></pre>
 						</small>
-						<img src="images/colab_import_from_github.png" alt="Jupyter" width="800" style="background:none; border:none; box-shadow:none;">
+						<p>Show running containers</p>
+						<small>
+							<pre class="bash"><code data-trim data-line-numbers="1-18">
+docker container ls
+...
+CONTAINER ID  IMAGE                           COMMAND                 CREATED      STATUS      PORTS  NAMES
+9176100c3273  openfoamplus/of_v1906_centos73  "/bin/bash --rcfile …"  5 weeks ago  Up 5 weeks         of_v1906
+
+							</code></pre>
+						</small>
+						<p>Show all containers</p>
+						<small>
+							<pre class="bash"><code data-trim data-line-numbers="1-18">
+docker container stop 9176100c3273
+docker container ls -a
+...
+CONTAINER ID  IMAGE                           COMMAND                 CREATED      STATUS                      PORTS  NAMES
+9176100c3273  openfoamplus/of_v1906_centos73  "/bin/bash --rcfile …"  5 weeks ago  Exited (137) 6 seconds ago         of_v1906
+							</code></pre>
+						</small>
+					</section>
+					<section>
+						<h2>Removing images and containers</h2>
+						<ul style="list-style-type:none">
+							<li>Remove images</li>
+							<li style="color:red;">docker image rm IMAGE_IDs</li>
+							<li>Remove all unsed images</li>
+							<li style="color:red;">docker image prune</li>
+							<li>Remove containers</li>
+							<li style="color:red;">docker container rm CONTAINER_IDs</li>
+							<li >Remove all stopped containers</li>
+							<li style="color:red;">docker container prune</li>
+						</ul>
+					</section>
+					<section>
+						<p>startOpenFOAM</p>
+						<pre class="bash"><code data-trim data-line-numbers="1-18">
+xhost +local:of_v1906
+docker start of_v1906
+docker exec -it of_v1906 /bin/bash -rcfile /opt/OpenFOAM/setImage_v1906.sh
+						</code></pre>
+						<p><a href="https://myheutagogy.com/2019/06/04/a-detailed-look-at-the-openfoam-plus-docker-workflow/">Learn more</a></p>
 					</section>
 				</section>
 
@@ -267,7 +345,6 @@
 				<section>
 					<section>
 						<h2>Containerizing an application</h2>
-						<p style="color:red;">path_regime_classification.ipynb</p>
 					</section>
 					<section>
 						<img src="images/path_regimes.png" alt="path_regimes" width="700" style="background:none; border:none; box-shadow:none;">
