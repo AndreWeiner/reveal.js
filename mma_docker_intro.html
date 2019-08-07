@@ -132,7 +132,7 @@
 
 				<!-- questions -->
 				<section>
-					<h2>Its a training ...</h2>
+					<h2>It's a training ...</h2>
 					<p>Feel free to ask <span style="color:red;">questions</span> at any time!</p>
 				</section>
 
@@ -266,7 +266,7 @@
 					</section>
 					<section>
 						<p>installOpenFOAM</p>
-						<pre class="bash"><code data-trim data-line-numbers="1-18">
+						<pre class="docker"><code data-trim data-line-numbers="1-18">
 username="$USER"
 user="$(id -u)"
 home="${1:-$HOME}"
@@ -284,6 +284,10 @@ docker run  -it -d --name ${containerName} --user=${user}  \
   --volume="/etc/sudoers.d:/etc/sudoers.d:ro"              \
   -v=/tmp/.X11-unix:/tmp/.X11-unix ${imageName}            \
   /bin/bash --rcfile /opt/OpenFOAM/setImage_v1906.sh
+						</code></pre>
+						<p>docker run (container creation)</p>
+						<pre class="bash"><code data-trim data-line-numbers="1-2">
+docker run [options] IMAGE_NAME [command] [arguments]
 						</code></pre>
 					</section>
 					<section>
@@ -332,10 +336,18 @@ CONTAINER ID  IMAGE                           COMMAND                 CREATED   
 					</section>
 					<section>
 						<p>startOpenFOAM</p>
-						<pre class="bash"><code data-trim data-line-numbers="1-18">
+						<pre class="docker"><code data-trim data-line-numbers="1-18">
 xhost +local:of_v1906
 docker start of_v1906
 docker exec -it of_v1906 /bin/bash -rcfile /opt/OpenFOAM/setImage_v1906.sh
+						</code></pre>
+						<p>docker start (start a stopped container)</p>
+						<pre class="docker"><code data-trim data-line-numbers="1-18">
+docker start CONTAINER_NAME # or CONTAINER_ID
+						</code></pre>
+						<p>docker exec (run a command in a running container)</p>
+						<pre class="docker"><code data-trim data-line-numbers="1-18">
+docker exec [options] CONTAINER_NAME COMMAND [arguments]
 						</code></pre>
 						<p><a href="https://myheutagogy.com/2019/06/04/a-detailed-look-at-the-openfoam-plus-docker-workflow/">Learn more</a></p>
 					</section>
@@ -347,26 +359,93 @@ docker exec -it of_v1906 /bin/bash -rcfile /opt/OpenFOAM/setImage_v1906.sh
 						<h2>Containerizing an application</h2>
 					</section>
 					<section>
-						<img src="images/path_regimes.png" alt="path_regimes" width="700" style="background:none; border:none; box-shadow:none;">
-						<p>Source: <a href="https://www.nature.com/articles/ncomms7268">M. K. Tripathi et al. 2015,</a> figure 1.</p>
+						<h2>Scenario</h2>
+						<ul>
+							<li>You develop a new app based on a specific framework (e. g. OpenFOAM, Jupyter, ...)</li>
+							<li>You do not modify the framework itself</li>
+							<li>There is already a Docker image for the version of the framework you are working with</li>
+							<li>You want to share/save framework and app together (complete build environment)</li>
+						</ul>
 					</section>
 					<section>
-						<img src="images/path_regime_data.png" alt="regime_data" width="800" style="background:none; border:none; box-shadow:none;">
+						<p>Repo: <a href="https://github.com/AndreWeiner/of_app_isolation">of_app_isolation</a></p>
+						<pre class="bash"><code data-trim data-line-numbers="1-18">
+git clone https://github.com/AndreWeiner/of_app_isolation.git
+cd of_app_isolation
+ls
+...
+Dockerfile
+Dockerfile.single
+README.md
+						</code></pre>
+						<pre class="bash"><code data-trim data-line-numbers="1-18">
+git clone https://github.com/AndreWeiner/dummyFoam
+git --git-dir dummyFoam/.git log -1
+...
+commit f2fbf951ca312e98b3e9c13def8ec122089d67e4
+Author: Andre Weiner &lt;weiner@mma.tu-darmstadt.de&gt;
+Date:   Fri Jun 28 12:57:23 2019 +0200
+
+    Update to OpenFOAM-v1906.
+						</code></pre>
+						<pre class="bash"><code data-trim data-line-numbers="1-18">
+git --git-dir dummyFoam/.git log -1 --format=%h
+...
+f2fbf95
+						</code></pre>
 					</section>
 					<section>
-						<h2>Perceptron algorithm</h2>
-						<pre class="python"><code data-trim data-line-numbers="5-11">
-class SimpleClassifier():
-  '''Implementation of a simple *perceptron* and the perceptron learning rule.
-  '''
-  ...
-  def train(self, X, y):
-    for e in range(self.epochs_):
-      self.weights_ += self.eta_ * self.lossGradient(X, y)
-      self.loss_.append(self.loss(X, y))
-      if self.loss_[-1] < 1.0E-6:
-        print("Training converged after {} epochs.".format(e))
-        break
+						<p>Dockerfile.single</p>
+						<pre class="docker"><code data-trim data-line-numbers="1-11">
+FROM openfoamplus/of_v1906_centos73
+# copy app source code to base image
+COPY dummyFoam /opt/OpenFOAM/OpenFOAM-v1906/applications/solvers/dummyFoam
+# change working directory
+WORKDIR /opt/OpenFOAM/OpenFOAM-v1906/applications/solvers/dummyFoam
+# source environment variables, compile, and create execution script
+RUN source /opt/OpenFOAM/OpenFOAM-v1906/etc/bashrc && \
+    wmake && \
+    mkdir /case && \
+    echo "source /opt/OpenFOAM/OpenFOAM-v1906/etc/bashrc &&gt; \
+    /dev/null; dummyFoam -case /case" &gt; /runDummyFoam.sh
+						</code></pre>
+						<a href="https://docs.docker.com/develop/develop-images/dockerfile_best-practices/">Best pratices for writing Dockerfiles</a>
+					</section>
+					<section>
+						<h2>Building the image</h2>
+						<pre class="docker"><code data-trim data-line-numbers="1-11">
+# -t TAG
+# -f DOCKERFILE
+#  . current path
+docker build -t andreweiner/dummy_foam:$(git --git-dir dummyFoam/.git log -1 --format=%h) -f Dockerfile.single .
+...
+docker image ls
+REPOSITORY              TAG      IMAGE ID      CREATED         SIZE
+andreweiner/dummy_foam  f2fbf95  50a4ab4d3441  13 seconds ago  2.23GB
+						</code></pre>
+						<p>docker build</p>
+						<pre class="docker"><code data-trim data-line-numbers="1-11">
+docker build [options] PATH
+# tag syntax
+-t repository/app_name:version
+# multiple tags are possible
+-t repo/my_app:v1.0 -t repo/my_app:latest
+						</code></pre>
+					</section>
+					<section>
+						<h2>Using the app</h2>
+						<pre class="bash"><code data-trim data-line-numbers="1-11">
+# go to some valid OpenFOAM case
+cd ${HOME}/OpenFOAM/${USER}-v1906/run/cavity
+docker container run -it -v"$PWD:/case" andreweiner/dummy_foam:f2fbf95 /bin/bash /runDummyFoam.sh
+...
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+
+ExecutionTime = 0 s  ClockTime = 0 s
+
+End
 						</code></pre>
 					</section>
 				</section>
@@ -381,22 +460,6 @@ class SimpleClassifier():
 							<li>Hardware accelerator -> select GPU</li>
 							<li>Check: <b>Executing PyTorch operations using cuda.</b></li>
 						</ol>
-					</section>
-					<section>
-						<h2>Using domain knowledge</h2>
-						<p>
-							The shape will be always roughly ellipsoidal.<br />
-							How can be use this knowledge?
-						</p>
-						<pre class="python"><code data-trim data-line-numbers="1-10">
-def estimate_half_axis(x, y, z):
-  ''' Estimate the half axis of an ellipsoid from a point cloud.'''
-  ...
-  a = 0.5 * (np.amax(x) - np.amin(x))
-  b = 0.5 * (np.amax(y) - np.amin(y))
-  c = 0.5 * (np.amax(z) - np.amin(z))
-  return a, b, c
-						</code></pre>
 					</section>
 				</section>
 
