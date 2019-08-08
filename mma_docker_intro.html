@@ -114,6 +114,12 @@
 					<section>
 						<h2>Who is working with Git and Github/Bitbucket?</h2>
 					</section>
+					<section>
+						<h2>Binary code?</h2>
+					</section>
+					<section>
+						<h2>Shared object libraries (.so)?</h2>
+					</section>
 				</section>
 
 				<!-- outline -->
@@ -164,6 +170,7 @@
 								</div>
 	 						</div>
 						</div>
+						<p><a href="https://www.docker.com/resources/what-container">Image source</a></p>
 					</section>
 					<section>
 						<h2>Why call it container?</h2>
@@ -607,20 +614,97 @@ docker build -t andreweiner/of_pytorch:of1906-py1.1-cpu
 						<h2>Containerizing a single application more effectively</h2>
 					</section>
 					<section>
-						<p>Pull the Docker image and create a container</p>
-						<pre class="bash"><code data-trim data-line-numbers="1-7">
-# pull the image from Dockerhub
-# (use sudo if your user is not in the docker group)
-~$ docker pull andreweiner/of_pytorch:of1906-py1.1-cpu
-~$ cd ../OpenFOAM
-~$ ls
-apps  cases  runContainer.sh
-~$ ./runContainer
+						<p>dummyFoam dependencies</p>
+						<pre class="bash"><code data-trim data-line-numbers="1-30">
+docker container run -it andreweiner/dummy_foam:f2fbf95 /bin/bash
+...
+source /opt/OpenFOAM/OpenFOAM-v1906/etc/bashrc
+ldd $(which dummyFoam)
+...
+libfiniteVolume.so => /opt/OpenFOAM/OpenFOAM-v1906/platforms/linux64GccDPInt32Opt/lib/libfiniteVolume.so (0x00007fbce0318000)
+libmeshTools.so => /opt/OpenFOAM/OpenFOAM-v1906/platforms/linux64GccDPInt32Opt/lib/libmeshTools.so (0x00007fbcdfada000)
+libOpenFOAM.so => /opt/OpenFOAM/OpenFOAM-v1906/platforms/linux64GccDPInt32Opt/lib/libOpenFOAM.so (0x00007fbcdef0d000)
+libdl.so.2 => /lib64/libdl.so.2 (0x00007fbcded09000)
+libstdc++.so.6 => /lib64/libstdc++.so.6 (0x00007fbcdea00000)
+libm.so.6 => /lib64/libm.so.6 (0x00007fbcde6fe000)
+libgcc_s.so.1 => /lib64/libgcc_s.so.1 (0x00007fbcde4e8000)
+libc.so.6 => /lib64/libc.so.6 (0x00007fbcde125000)
+...
+exit
 						</code></pre>
-						<p>Working directory in the container</p>
-						<pre class="bash"><code data-trim data-line-numbers="1-3">
-weiner@01f4d1ff183a:/home$ ls
-apps  cases  runContainer.sh
+					</section>
+					<section>
+						<h2>Multistage builds</h2>
+						<p>Repository: <a href="">of_app_isolation</a>
+						<ol>
+							<li>Build the app as done before</il>
+							<li>Create a new, clean image</il>
+							<li>Copy only executable and dependencies</il>
+						</ol>
+						<p>The final image will be significantly smaller!<p>
+					</section>
+					<section>
+						<p>Dockerfile: stage I</p>
+						<pre class="bash"><code data-trim data-line-numbers="1-30">
+FROM openfoamplus/of_v1906_centos73 AS builder
+COPY dummyFoam /opt/OpenFOAM/OpenFOAM-v1906/applications/solvers/dummyFoam
+WORKDIR /opt/OpenFOAM/OpenFOAM-v1906/applications/solvers/dummyFoam
+RUN source /opt/OpenFOAM/OpenFOAM-v1906/etc/bashrc && \
+    wmake && \
+    ldd $(which dummyFoam) | cut -d" " -f3 | xargs tar --dereference -cf libs.tar && \
+    tar --dereference -rvf libs.tar /lib64/ld-linux-x86-64.so.2 && \
+    tar -cf etc.tar /opt/OpenFOAM/OpenFOAM-v1906/etc
+						</code></pre>
+					</section>
+					<section>
+						<p>Dockerfile: stage II</p>
+						<pre class="bash"><code data-trim data-line-numbers="1-30">
+FROM alpine:latest
+RUN apk add --no-cache bash tar
+COPY --from=builder /opt/OpenFOAM/OpenFOAM-v1906/applications/solvers/dummyFoam/libs.tar \
+										/root/OpenFOAM/-v1906/platforms/linux64GccDPInt32Opt/bin/dummyFoam \
+										/opt/OpenFOAM/OpenFOAM-v1906/applications/solvers/dummyFoam/etc.tar \
+										/
+RUN tar -xf libs.tar && \
+		tar -xf etc.tar && \
+		rm *.tar && \
+		sed -i '/projectDir=\"\$HOME\/OpenFOAM\/OpenFOAM-\$WM_PROJECT_VERSION\"/c\projectDir=\"\/opt\/OpenFOAM\/OpenFOAM-\$WM_PROJECT_VERSION\"' /opt/OpenFOAM/OpenFOAM-v1906/etc/bashrc && \
+		mkdir case && \
+		echo "source /opt/OpenFOAM/OpenFOAM-v1906/etc/bashrc &> /dev/null; /dummyFoam -case /case" > runDummyFoam.sh
+ENV LD_LIBRARY_PATH=/opt/OpenFOAM/OpenFOAM-v1906/platforms/linux64GccDPInt32Opt/lib:\
+lib:lib64:/opt/OpenFOAM/ThirdParty-v1906/platforms/linux64Gcc/openmpi-1.10.4/lib64/lib:\
+/opt/OpenFOAM/OpenFOAM-v1906/platforms/linux64GccDPInt32Opt/lib/openmpi-1.10.4:\
+/opt/OpenFOAM/ThirdParty-v1906/platforms/linux64Gcc/openmpi-1.10.4/lib64
+						</code></pre>
+					</section>
+					<section>
+						<h2>Building the image</h2>
+						<pre class="docker"><code data-trim data-line-numbers="1-11">
+# -t TAG
+# -f DOCKERFILE
+#  . current path
+docker build -t andreweiner/dummy_foam_iso:$(git --git-dir dummyFoam/.git log -1 --format=%h) .
+...
+docker image ls
+REPOSITORY                  TAG      IMAGE ID      CREATED         SIZE
+andreweiner/dummy_foam_iso  f2fbf95  018fbad986dd  5 weeks ago     161MB
+						</code></pre>
+						<p>The previous image was ~2.3GB</p>
+					</section>
+					<section>
+						<h2>Using the app</h2>
+						<pre class="bash"><code data-trim data-line-numbers="1-11">
+# go to some valid OpenFOAM case
+cd ${HOME}/OpenFOAM/${USER}-v1906/run/cavity
+docker container run -it -v"$PWD:/case" andreweiner/dummy_foam_iso:f2fbf95 /bin/bash /runDummyFoam.sh
+...
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+
+ExecutionTime = 0 s  ClockTime = 0 s
+
+End
 						</code></pre>
 					</section>
 				</section>
@@ -653,14 +737,47 @@ apps  cases  runContainer.sh
 					</section>
 					<section>
 						<h2>Dockerhub</h2>
+						<p>To use Dockerhub, you need an <a href="https://hub.docker.com/">account</a> (free).</p>
+						<pre class="bash"><code data-trim data-line-numbers="1-10">
+docker login --username=yourhubusername --email=name@host.com
+docker push andreweiner/of_pytorch:of1906-py1.1-cpu
+...
+docker pull andreweiner/of_pytorch:of1906-py1.1-cpu
+						</code></pre>
+						<a href="https://hub.docker.com/r/andreweiner/of_pytorch">Check out the of_pytorch example!</a>
 					</section>
 					<section>
 						<h2>tar archive</h2>
-						<pre class="bash"><code data-trim data-line-numbers="1-3">
-docker save -o latestversion-1.0.0.tar dockerregistry/latestversion:1.0.0
-docker load -i latestversion-1.0.0.tar
+						<pre class="bash"><code data-trim data-line-numbers="1-10">
+docker history andreweiner/dummy_foam:f2fbf95
+...
+IMAGE         CREATED       CREATED BY                                     SIZE    COMMENT
+50a4ab4d3441  17 hours ago  /bin/sh -c source /opt/OpenFOAM/OpenFOAM-v19…  72.5kB
+1d1a83fdb3da  17 hours ago  /bin/sh -c #(nop) WORKDIR /opt/OpenFOAM/Open…  0B
+7cb119e51ba1  17 hours ago  /bin/sh -c #(nop) COPY dir:db92694508b316ccc…  73.1kB
+6e63df7efb1e  5 weeks ago                                                  2.23GB  Imported from -
+						</code></pre>
+						<pre class="bash"><code data-trim data-line-numbers="1-10">
+docker save -o dummy_foam-f2fbf95.tar andreweiner/dummy_foam:f2fbf95
+docker image rm andreweiner/dummy_foam:f2fbf95
+docker image ls
+...
+docker load -i dummy_foam-f2fbf95.tar
+docker image ls
+...
 						</code></pre>
 					</section>
+				</section>
+
+				<section>
+					<h2>Conclusion</h2>
+					<ul>
+						<li>Docker minimizes dependencies</il>
+						<li>Docker images are easy to share</il>
+						<li>Docker containers are always ready to use</il>
+						<li>Running a container with the same options will always give 100% identical results</il>
+					</ul>
+					<p style="color:red;">More pros and cons you can think of?</p>
 				</section>
 
 				<section style="text-align: left;">
