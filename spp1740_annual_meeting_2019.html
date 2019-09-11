@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Data-driven subgrid-scale modeling for convection-dominated concentration boundary layers</title>
+
+		<meta name="description" content="ofw2019_presentation">
+		<meta name="author" content="Andre Weiner">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/white.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/monokai.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<!-- title slide -->
+				<section>
+					<h2>Convection-dominated concentration boundary layers and chemical reactions at rising bubbles</h2>
+					<p>
+						<small><a href="mailto:weiner@mma.tu-darmstadt.de">Andre Weiner</a>, Dieter Bothe</small><br>
+						<small>Slides available at: <a href="https://andreweiner.github.io/reveal.js/spp1740_annual_meeting_2019.html#/">andreweiner.github.io/reveal.js/spp1740_annual_meeting_2019.html</a></small>
+					</p>
+
+					<style>
+						.row_logo {
+							display: table;
+						}
+						.column_logo {
+							display: table-cell;
+							vertical-align: middle;
+							text-align: center;
+							width: 50%;
+						}
+						.content_logo {
+							display: inline-block;
+						}
+					</style>
+					<div class="row_logo">
+ 						<div class="column_logo">
+							<div class="content_logo">
+	 							<img src="images/mma_logo.jpg" alt="mma_logo" style="background:none; border:none; box-shadow:none;">
+							</div>
+ 						</div>
+ 						<div class="column_logo">
+							<div class="content_logo">
+	 							<img src="images/spp1740_logo.svg" alt="spp1740_logo" style="background:none; border:none; box-shadow:none;">
+							</div>
+ 						</div>
+					</div>
+				</section>
+
+				<!-- outline -->
+				<section>
+					<h2>Outline</h2>
+					<ol>
+						<li>Research debt</li>
+						<li>Maintaining research</li>
+						<hr>
+						<li>Simulation of reactive species transfer (pseudo 3D)</li>
+						<li>Simulations of gas bubbles rising in water (3D)</li>
+						<li>Outlook</li>
+						<li>Summary</li>
+					</ol>
+				</section>
+
+				<!-- mass transfer at rising bubbles-->
+				<section>
+					<section>
+					<style>
+						.row_video {
+							display: table;
+							width: 100%;
+						}
+						.column_video {
+							display: table-cell;
+							text-align: center;
+							width: 50%;
+						}
+						.content_video {
+							display: inline-block;
+						}
+					</style>
+						<h2>Mass transfer at rising bubbles</h2>
+						<div class="row_video">
+	 						<div class="column_video">
+								<div class="content_video">
+									<small>water/air: $d_{eq}=3~mm$</small>
+									<video height="400" controls mute autoplay loop>
+										<source src="videos/b8_mesh_plic.ogv">
+									</video>
+								</div>
+	 						</div>
+	 						<div class="column_video">
+								<div class="content_video">
+									<small>water/air: $d_{eq}=5~mm$</small>
+									<video height="400" controls mute autoplay loop>
+										<source src="videos/b10_mesh_plic.ogv">
+									</video>
+								</div>
+	 						</div>
+						</div>
+					</section>
+					<section>
+						<h2>High fidelity data for closure models</h2>
+						<img src="images/bubbles_euler_lagrange.png" alt="euler_lagrange" width="600px" style="background:none; border:none; box-shadow:none;">
+						<p>Image source: <a href="https://www.appliedccm.com/portfolio-item/bubble/">appliedccm.com/portfolio-item/bubble</a></p>
+					</section>
+					<section>
+						<h2>High Péclet number problem</h2>
+						<img src="images/high_pe_bl.png" alt="high_pe" width="800px" style="background:none; border:none; box-shadow:none;">
+						<small>
+							<p>Image source: U. D. Kück et al.: Analyse des Grenzschichtnahen Stofftransports an frei aufsteigenden Gasblasen. CIT (2009), 1599-1606</p>
+						</small>
+					</section>
+					<section>
+						<h2>Specimen calculation</h2>
+						<p>
+							$d_b=1~mm$ water/oxygen at room temperature
+						</p>
+						<ul>
+							<li>
+								$Pe = Sc\ Re = U_b d_b/D = 10^4 ... 10^7 $
+							</li>
+							<li>
+								$$ Re\approx 250;\quad \delta_h/d_b \propto Re^{-1/2};\quad\delta_h\approx 45~\mu m $$
+							</li>
+							<li>
+								$$ Sc\approx 500;\quad \delta_c/\delta_h \propto Sc^{-1/2};\quad\delta_c\approx 2.5~\mu m $$
+							</li>
+						</ul>
+						<p>
+							$\delta_c/\delta_h$ typically <b style="color:red;">10 ... 100</b>
+						</p>
+					</section>
+				</section>
+
+				<!-- subgrid-scale modeling-->
+				<section>
+					<section>
+						<h2>Subgrid-scale modeling</h2>
+						<p>What happens if the mesh is not fine enough?</p>
+						<img src="images/linApproxHR.png" alt="lin_approx" width="650px" style="background:none; border:none; box-shadow:none;"><br />
+						<a href="https://www.sciencedirect.com/science/article/pii/S0021999117304941">A. Weiner, D. Bothe (2017)</a>
+					</section>
+					<section>
+						<h2>Solution I</h2>
+						<img src="images/sgs_subs_problem_org.png" alt="lin_approx" width="650px" style="background:none; border:none; box-shadow:none;">
+						<p>
+							$$ c(x,\delta) = c_\Sigma + (c_\infty - c_\Sigma) \mathrm{erf}(x/\delta) $$
+						</p>
+					</section>
+					<section>
+						<h2>Solution II</h2>
+						<img src="images/cube_sgs_profile.png" alt="cube_sgs" width="400px" style="background:none; border:none; box-shadow:none;">
+						<p>
+							$$ \langle c \rangle_V \overset{!}{=} \frac{1}{V}\int_V \left[c_\Sigma + (c_\infty - c_\Sigma) \mathrm{erf}(x/\delta)\right] \mathrm{d}x $$
+						</p>
+					</section>
+					<section>
+						<h2>Workflow</h2>
+						<img src="images/workflow_sgs_org.png" alt="cube_sgs" width="850px" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Surfactant influence</h2>
+						<img src="images/pesci_local_marangoni.png" alt="cube_sgs" width="650px" style="background:none; border:none; box-shadow:none;">
+						<p>
+							<a href="https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/computational-analysis-of-single-rising-bubbles-influenced-by-soluble-surfactant/74FFCE053782E4E0901EFD77CDAF4518">C. Pesci, A. Weiner, H. Marschall, D.Bothe (2018)</a>
+						</p>
+					</section>
+					<section>
+						<h2>Surfactant + mass transfer</h2>
+						<img src="images/weiner_kl_db.png" alt="cube_sgs" width="850px" style="background:none; border:none; box-shadow:none;">
+						<p>
+							<a href="https://www.sciencedirect.com/science/article/pii/S2590140019300140">A. Weiner et al. (2019)</a>
+						</p>
+					</section>
+					<section>
+						<h2>Complex reactions?</h2>
+						<img src="images/consecutive_reaction.png" alt="cube_sgs" width="500px" style="background:none; border:none; box-shadow:none;">
+						<p>
+							$A+B\rightarrow P\quad A+P\rightarrow S$
+						</p>
+					</section>
+				</section>
+
+				<!-- data-driven modeling -->
+				<section>
+					<section>
+						<h2>Data-driven SGS modeling</h2>
+						<img src="images/workflow_sgs_data.png" alt="cube_sgs" width="850px" style="background:none; border:none; box-shadow:none;">
+						<p><a href="https://onlinelibrary.wiley.com/doi/full/10.1002/ceat.201900044">A. Weiner, D. Hillenbrand, H.Marschall, D. Bothe (2019)</a></p>
+					</section>
+					<section>
+						<h2>Data generation</h2>
+						<img src="images/elliptical_mesh.png" alt="mesh" width="850px" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>IBV problems</h2>
+						<ul>
+							<li>
+								Single phase incompressible Navier-Stokes, inletOutlet velocity, free slip at $ \Sigma $, $\mathbf{u}(t=0)=\mathbf{0}$
+							</li>
+							<p>
+								$$\partial_t c + \nabla \cdot (\mathbf{u}c-D\nabla c) = -kc$$
+						    $$ c_\Sigma (t) = 1,\quad c_\Omega(t=0) = 0 $$
+							</p>
+						</ul>
+					</section>
+					<section>
+						<h2>Parameter variation</h2>
+						<img src="images/parameter_range.png" alt="mesh" width="850px" style="background:none; border:none; box-shadow:none;">
+						<p>
+							132 simultions, $70~GB$ raw data, $16~GB$ reduced
+						</p>
+					</section>
+					<section>
+						<h2>Feature engineering</h2>
+						<img src="images/feature_engineering.png" alt="mesh" width="700px" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Sequential backward selection</h2>
+						<img src="images/ML_model_score_error.png" alt="sgs" width="850px" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>MLP models</h2>
+						<ul>
+							<li>
+								three models (PyTorch), one model per label
+							</li>
+							<li>
+								353 parameters per model
+							</li>
+							<li>
+								30min training time on a GTX 960
+							</li>
+						</ul>
+						<img src="images/combined_linear_models.svg" alt="sgs" width="400px" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Model errors</h2>
+						<img src="images/histogram_ML_errors.png" alt="sgs" width="850px" style="background:none; border:none; box-shadow:none;">
+						<p>
+							Data compression: $16GB\rightarrow 3\times 353$ parameters
+						</p>
+					</section>
+				</section>
+
+				<!-- validation -->
+				<section>
+					<section>
+						<h2>Validation</h2>
+						<img src="images/validation_cases.png" alt="sgs" width="850px" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Inference</h2>
+						<ul>
+							<li>
+								models loaded at run-time
+							</li>
+							<li>
+								overhead: ~$0.2\%$ per time step
+							</li>
+							<li>
+								no iterative inversion
+							</li>
+							<li>
+								overhead should be even lower in 3D
+							</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Local Sherwood number</h2>
+						<img src="images/localSh_validation.png" alt="local_sh" width="850px" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Global Sherwood number</h2>
+						<img src="images/global_sh_table.png" alt="global_sh" width="850px" style="background:none; border:none; box-shadow:none;">
+					</section>
+				</section>
+
+				<!-- outlook -->
+				<section>
+					<section>
+						<h2>Outlook</h2>
+						<img src="images/shape_variety.png" alt="local_sh" width="850px" style="background:none; border:none; box-shadow:none;">
+					</section>
+				</section>
+
+				<!-- summary -->
+				<section>
+					<section>
+						<h2>Summary</h2>
+						<img src="images/workflow_table.png" alt="workflow" width="800px" style="background:none; border:none; box-shadow:none;">
+					</section>
+				</section>
+
+				<!-- end -->
+				<section style="text-align: left;">
+					<h1>THE END</h1>
+					<p>Thank you for your attention!
+					<p>Get in touch: <a href="mailto:weiner@mma.tu-darmstadt.de">weiner@mma.tu-darmstadt.de</a></p>
+					<p>Time for discussion ...</p>
+					<div class="row_logo">
+ 						<div class="column_logo">
+							<div class="content_logo">
+	 							<img src="images/mma_logo.jpg" alt="mma_logo" style="background:none; border:none; box-shadow:none;">
+							</div>
+ 						</div>
+ 						<div class="column_logo">
+							<div class="content_logo">
+	 							<img src="images/spp1740_logo.svg" alt="spp1740_logo" style="background:none; border:none; box-shadow:none;">
+							</div>
+ 						</div>
+					</div>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				center: true,
+				hash: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true },
+					{ src: 'plugin/search/search.js', async: true },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/math/math.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
