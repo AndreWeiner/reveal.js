@@ -35,6 +35,21 @@
 		<![endif]-->
 	</head>
 
+	<style>
+		.row_img {
+			display: table;
+		}
+		.column_img {
+			display: table-cell;
+			vertical-align: middle;
+			text-align: center;
+			width: 50%;
+		}
+		.content_img {
+			display: inline-block;
+		}
+	</style>
+
 	<body>
 
 		<div class="reveal">
@@ -82,11 +97,10 @@
 					<h2>Outline</h2>
 					<ol>
 						<li>Recent activities</li>
-						<li>Maintaining research and results</li>
+						<li>Sustainable research</li>
 						<hr>
 						<li>Subgrid-scale modeling</li>
-						<li>Decoupling of two-phase flow and species transfer</li>
-						<li>Air bubbles rising in aqueous sugar solutions</li>
+						<li>Model validation</li>
 						<li>Air bubbles rising in water</li>
 						<li>Outlook and summary</li>
 					</ol>
@@ -116,19 +130,72 @@
 				<!-- maintaining research and results-->
 				<section>
 					<section>
-						<h2>Research debt</h2>
+						<h2>Sustainable research</h2>
+						<img src="images/spp1740/no_version_control_crop.png" alt="no_version_control" width="500px" style="background:none; border:none; box-shadow:none;">
+						<p>
+							<small><a href="http://geek-and-poke.com/geekandpoke/2012/11/3/simply-explained.html">Image source: Geek and Poke</a></small>
+						</p>
+					</section>
+					<section>
+						<img src="images/spp1740/debt-mountain.jpg" alt="debt_mountain" width="800px" style="background:none; border:none; box-shadow:none;">
+						<p>
+							Chris Olah, Shan Carter: Research debt<br>
+							<a href="https://distill.pub/2017/research-debt/">DOI: 10.23915/distill.00005</a>
+						</p>
 					</section>
 					<section>
 						<h2>Making results reproducible</h2>
+						<img src="images/spp1740/reproducibility_strategy.png" alt="research_strategy" width="800px" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
-						<h2>Version control</h2>
+						<h2>Version control I</h2>
+						<img src="images/spp1740/commit_diff.png" alt="github_diff" width="650px" style="background:none; border:none; box-shadow:none;">
+						<p> Tools:
+							<a href="https://git-scm.com/">Git</a>, <a href="https://github.com/">Github</a>
+						</p>
+					</section>
+					<section>
+						<h2>Version control II</h2>
+						<img src="images/spp1740/github_overview.png" alt="github_overview" width="650px" style="background:none; border:none; box-shadow:none;">
+						<p>
+							<a href="https://github.com/AndreWeiner/phd_notebooks">Available on Github</a>
+						</p>
 					</section>
 					<section>
 						<h2>Virtualization</h2>
+						<div class="row_img">
+	 						<div class="column_img">
+								<div class="content_img">
+		 							<img src="images/docker/container-vm.png" alt="vm" style="background:none; border:none; box-shadow:none;">
+								</div>
+	 						</div>
+	 						<div class="column_img">
+								<div class="content_img">
+		 							<img src="images/docker/docker-containerized.png" alt="docker" style="background:none; border:none; box-shadow:none;">
+								</div>
+	 						</div>
+						</div>
+						<p><a href="https://www.docker.com/resources/what-container">Image source (Docker)</a></p>
+					</section>
+					<section>
+						<h2>Compatibility</h2>
+						<ul>
+							<li>Linux kernel <b>3.10+</b> (30th June 2013)</li>
+							<li>Docker engine
+									<ul>
+										<li>Initial release: <b>0.1.0</b> (23rd March 2013)</li>
+										<li>Compatibility break: <b>1.10</b> (4th Febuary 2016)</li>
+										<li>Current release: <b>19.03.01</b> (25th July 2019)</li>
+									</ul>
+							</li>
+						</ul>
 					</section>
 					<section>
 						<h2>High-fidelity data storage</h2>
+						<img src="images/spp1740/tu_datalib_example.png" alt="tu_datalib" width="600px" style="background:none; border:none; box-shadow:none;">
+						<p>
+							<a href="https://tudatalib.ulb.tu-darmstadt.de/handle/tudatalib/2087">Available on TUdatalib</a>
+						</p>
 					</section>
 				</section>
 
@@ -136,13 +203,80 @@
 				<section>
 					<section>
 						<h2>Subgrid-scale modeling</h2>
+						principal of subgrid scale modeling
+					</section>
+					<section>
+						<h2>Typical simulation scenario</h2>
+						bild Chiara, Protoype reaction with names
+					</section>
+					<section>
+						<h2>Transfer species A</h2>
+						fluxes A
+					</section>
+					<section>
+						<h2>Bulk species B</h2>
+						fluxes B
+					</section>
+					<section>
+						<h2>Product species P</h2>
+						fluxes P
+					</section>
+					<section>
+						<h2>Reaction term</h2>
+						reaction term
+					</section>
+					<section>
+						<h2>Data-driven profile reconstruction</h2>
+						Paper CET, wedge setup
+					</section>
+					<section>
+						<h2>1D setting for data generation</h2>
+						outline idea, reference Tryggvasion, Dirk
+						no parameter limitation
+					</section>
+					<section>
+						<h2>Subgrid-scale modeling is not reserved for simulations</h2>
+						bild exp. vs. simulation
 					</section>
 				</section>
 
-				<!-- air bubbles rising in aqueous solutions -->
+				<!-- decoupling of two-phase flow and species transfer -->
 				<section>
 					<section>
-						<h2>Air bubbles rising in aqueous solutions</h2>
+						<h2>Model validation</h2>
+						Complex shapes
+						Dynamic conditions
+						Reference data (local and global)?
+					</section>
+					<section>
+						<h2>Dilemma</h2>
+						VOF InterfaceTracking, cite Chiara, old SGS paper
+					</section>
+					<section>
+						<h2>Decoupling of two phase flow and species transport</h2>
+						VOF simulation: shape, velocity bild bhaga
+					</section>
+					<section>
+						<h2>Decoupling of two phase flow and species transport</h2>
+						shape approximation
+					</section>
+					<section>
+						<h2>Decoupling of two phase flow and species transport</h2>
+						boundary condition
+					</section>
+					<section>
+						<h2>Decoupling of two phase flow and species transport</h2>
+						single phase simulation
+					</section>
+					<section>
+						<h2>Extension to 4D</h2>
+						<img src="images/initial_sphere_mesh.png" alt="initial_mesh" width="500" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>First impression</h2>
+						<video height="550px" controls autoplay loop>
+							<source src="videos/mesh_deformation.ogv">
+						</video>
 					</section>
 				</section>
 
@@ -150,13 +284,74 @@
 				<section>
 					<section>
 						<h2>Air bubbles rising in water</h2>
+						<ul>
+							<li>bubble size $d_b=3...7mm$</li>
+							<li>VoF simulation for Hydrodynamic solution (<a href="http://basilisk.fr/">Basilisk</a>)</li>
+							<li>Single phase approximation for species transport (planned, <a href="http://openfoam.com/">OpenFOAM</a>, <a href="https://pytorch.org/">PyTorch</a>)</li>
+							<li>experiments by David Merker (Prof. Kraume)</li>
+						</ul>
+					</section>
+					<section>
+					<style>
+						.row_video {
+							display: table;
+							width: 100%;
+						}
+						.column_video {
+							display: table-cell;
+							text-align: center;
+							width: 50%;
+						}
+						.content_video {
+							display: inline-block;
+						}
+					</style>
+						<div class="row_video">
+	 						<div class="column_video">
+								<div class="content_video">
+									<small>water/air: $d_{eq}=3~mm$</small>
+									<video height="500" controls mute autoplay loop>
+										<source src="videos/b8_mesh_plic.ogv">
+									</video>
+								</div>
+	 						</div>
+	 						<div class="column_video">
+								<div class="content_video">
+									<small>water/air: $d_{eq}=5~mm$</small>
+									<video height="500" controls mute autoplay loop>
+										<source src="videos/b10_mesh_plic.ogv">
+									</video>
+								</div>
+	 						</div>
+						</div>
+					</section>
+					<section>
+						<h2>Terminal velocity</h2>
+						<img src="images/spp1740/velocities.png" alt="terminal_velocity" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Velocity distribution</h2>
+						<img src="images/spp1740/velocity_distribution.png" alt="velocity_distribution" width="600" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Some statistics</h2>
+						<img src="images/spp1740/water_air_statistics.png" alt="statistics" width="800" style="background:none; border:none; box-shadow:none;">
 					</section>
 				</section>
 
 				<!-- outlook and summary -->
 				<section>
 					<section>
-						<h2>Outlook and summary</h2>
+						<h2>Summary and outlook</h2>
+						<ul>
+							<li>concept for conserving and publishing results &#10004;</li>
+							<li>high-$Pe$ number problem (boundary layer) &#10004;</li>
+							<li>SGS modeling for 1st order reaction &#10004;</li>
+							<hr>
+							<li>SGS modeling for selective reactions (&#10004;)</li>
+							<li>Validation with complex and dynamic interfaces (&#10004;)</li>
+							<li>PhD thesis (&#10004;)</li>
+						</ul>
 					</section>
 				</section>
 
