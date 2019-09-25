@@ -148,14 +148,14 @@
 						<img src="images/spp1740/reproducibility_strategy.png" alt="research_strategy" width="800px" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
-						<h2>Version control I</h2>
+						<h2>Version control (I)</h2>
 						<img src="images/spp1740/commit_diff.png" alt="github_diff" width="650px" style="background:none; border:none; box-shadow:none;">
 						<p> Tools:
 							<a href="https://git-scm.com/">Git</a>, <a href="https://github.com/">Github</a>
 						</p>
 					</section>
 					<section>
-						<h2>Version control II</h2>
+						<h2>Version control (II)</h2>
 						<img src="images/spp1740/github_overview.png" alt="github_overview" width="650px" style="background:none; border:none; box-shadow:none;">
 						<p>
 							<a href="https://github.com/AndreWeiner/phd_notebooks">Available on Github</a>
@@ -203,40 +203,62 @@
 				<section>
 					<section>
 						<h2>Subgrid-scale modeling</h2>
-						principal of subgrid scale modeling
+						<img src="images/spp1740/sgs_principle.svg" alt="sgs_principle" width="800px" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
 						<h2>Typical simulation scenario</h2>
-						bild Chiara, Protoype reaction with names
+						<div class="row_img">
+	 						<div class="column_img">
+								<div class="content_img">
+		 							<img src="images/spp1740/bl_configuration.png" alt="bl_configuration" width="450" style="background:none; border:none; box-shadow:none;">
+								</div>
+	 						</div>
+	 						<div class="column_img">
+								<div class="content_img">
+									<p>Reaction:</p>
+									<p>$2A + B \rightarrow P$</p>
+									<p>$\dot{r} = kc_A^2c_B$</p>
+									<ul>
+										<li>$A$ - transfer species</li>
+										<li>$B$ - bulk species</li>
+										<li>$P$ - product species</li>
+									</ul>
+								</div>
+	 						</div>
+						</div>
+						<p><a href="https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/computational-analysis-of-single-rising-bubbles-influenced-by-soluble-surfactant/74FFCE053782E4E0901EFD77CDAF4518">Image: C. Pesci, A. Weiner, H. Marschall, D.Bothe</a></p>
 					</section>
 					<section>
-						<h2>Transfer species A</h2>
-						fluxes A
+						<h2>Transfer species (A)</h2>
+						<img src="images/spp1740/sgs_transfer_species.png" alt="sgs_transfer_species" width="800" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
-						<h2>Bulk species B</h2>
-						fluxes B
+						<h2>Bulk species (B)</h2>
+						<img src="images/spp1740/sgs_bulk_species.png" alt="sgs_bulk_species" width="800" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
-						<h2>Product species P</h2>
-						fluxes P
+						<h2>Product species (P)</h2>
+						<img src="images/spp1740/sgs_product_species.png" alt="sgs_product_species" width="800" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
 						<h2>Reaction term</h2>
-						reaction term
+						<img src="images/spp1740/sgs_reaction_term.png" alt="sgs_reaction_term" width="800" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
 						<h2>Data-driven profile reconstruction</h2>
-						Paper CET, wedge setup
+						<img src="images/workflow_sgs_data.png" alt="sgs_workflow_data" width="800px" style="background:none; border:none; box-shadow:none;">
+						<p><small><a href="https://onlinelibrary.wiley.com/doi/full/10.1002/ceat.201900044">Further information: A. Weiner, D. Hillenbrand, H. Marschall, D.Bothe</a></small></p>
 					</section>
 					<section>
-						<h2>1D setting for data generation</h2>
-						outline idea, reference Tryggvasion, Dirk
-						no parameter limitation
+						<h2>Idea: 2D&#8594;1D setting</h2>
+						<img src="images/elliptical_mesh.png" alt="elliptical_mesh" width="600" style="background:none; border:none; box-shadow:none;">
+						<p>$\partial_\tau c = -\partial_n u_n|_\Sigma \partial_n c + D\partial_{nn}c + f_t (n,u_t,...)$</p>
+						<p><small>Idea based on <a href="https://www.sciencedirect.com/science/article/pii/S0017931015306980">D. Gründing et al.</a> and <a href="https://www.sciencedirect.com/science/article/pii/S000925091200231X">B. Aboulhasanzadeh et al.</a></small></p>
 					</section>
 					<section>
-						<h2>Subgrid-scale modeling is not reserved for simulations</h2>
-						bild exp. vs. simulation
+						<h2>SGS modeling for experiments?</h2>
+						<img src="images/spp1740/exp_vs_sim_wake.png" alt="sgs_principle" height="380px" style="background:none; border:none; box-shadow:none;">
+						<p><small><a href="https://www.sciencedirect.com/science/article/pii/S2590140019300140">Image: A. Weiner, J. Timmermann, C. Pesci, J.Grewe, M. Hoffmann, M.Schlüter, D.Bothe</a></small></p>
 					</section>
 				</section>
 
@@ -244,29 +266,77 @@
 				<section>
 					<section>
 						<h2>Model validation</h2>
-						Complex shapes
-						Dynamic conditions
-						Reference data (local and global)?
+						<p>How to obtain reference data for</p>
+						<ol>
+							<li><b>complex</b> bubble shapes and</li>
+							<li><b>dynamic</b> shape deformation</li>
+						</ol>
+						<p>locally <b>and</b> globally?</p>
 					</section>
 					<section>
 						<h2>Dilemma</h2>
-						VOF InterfaceTracking, cite Chiara, old SGS paper
+						<div class="row_img">
+	 						<div class="column_img">
+								<div class="content_img">
+									<p>Volume of Fluid</p>
+									<small>
+										<ul>
+											<li>strong deformations</li>
+											<li>low computational cost</li>
+											<li>low accuracy</li>
+										</ul>
+									</small>
+		 							<img src="images/spp1740/vof_local_sh.png" alt="vof_sh_loc" height="250" style="background:none; border:none; box-shadow:none;">
+									<p><small>Image: <a href="https://www.sciencedirect.com/science/article/pii/S0021999117304941">A. Weiner, D. Bothe (2017)</a></small></p>
+								</div>
+	 						</div>
+	 						<div class="column_img">
+								<div class="content_img">
+									<p>Interface Tracking</p>
+									<small>
+										<ul>
+											<li>small deformations</li>
+											<li>high computational cost</li>
+											<li>high accuracy</li>
+										</ul>
+									</small>
+									<img src="images/spp1740/it_local_sh.png" alt="it_sh_loc" height="250" style="background:none; border:none; box-shadow:none;">
+									<p><small>Image: <a href="https://www.sciencedirect.com/science/article/pii/S2590140019300140">A. Weiner et al. (2019)</a></small></p>
+	 						</div>
+						</div>
 					</section>
 					<section>
 						<h2>Decoupling of two phase flow and species transport</h2>
-						VOF simulation: shape, velocity bild bhaga
+						<ol>
+							<li>Two-phase flow simulation (VoF)</li>
+							<li>Extraction and approximation of shape and boundary conditions (machine learning)</li>
+							<li>Single phase solution (liquid) of momentum and species transport</li>
+						</ol>
 					</section>
 					<section>
-						<h2>Decoupling of two phase flow and species transport</h2>
-						shape approximation
+						<h2>Two phase flow simulation</h2>
+						<img src="images/shape_variety.png" alt="bhaga_velocity" width="800" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
-						<h2>Decoupling of two phase flow and species transport</h2>
-						boundary condition
+						<h2>Shape and BC</h2>
+						<img src="images/spp1740/shape_approximation_bhaga.png" alt="bhaga_shape" width="600" style="background:none; border:none; box-shadow:none;">
+						<img src="images/spp1740/velocity_interface_approximation.png" alt="bhaga_interface_velocity" width="600" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
-						<h2>Decoupling of two phase flow and species transport</h2>
-						single phase simulation
+						<h2>Single phase solution</h2>
+						<div class="row_img">
+	 						<div class="column_img">
+								<div class="content_img">
+									<small>original tow-phase flow</small>
+		 							<img src="images/spp1740/bhaga_dimpled_streamlines.png" alt="dimpled_streamlines" height="500" style="background:none; border:none; box-shadow:none;">
+								</div>
+	 						</div>
+	 						<div class="column_img">
+								<div class="content_img">
+									<small>single phase approximation</small>
+									<img src="images/spp1740/dimpled_mass_preview.png" alt="dimpled_mass" height="500" style="background:none; border:none; box-shadow:none;">
+	 						</div>
+						</div>
 					</section>
 					<section>
 						<h2>Extension to 4D</h2>
