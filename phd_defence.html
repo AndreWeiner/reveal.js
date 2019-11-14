@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Data-driven subgrid-scale modeling for convection-dominated concentration boundary layers</title>
+
+		<meta name="description" content="ofw2019_presentation">
+		<meta name="author" content="Andre Weiner">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/white.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/monokai.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<style>
+		.row_img {
+			display: table;
+		}
+		.column_img {
+			display: table-cell;
+			vertical-align: middle;
+			text-align: center;
+			width: 50%;
+		}
+		.content_img {
+			display: inline-block;
+		}
+	</style>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<!-- title slide -->
+				<section>
+					<h3>Modeling and simulation of convection-dominated species transfer at rising bubbles</h3>
+					<p>
+						<small>Andre Weiner, <a href="mailto:weiner@mma.tu-darmstadt.de">weiner@mma.tu-darmstadt.de</a></small><br>
+						<small>First supervisor: <b>Prof. Dr. rer. nat. Dieter Bothe</b></small><br>
+						<small>Second supervisor: <b>Prof. Dr.-Ing. Peter Stephan</b></small><br>
+						<small>Slides available at: <a href="https://andreweiner.github.io/reveal.js/phd_defence.html#/">andreweiner.github.io/reveal.js/phd_defence.html</a></small>
+					</p>
+
+					<style>
+						.row_logo {
+							display: table;
+						}
+						.column_logo {
+							display: table-cell;
+							vertical-align: middle;
+							text-align: center;
+							width: 50%;
+						}
+						.content_logo {
+							display: inline-block;
+						}
+					</style>
+					<div class="row_logo">
+ 						<div class="column_logo">
+							<div class="content_logo">
+	 							<img src="images/mma_logo.jpg" alt="mma_logo" style="background:none; border:none; box-shadow:none;">
+							</div>
+ 						</div>
+ 						<div class="column_logo">
+							<div class="content_logo">
+	 							<img src="images/spp1740_logo.svg" alt="spp1740_logo" style="background:none; border:none; box-shadow:none;">
+							</div>
+ 						</div>
+					</div>
+				</section>
+
+				<!-- Motivation -->
+				<section>
+					<section>
+						Some numbers on columns
+					</section>
+					<section>
+						column simulations
+					</section>
+				</section>
+
+				<!-- outline -->
+				<section>
+					<h2>Outline</h2>
+					<ol>
+						<li>High Pe number problem</li>
+						<li>Effect of underresolved meshes</li>
+						<li>Subgrid-scale modeling I</li>
+						<li>Subgrid-scale modeling</li>
+						<li>Model validation</li>
+						<li>Air bubbles rising in water</li>
+						<li>Outlook and summary</li>
+					</ol>
+				</section>
+
+				<!-- maintaining research and results-->
+				<section>
+					<section>
+						<h2>Sustainable research</h2>
+						<img src="images/spp1740/no_version_control_crop.png" alt="no_version_control" width="500px" style="background:none; border:none; box-shadow:none;">
+						<p>
+							<small><a href="http://geek-and-poke.com/geekandpoke/2012/11/3/simply-explained.html">Image source: Geek and Poke</a></small>
+						</p>
+					</section>
+					<section>
+						<img src="images/spp1740/debt-mountain.jpg" alt="debt_mountain" width="800px" style="background:none; border:none; box-shadow:none;">
+						<p>
+							Chris Olah, Shan Carter: Research debt<br>
+							<a href="https://distill.pub/2017/research-debt/">DOI: 10.23915/distill.00005</a>
+						</p>
+					</section>
+					<section>
+						<h2>Making results reproducible</h2>
+						<img src="images/spp1740/reproducibility_strategy.png" alt="research_strategy" width="800px" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Version control (I)</h2>
+						<img src="images/spp1740/commit_diff.png" alt="github_diff" width="650px" style="background:none; border:none; box-shadow:none;">
+						<p> Tools:
+							<a href="https://git-scm.com/">Git</a>, <a href="https://github.com/">Github</a>
+						</p>
+					</section>
+					<section>
+						<h2>Version control (II)</h2>
+						<img src="images/spp1740/github_overview.png" alt="github_overview" width="650px" style="background:none; border:none; box-shadow:none;">
+						<p>
+							<a href="https://github.com/AndreWeiner/phd_notebooks">Available on Github</a>
+						</p>
+					</section>
+					<section>
+						<h2>Virtualization</h2>
+						<div class="row_img">
+	 						<div class="column_img">
+								<div class="content_img">
+		 							<img src="images/docker/container-vm.png" alt="vm" style="background:none; border:none; box-shadow:none;">
+								</div>
+	 						</div>
+	 						<div class="column_img">
+								<div class="content_img">
+		 							<img src="images/docker/docker-containerized.png" alt="docker" style="background:none; border:none; box-shadow:none;">
+								</div>
+	 						</div>
+						</div>
+						<p><a href="https://www.docker.com/resources/what-container">Image source (Docker)</a></p>
+					</section>
+					<section>
+						<h2>Compatibility</h2>
+						<ul>
+							<li>Linux kernel <b>3.10+</b> (30th June 2013)</li>
+							<li>Docker engine
+									<ul>
+										<li>Initial release: <b>0.1.0</b> (23rd March 2013)</li>
+										<li>Compatibility break: <b>1.10</b> (4th Febuary 2016)</li>
+										<li>Current release: <b>19.03.01</b> (25th July 2019)</li>
+									</ul>
+							</li>
+						</ul>
+					</section>
+					<section>
+						<h2>High-fidelity data storage</h2>
+						<img src="images/spp1740/tu_datalib_example.png" alt="tu_datalib" width="600px" style="background:none; border:none; box-shadow:none;">
+						<p>
+							<a href="https://tudatalib.ulb.tu-darmstadt.de/handle/tudatalib/2087">Available on TUdatalib</a>
+						</p>
+					</section>
+				</section>
+
+				<!-- subgrid-scale modeling-->
+				<section>
+					<section>
+						<h2>Subgrid-scale modeling</h2>
+						<img src="images/spp1740/sgs_principle.svg" alt="sgs_principle" width="800px" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Typical simulation scenario</h2>
+						<div class="row_img">
+	 						<div class="column_img">
+								<div class="content_img">
+		 							<img src="images/spp1740/bl_configuration.png" alt="bl_configuration" width="450" style="background:none; border:none; box-shadow:none;">
+								</div>
+	 						</div>
+	 						<div class="column_img">
+								<div class="content_img">
+									<p>Reaction:</p>
+									<p>$2A + B \rightarrow P$</p>
+									<p>$\dot{r} = kc_A^2c_B$</p>
+									<ul>
+										<li>$A$ - transfer species</li>
+										<li>$B$ - bulk species</li>
+										<li>$P$ - product species</li>
+									</ul>
+								</div>
+	 						</div>
+						</div>
+						<p>
+							<small> Image:
+								<a href="https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/computational-analysis-of-single-rising-bubbles-influenced-by-soluble-surfactant/74FFCE053782E4E0901EFD77CDAF4518">C. Pesci, A. Weiner, H. Marschall, D.Bothe; J. Fluid Mech. (2018)</a>
+							</small>
+						</p>
+					</section>
+					<section>
+						<h2>Transfer species (A)</h2>
+						<img src="images/spp1740/sgs_transfer_species.png" alt="sgs_transfer_species" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Bulk species (B)</h2>
+						<img src="images/spp1740/sgs_bulk_species.png" alt="sgs_bulk_species" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Product species (P)</h2>
+						<img src="images/spp1740/sgs_product_species.png" alt="sgs_product_species" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Reaction term</h2>
+						<img src="images/spp1740/sgs_reaction_term.png" alt="sgs_reaction_term" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Data-driven profile reconstruction</h2>
+						<img src="images/workflow_sgs_data.png" alt="sgs_workflow_data" width="800px" style="background:none; border:none; box-shadow:none;">
+						<p><small> Further information:
+							<a href="https://onlinelibrary.wiley.com/doi/full/10.1002/ceat.201900044">A. Weiner, D. Hillenbrand, H. Marschall, D.Bothe; CET (2019)</a>
+						</small></p>
+					</section>
+					<section>
+						<h2>Idea: 2D&#8594;1D setting</h2>
+						<img src="images/elliptical_mesh.png" alt="elliptical_mesh" width="600" style="background:none; border:none; box-shadow:none;">
+						<p>$\partial_\tau c = -\partial_n u_n|_\Sigma \partial_n c + D\partial_{nn}c + f_t (n,u_t,...)$</p>
+						<p><small>Idea based on <a href="https://www.sciencedirect.com/science/article/pii/S0017931015306980">D. Gründing, D. Bothe; Int. J. Heat Mass Tranf. (2016)</a> and <a href="https://www.sciencedirect.com/science/article/pii/S000925091200231X">B. Aboulhasanzadeh, S. Thomas, M. Taeibi-Rahni, G. Tryggvason; CES (2012)</a></small></p>
+					</section>
+					<section>
+						<h2>SGS modeling for experiments?</h2>
+						<img src="images/spp1740/exp_vs_sim_wake.png" alt="sgs_principle" height="380px" style="background:none; border:none; box-shadow:none;">
+						<p><small>Image: <a href="https://www.sciencedirect.com/science/article/pii/S2590140019300140">A. Weiner, J. Timmermann, C. Pesci, J.Grewe, M. Hoffmann, M.Schlüter, D.Bothe; CES (2019)</a></small></p>
+					</section>
+				</section>
+
+				<!-- decoupling of two-phase flow and species transfer -->
+				<section>
+					<section>
+						<h2>Model assessment</h2>
+						<p>How to obtain reference data for</p>
+						<ol>
+							<li><b>complex</b> bubble shapes and</li>
+							<li><b>dynamic</b> shape deformation</li>
+						</ol>
+						<p>locally <b>and</b> globally?</p>
+					</section>
+					<section>
+						<h2>Dilemma</h2>
+						<div class="row_img">
+	 						<div class="column_img">
+								<div class="content_img">
+									<p>Volume of Fluid</p>
+									<small>
+										<ul>
+											<li>strong deformations</li>
+											<li>low computational cost</li>
+											<li>low accuracy</li>
+										</ul>
+									</small>
+		 							<img src="images/spp1740/vof_local_sh.png" alt="vof_sh_loc" height="250" style="background:none; border:none; box-shadow:none;">
+									<p><small>Image: <a href="https://www.sciencedirect.com/science/article/pii/S0021999117304941">A. Weiner, D. Bothe; J. Comput. Phys. (2017)</a></small></p>
+								</div>
+	 						</div>
+	 						<div class="column_img">
+								<div class="content_img">
+									<p>Interface Tracking</p>
+									<small>
+										<ul>
+											<li>small deformations</li>
+											<li>high computational cost</li>
+											<li>high accuracy</li>
+										</ul>
+									</small>
+									<img src="images/spp1740/it_local_sh.png" alt="it_sh_loc" height="250" style="background:none; border:none; box-shadow:none;">
+									<p><small>Image: <a href="https://www.sciencedirect.com/science/article/pii/S2590140019300140">A. Weiner, J. Timmermann, C. Pesci, J.Grewe, M. Hoffmann, M.Schlüter, D.Bothe</a></small></p>
+	 						</div>
+						</div>
+					</section>
+					<section>
+						<h2>Decoupling of two phase flow and species transport</h2>
+						<ol>
+							<li>Two-phase flow simulation (VoF)</li>
+							<li>Extraction and approximation of shape and boundary conditions (machine learning)</li>
+							<li>Single phase solution (liquid) of momentum and species transport</li>
+						</ol>
+					</section>
+					<section>
+						<h2>Two phase flow simulation</h2>
+						<img src="images/shape_variety.png" alt="bhaga_velocity" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Oscillations in VOF data</h2>
+						<img src="images/spp1740/bhaga_2_tail_velocity.png" alt="bhaga_velocity_tail" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Shape and BC</h2>
+						<img src="images/spp1740/shape_approximation_bhaga.png" alt="bhaga_shape" width="600" style="background:none; border:none; box-shadow:none;">
+						<img src="images/spp1740/velocity_interface_approximation.png" alt="bhaga_interface_velocity" width="600" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Single phase solution</h2>
+						<div class="row_img">
+	 						<div class="column_img">
+								<div class="content_img">
+									<small>original tow-phase flow</small>
+		 							<img src="images/spp1740/bhaga_dimpled_streamlines.png" alt="dimpled_streamlines" height="500" style="background:none; border:none; box-shadow:none;">
+								</div>
+	 						</div>
+	 						<div class="column_img">
+								<div class="content_img">
+									<small>single phase approximation</small>
+									<img src="images/spp1740/dimpled_mass_preview.png" alt="dimpled_mass" height="500" style="background:none; border:none; box-shadow:none;">
+	 						</div>
+						</div>
+					</section>
+					<section>
+						<h2>Extension to 4D</h2>
+						<img src="images/initial_sphere_mesh.png" alt="initial_mesh" width="500" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>First impression</h2>
+						<video height="550px" controls autoplay loop>
+							<source src="videos/mesh_deformation.ogv">
+						</video>
+					</section>
+				</section>
+
+				<!-- air bubbles rising in water -->
+				<section>
+					<section>
+						<h2>Air bubbles rising in water</h2>
+						<ul>
+							<li>bubble size $d_b=3...7mm$</li>
+							<li>VoF simulation for Hydrodynamic solution (<a href="http://basilisk.fr/">Basilisk</a>)</li>
+							<li>Single phase approximation for species transport (planned, <a href="http://openfoam.com/">OpenFOAM</a>, <a href="https://pytorch.org/">PyTorch</a>)</li>
+							<li>experiments by David Merker (Prof. Kraume)</li>
+						</ul>
+					</section>
+					<section>
+					<style>
+						.row_video {
+							display: table;
+							width: 100%;
+						}
+						.column_video {
+							display: table-cell;
+							text-align: center;
+							width: 50%;
+						}
+						.content_video {
+							display: inline-block;
+						}
+					</style>
+						<div class="row_video">
+	 						<div class="column_video">
+								<div class="content_video">
+									<small>water/air: $d_{eq}=3~mm$</small>
+									<video height="500" controls mute autoplay loop>
+										<source src="videos/b8_mesh_plic.ogv">
+									</video>
+								</div>
+	 						</div>
+	 						<div class="column_video">
+								<div class="content_video">
+									<small>water/air: $d_{eq}=5~mm$</small>
+									<video height="500" controls mute autoplay loop>
+										<source src="videos/b10_mesh_plic.ogv">
+									</video>
+								</div>
+	 						</div>
+						</div>
+					</section>
+					<section>
+						<h2>Terminal velocity</h2>
+						<img src="images/spp1740/velocities.png" alt="terminal_velocity" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Velocity distribution</h2>
+						<img src="images/spp1740/velocity_distribution.png" alt="velocity_distribution" width="600" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Some statistics</h2>
+						<img src="images/spp1740/water_air_statistics.png" alt="statistics" width="800" style="background:none; border:none; box-shadow:none;">
+					</section>
+				</section>
+
+				<!-- outlook and summary -->
+				<section>
+					<section>
+						<h2>Summary and outlook</h2>
+						<ul>
+							<li>concept for conserving and publishing results &#10004;</li>
+							<li>high-$Pe$ number problem (boundary layer) &#10004;</li>
+							<li>SGS modeling for 1st order reaction &#10004;</li>
+							<hr>
+							<li>SGS modeling for selective reactions (&#10004;)</li>
+							<li>Validation with complex and dynamic interfaces (&#10004;)</li>
+							<li>PhD thesis (&#10004;)</li>
+						</ul>
+					</section>
+				</section>
+
+				<!-- end -->
+				<section style="text-align: left;">
+					<h1>THE END</h1>
+					<p>Thank you for your attention!
+					<p>Get in touch: <a href="mailto:weiner@mma.tu-darmstadt.de">weiner@mma.tu-darmstadt.de</a></p>
+					<p>Time for discussion ...</p>
+					<div class="row_logo">
+ 						<div class="column_logo">
+							<div class="content_logo">
+	 							<img src="images/mma_logo.jpg" alt="mma_logo" style="background:none; border:none; box-shadow:none;">
+							</div>
+ 						</div>
+ 						<div class="column_logo">
+							<div class="content_logo">
+	 							<img src="images/spp1740_logo.svg" alt="spp1740_logo" style="background:none; border:none; box-shadow:none;">
+							</div>
+ 						</div>
+					</div>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				center: true,
+				hash: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true },
+					{ src: 'plugin/search/search.js', async: true },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/math/math.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
