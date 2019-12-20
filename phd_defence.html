@@ -97,10 +97,16 @@
 				<!-- Motivation -->
 				<section>
 					<section>
-						Some numbers on columns
+						Videos von Blasensauele, plant, Stickworte (mixing, transfer, enhancement, selectivity)
 					</section>
 					<section>
-						column simulations
+						scale up strategy
+					</section>
+					<section>
+						boundary layer image kueck, numbers, computation
+					</section>
+					<section>
+						Pe influence, limitations
 					</section>
 				</section>
 
@@ -108,85 +114,23 @@
 				<section>
 					<h2>Outline</h2>
 					<ol>
-						<li>High Pe number problem</li>
 						<li>Effect of underresolved meshes</li>
-						<li>Subgrid-scale modeling I</li>
 						<li>Subgrid-scale modeling</li>
-						<li>Model validation</li>
-						<li>Air bubbles rising in water</li>
-						<li>Outlook and summary</li>
+						<li>Data-driven modeling</li>
+						<li>Hybrid approach for model assessment</li>
+						<li>Comparison with experiments</li>
+						<li>Summary and outlook</li>
 					</ol>
 				</section>
 
-				<!-- maintaining research and results-->
+				<!-- effect of underresolved meshes-->
 				<section>
 					<section>
-						<h2>Sustainable research</h2>
-						<img src="images/spp1740/no_version_control_crop.png" alt="no_version_control" width="500px" style="background:none; border:none; box-shadow:none;">
-						<p>
-							<small><a href="http://geek-and-poke.com/geekandpoke/2012/11/3/simply-explained.html">Image source: Geek and Poke</a></small>
-						</p>
+						<h2>Underresolved meshes</h2>
 					</section>
 					<section>
-						<img src="images/spp1740/debt-mountain.jpg" alt="debt_mountain" width="800px" style="background:none; border:none; box-shadow:none;">
-						<p>
-							Chris Olah, Shan Carter: Research debt<br>
-							<a href="https://distill.pub/2017/research-debt/">DOI: 10.23915/distill.00005</a>
-						</p>
-					</section>
-					<section>
-						<h2>Making results reproducible</h2>
-						<img src="images/spp1740/reproducibility_strategy.png" alt="research_strategy" width="800px" style="background:none; border:none; box-shadow:none;">
-					</section>
-					<section>
-						<h2>Version control (I)</h2>
-						<img src="images/spp1740/commit_diff.png" alt="github_diff" width="650px" style="background:none; border:none; box-shadow:none;">
-						<p> Tools:
-							<a href="https://git-scm.com/">Git</a>, <a href="https://github.com/">Github</a>
-						</p>
-					</section>
-					<section>
-						<h2>Version control (II)</h2>
-						<img src="images/spp1740/github_overview.png" alt="github_overview" width="650px" style="background:none; border:none; box-shadow:none;">
-						<p>
-							<a href="https://github.com/AndreWeiner/phd_notebooks">Available on Github</a>
-						</p>
-					</section>
-					<section>
-						<h2>Virtualization</h2>
-						<div class="row_img">
-	 						<div class="column_img">
-								<div class="content_img">
-		 							<img src="images/docker/container-vm.png" alt="vm" style="background:none; border:none; box-shadow:none;">
-								</div>
-	 						</div>
-	 						<div class="column_img">
-								<div class="content_img">
-		 							<img src="images/docker/docker-containerized.png" alt="docker" style="background:none; border:none; box-shadow:none;">
-								</div>
-	 						</div>
-						</div>
-						<p><a href="https://www.docker.com/resources/what-container">Image source (Docker)</a></p>
-					</section>
-					<section>
-						<h2>Compatibility</h2>
-						<ul>
-							<li>Linux kernel <b>3.10+</b> (30th June 2013)</li>
-							<li>Docker engine
-									<ul>
-										<li>Initial release: <b>0.1.0</b> (23rd March 2013)</li>
-										<li>Compatibility break: <b>1.10</b> (4th Febuary 2016)</li>
-										<li>Current release: <b>19.03.01</b> (25th July 2019)</li>
-									</ul>
-							</li>
-						</ul>
-					</section>
-					<section>
-						<h2>High-fidelity data storage</h2>
-						<img src="images/spp1740/tu_datalib_example.png" alt="tu_datalib" width="600px" style="background:none; border:none; box-shadow:none;">
-						<p>
-							<a href="https://tudatalib.ulb.tu-darmstadt.de/handle/tudatalib/2087">Available on TUdatalib</a>
-						</p>
+						<h2>Transfer species (A)</h2>
+						<img src="images/spp1740/sgs_transfer_species.png" alt="sgs_transfer_species" width="800" style="background:none; border:none; box-shadow:none;">
 					</section>
 				</section>
 
@@ -194,72 +138,57 @@
 				<section>
 					<section>
 						<h2>Subgrid-scale modeling</h2>
-						<img src="images/spp1740/sgs_principle.svg" alt="sgs_principle" width="800px" style="background:none; border:none; box-shadow:none;">
+						three steps
 					</section>
 					<section>
-						<h2>Typical simulation scenario</h2>
-						<div class="row_img">
-	 						<div class="column_img">
-								<div class="content_img">
-		 							<img src="images/spp1740/bl_configuration.png" alt="bl_configuration" width="450" style="background:none; border:none; box-shadow:none;">
-								</div>
-	 						</div>
-	 						<div class="column_img">
-								<div class="content_img">
-									<p>Reaction:</p>
-									<p>$2A + B \rightarrow P$</p>
-									<p>$\dot{r} = kc_A^2c_B$</p>
-									<ul>
-										<li>$A$ - transfer species</li>
-										<li>$B$ - bulk species</li>
-										<li>$P$ - product species</li>
-									</ul>
-								</div>
-	 						</div>
-						</div>
-						<p>
-							<small> Image:
-								<a href="https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/computational-analysis-of-single-rising-bubbles-influenced-by-soluble-surfactant/74FFCE053782E4E0901EFD77CDAF4518">C. Pesci, A. Weiner, H. Marschall, D.Bothe; J. Fluid Mech. (2018)</a>
-							</small>
-						</p>
+						<h2>substitute problem</h2>
+						history plus new correction
 					</section>
 					<section>
-						<h2>Transfer species (A)</h2>
-						<img src="images/spp1740/sgs_transfer_species.png" alt="sgs_transfer_species" width="800" style="background:none; border:none; box-shadow:none;">
+						<h2>solutions</h2>
 					</section>
 					<section>
-						<h2>Bulk species (B)</h2>
-						<img src="images/spp1740/sgs_bulk_species.png" alt="sgs_bulk_species" width="800" style="background:none; border:none; box-shadow:none;">
+						<h2>solutions</h2>
 					</section>
 					<section>
-						<h2>Product species (P)</h2>
-						<img src="images/spp1740/sgs_product_species.png" alt="sgs_product_species" width="800" style="background:none; border:none; box-shadow:none;">
+						<h2>old fitting</h2>
 					</section>
 					<section>
-						<h2>Reaction term</h2>
-						<img src="images/spp1740/sgs_reaction_term.png" alt="sgs_reaction_term" width="800" style="background:none; border:none; box-shadow:none;">
+						<h2>integral fitting</h2>
 					</section>
 					<section>
-						<h2>Data-driven profile reconstruction</h2>
-						<img src="images/workflow_sgs_data.png" alt="sgs_workflow_data" width="800px" style="background:none; border:none; box-shadow:none;">
-						<p><small> Further information:
-							<a href="https://onlinelibrary.wiley.com/doi/full/10.1002/ceat.201900044">A. Weiner, D. Hillenbrand, H. Marschall, D.Bothe; CET (2019)</a>
-						</small></p>
-					</section>
-					<section>
-						<h2>Idea: 2D&#8594;1D setting</h2>
-						<img src="images/elliptical_mesh.png" alt="elliptical_mesh" width="600" style="background:none; border:none; box-shadow:none;">
-						<p>$\partial_\tau c = -\partial_n u_n|_\Sigma \partial_n c + D\partial_{nn}c + f_t (n,u_t,...)$</p>
-						<p><small>Idea based on <a href="https://www.sciencedirect.com/science/article/pii/S0017931015306980">D. Gründing, D. Bothe; Int. J. Heat Mass Tranf. (2016)</a> and <a href="https://www.sciencedirect.com/science/article/pii/S000925091200231X">B. Aboulhasanzadeh, S. Thomas, M. Taeibi-Rahni, G. Tryggvason; CES (2012)</a></small></p>
-					</section>
-					<section>
-						<h2>SGS modeling for experiments?</h2>
-						<img src="images/spp1740/exp_vs_sim_wake.png" alt="sgs_principle" height="380px" style="background:none; border:none; box-shadow:none;">
-						<p><small>Image: <a href="https://www.sciencedirect.com/science/article/pii/S2590140019300140">A. Weiner, J. Timmermann, C. Pesci, J.Grewe, M. Hoffmann, M.Schlüter, D.Bothe; CES (2019)</a></small></p>
+						<h2>corrections</h2>
 					</section>
 				</section>
 
-				<!-- decoupling of two-phase flow and species transfer -->
+				<!-- data driven modeling-->
+				<section>
+					<section>
+						<h2>Subgrid-scale modeling</h2>
+						three steps
+					</section>
+					<section>
+						<h2>substitute problem</h2>
+						history plus new correction
+					</section>
+					<section>
+						<h2>solutions</h2>
+					</section>
+					<section>
+						<h2>solutions</h2>
+					</section>
+					<section>
+						<h2>old fitting</h2>
+					</section>
+					<section>
+						<h2>integral fitting</h2>
+					</section>
+					<section>
+						<h2>corrections</h2>
+					</section>
+				</section>
+
+				<!-- model assessment -->
 				<section>
 					<section>
 						<h2>Model assessment</h2>
@@ -339,19 +268,9 @@
 	 						</div>
 						</div>
 					</section>
-					<section>
-						<h2>Extension to 4D</h2>
-						<img src="images/initial_sphere_mesh.png" alt="initial_mesh" width="500" style="background:none; border:none; box-shadow:none;">
-					</section>
-					<section>
-						<h2>First impression</h2>
-						<video height="550px" controls autoplay loop>
-							<source src="videos/mesh_deformation.ogv">
-						</video>
-					</section>
 				</section>
 
-				<!-- air bubbles rising in water -->
+				<!-- comparison with experiments -->
 				<section>
 					<section>
 						<h2>Air bubbles rising in water</h2>
@@ -410,19 +329,21 @@
 					</section>
 				</section>
 
-				<!-- outlook and summary -->
+				<!-- summary and outlook -->
 				<section>
 					<section>
-						<h2>Summary and outlook</h2>
+						<h2>Summary</h2>
 						<ul>
-							<li>concept for conserving and publishing results &#10004;</li>
 							<li>high-$Pe$ number problem (boundary layer) &#10004;</li>
 							<li>SGS modeling for 1st order reaction &#10004;</li>
 							<hr>
 							<li>SGS modeling for selective reactions (&#10004;)</li>
 							<li>Validation with complex and dynamic interfaces (&#10004;)</li>
-							<li>PhD thesis (&#10004;)</li>
 						</ul>
+					</section>
+					<section>
+						<h2>Outlook</h2>
+						dynamic assessment, 3D, bulk modeling, apply to other fluid dynamical problems, learning from data
 					</section>
 				</section>
 
@@ -444,6 +365,32 @@
 							</div>
  						</div>
 					</div>
+				</section>
+
+				<!-- appendix -->
+				<section>
+					<section>
+						<h1>Complementary material</h1>
+					</section>
+					<section>
+						<h2>Publications</h2>
+					</section>
+					<section>
+						Super-focus mixer
+					</section>
+					<section>
+						<h2>Pendant bubble method</h2>
+							<img src="images/phd_defence/pendant_bubble.jpg" alt="pendant_bubble" width="800" style="background:none; border:none; box-shadow:none;">
+							<p>
+								<small>
+									Image by courtesy of <a href="https://www.verfahrenstechnik.tu-berlin.de/menue/ueber_uns/mitarbeiterinnen/doktoranden/msc_david_merker/">David Merker</a>.
+									Measurement apparatus by <a href="https://www.dataphysics-instruments.com/de/wissen/grenzflaechen-verstehen/pendant-drop-methode/">dataphysics-instruments</a>.
+								</small>
+							</p>
+					</section>
+					<section>
+						Adsorption measurement
+					</section>
 				</section>
 
 			</div>
