@@ -48,6 +48,20 @@
 		.content_img {
 			display: inline-block;
 		}
+		.reveal .slide-number {
+		  position: absolute;
+		  display: block;
+		  right: 8px;
+		  top: 8px;
+			height: 48px;
+		  z-index: 31;
+		  font-family: Helvetica, sans-serif;
+		  font-size: 40px;
+		  line-height: 1;
+		  color: #fff;
+		  background-color: rgba(0, 0, 0, 0.4);
+		  padding: 5px; }
+
 	</style>
 
 	<body>
@@ -97,16 +111,94 @@
 				<!-- Motivation -->
 				<section>
 					<section>
-						Videos von Blasensauele, plant, Stickworte (mixing, transfer, enhancement, selectivity)
+						<h2>Gas-liquid reactors</h2>
+						<div class=row_img>
+							<div class=column_img style="width:20%">
+								<div class=content_img>
+									<img src="videos/taylor_bubble_copper.gif" alt="taylor_bubble" height="400" style="background:none; border:none; box-shadow:none;">
+									<p>
+										<small>
+												<b>micro reactor</b><br>
+												size: $mm$-range<br>
+												source: <a href="http://www.dfg-spp1740.de/">SPP 1740</a>
+										</small>
+									</p>
+								</div>
+							</div>
+							<div class=column_img style="width:35%">
+								<p>
+									<b>prediction</b> of
+								</p>
+									<ul>
+										<li>mass transfer</li>
+										<li>enhancement</li>
+										<li>mixing</li>
+										<li>conversion</li>
+										<li>selectivity</li>
+										<li>yield</li>
+										<li>...</li>
+									</ul>
+							</div>
+							<div class=column_img style="width:25%">
+								<div class=content_img>
+									<img src="images/phd_defence/eni_fischer_tropsch.png" alt="bubble_column" height="400" style="background:none; border:none; box-shadow:none;">
+									<p>
+										<small>
+											<b>bubble column reactor</b><br>
+											size: $m$-range<br>
+											source: <a href="https://tel.archives-ouvertes.fr/tel-01267349/document">R. M. Raimundo, ENI</a>
+										</small>
+									</p>
+								</div>
+							</div>
+						</div>
 					</section>
 					<section>
-						scale up strategy
+						<h2>Scale-up strategy</h2>
+						<img src="images/phd_defence/scale_up.png" alt="scale_up" width="1000" style="background:none; border:none; box-shadow:none;">
+						<p>What about the &laquoarrows&raquo?</p>
 					</section>
 					<section>
-						boundary layer image kueck, numbers, computation
+						<video height="500" controls mute autoplay loop>
+							<source src="videos/no_bubbles.mp4">
+						</video>
+						<p>
+							Video by courtesy of <a href="https://www.verfahrenstechnik.tu-berlin.de/menue/ueber_uns/mitarbeiterinnen/doktoranden/msc_david_merker/">David Merker</a>.
+						</p>
 					</section>
 					<section>
-						Pe influence, limitations
+						<h2>High Péclet number problem</h2>
+						<img src="images/phd_defence/high_pe_bl.png" alt="kueck_exp" width="800" style="background:none; border:none; box-shadow:none;">
+						<small>
+							<p>Image source: U. D. Kück et al.: Analyse des Grenzschichtnahen Stofftransports an frei aufsteigenden Gasblasen. CIT (2009), 1599-1606</p>
+						</small>
+					</section>
+					<section>
+						<h2>Specimen calculation</h2>
+						<p>
+							$d_b=1~mm$ water/oxygen at room temperature
+						</p>
+						<ul>
+							<li class="fragment" data-fragment-index="1">
+								$$ Re\approx 250;\quad \delta_h/d_b \propto Re^{-1/2};\quad\delta_h\approx 45~\mu m $$
+							</li>
+							<li class="fragment" data-fragment-index="2">
+								$$ Sc\approx 500;\quad \delta_c/\delta_h \propto Sc^{-1/2};\quad\delta_c\approx 2.5~\mu m $$
+							</li>
+							<li class="fragment" data-fragment-index="3">
+								$Pe = Sc\ Re = \nu_l / D_{O_2} \cdot U_b d_b/\nu_l \approx 10^5 $
+							</li>
+						</ul>
+						<p class="fragment" data-fragment-index="4">
+							$\delta_c/\delta_h$ typically <b style="color:red;">10 ... 100</b>
+						</p>
+					</section>
+					<section>
+						<h2>Computational limit</h2>
+						<img src="images/phd_defence/pe_comparison.png" alt="pe_influence" width="800" style="background:none; border:none; box-shadow:none;">
+						<p>
+							Two-phase DNS limit (3D): $Pe\approx 1000$.
+						</p>
 					</section>
 				</section>
 
@@ -127,34 +219,78 @@
 				<section>
 					<section>
 						<h2>Underresolved meshes</h2>
-						<p>Show how solution changes with resolution</p>
+						<div class=row_img>
+							<div class=column_img style="width:60%">
+								<small>
+								$$ 2A + B \rightarrow P $$
+								<ul>
+									<li>$A$ - transfer species</li>
+									<li>$B$ - bulk species</li>
+									<li>$P$ - product species</li>
+								</ul>
+								$$ \partial_t c_j + \nabla \cdot (c_j\mathbf{u} - D_j \nabla c) = \dot{r}_j\quad \text{in}\quad \Omega^+ $$
+								<ul>
+									<li style="padding-bottom:0.5em">$c_A|_\Sigma = const.$</li>
+									<li style="padding-bottom:0.5em">$\partial_n c_{B}|_\Sigma = 0$, $\partial_n c_{P}|_\Sigma = 0$</li>
+									<li style="padding-bottom:0.5em">$\dot{r}_j = \pm kc_A^2c_B$</li>
+									<li>$\mathbf{u}$ - given velocity vector field</li>
+									<li><b>finite volume discretization</b></li>
+								</ul>
+								</small>
+							</div>
+							<div class=column_img style="width:40%">
+								<div class=content_img>
+									<img src="images/phd_defence/1D_scenario.png" alt="one_d_scenario" height="400" style="background:none; border:none; box-shadow:none;">
+									<small>$\Omega^\pm$ - liquid/gas domain, $\Sigma$ - interface, $f_i$ - cell faces</small>
+								</div>
+							</div>
+						</div>
 					</section>
 					<section>
-						<h2>1D scenario</h2>
+						<img src="images/phd_defence/water_01_phys_single.png" alt="phys_single" width="800" style="background:none; border:none; box-shadow:none;">
+						<p>
+							<small>
+								Normalized concentration fields around a rising bubble with and without chemical reaction in the liquid ($A+B\rightarrow P$).
+							</small>
+						</p>
 					</section>
 					<section>
-						<h2>Transfer species (A)</h2>
-						<img src="images/spp1740/sgs_transfer_species.png" alt="sgs_transfer_species" width="800" style="background:none; border:none; box-shadow:none;">
-						<p>Add picture of concentration field</p>
+						<h2>Transfer species - A</h2>
+						<img src="images/phd_defence/sgs_flux_A.png" alt="flux_A" width="800" style="background:none; border:none; box-shadow:none;">
+						<small>
+						  Normalized concentration profile $\tilde{c}_A$ in interface normal direction $x/\delta_c$ for the <b>transfer species</b> (solid blue line),
+							average concentration values per cell (shaded blue), and linear reconstruction (orange).
+						</small>
 					</section>
 					<section>
 						<h2>Interpolation errors</h2>
-						<p>animation</p>
+						<video height="500" controls mute loop>
+							<source src="videos/flux_a.mp4">
+						</video>
 					</section>
 					<section>
-						<h2>Bulk species (B)</h2>
-						<img src="images/spp1740/sgs_transfer_species.png" alt="sgs_transfer_species" width="800" style="background:none; border:none; box-shadow:none;">
-						<p>Add picture of concentration field</p>
+						<h2>Bulk species - B</h2>
+						<img src="images/phd_defence/sgs_flux_B.png" alt="flux_B" width="800" style="background:none; border:none; box-shadow:none;">
+						<small>
+						  Normalized concentration profile $\tilde{c}_B$ in interface normal direction $x/\delta_c$ for the <b>bulk species</b> (dashed blue line),
+							average concentration values per cell (shaded blue), and linear reconstruction (orange).
+						</small>
 					</section>
 					<section>
-						<h2>Product species (P)</h2>
-						<img src="images/spp1740/sgs_transfer_species.png" alt="sgs_transfer_species" width="800" style="background:none; border:none; box-shadow:none;">
-						<p>Add picture of concentration field</p>
+						<h2>Product species - P</h2>
+						<img src="images/phd_defence/sgs_flux_P.png" alt="flux_P" width="800" style="background:none; border:none; box-shadow:none;">
+						<small>
+						  Normalized concentration profile $\tilde{c}_P$ in interface normal direction $x/\delta_c$ for the <b>product species</b> (dash-dotted blue line),
+							average concentration values per cell (shaded blue), and linear reconstruction (orange).
+						</small>
 					</section>
 					<section>
-						<h2>Reaction source term</h2>
-						<img src="images/spp1740/sgs_transfer_species.png" alt="sgs_transfer_species" width="800" style="background:none; border:none; box-shadow:none;">
-						<p>Add picture of concentration field</p>
+						<h2>Source term</h2>
+						<img src="images/phd_defence/sgs_source_term.png" alt="source_term" width="800" style="background:none; border:none; box-shadow:none;">
+						<small>
+						  Reaction source profile $\dot{\tilde{r}}$ in interface normal direction $x/\delta_c$ (dash-dotted blue line),
+							cell average of $\dot{\tilde{r}}$ (shaded blue), and product of averages (orange).
+						</small>
 					</section>
 				</section>
 
@@ -162,26 +298,54 @@
 				<section>
 					<section>
 						<h2>Subgrid-scale modeling</h2>
-						three steps
+						<p>
+							<b>Idea:</b> Leverage coherent structures in convection-dominated species boundary layers.
+						</p>
+						<ol>
+							<li>
+								<b>Substitute problem</b><br>
+								<small>Find a representative substitute problem to obtain a parameterized profile function.</small>
+							</li>
+							<li>
+								<b>Reconstruction</b><br>
+								<small>Adjust the profile function based on local simulation data (cell-width, average concentration, ...)</small>
+							</li>
+							<li>
+								<b>Correction</b><br>
+								<small>Correct convective fluxes, diffusive fluxes, and reaction source terms based on the adjusted profile function.</small>
+							</li>
+						</ol>
 					</section>
 					<section>
-						<h2>(1) Substitute problems</h2>
+						<h2>(1) Substitute problem</h2>
 						history, mathematical problem
 					</section>
 					<section>
 						<h2>Solutions</h2>
+						<img src="images/phd_defence/simple_substitute_problem.png" alt="substitute_problem" width="1000" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
-						<h2>(2) Reconstruction</h2>
+						<h2>(2.1) Reconstruction</h2>
+						<video height="500" controls mute loop>
+							<source src="videos/distance_fitting.mp4">
+						</video>
 					</section>
 					<section>
-						<h2>old fitting</h2>
+						<h2>(3.1) Correction</h2>
+						<div align="left">
+						<small>S. Fleckenstein, D. Bothe:<br>
+							<a href="https://www.sciencedirect.com/science/article/pii/S0009250913003606?via%3Dihub">A Volume-of-Fluid-based method for mass transfer processes at fluid particles (2013)</a>
+						</small>
+					</div>
 					</section>
 					<section>
-						<h2>integral fitting</h2>
+						<h2>(3.2) Correction</h2>
 					</section>
 					<section>
-						<h2>(3) Correction</h2>
+						<h2>(2.2) Reconstruction</h2>
+					</section>
+					<section>
+						<h2>Results</h2>
 					</section>
 					<section>
 						<h2>Limitations</h2>
@@ -453,6 +617,7 @@
 					{ src: 'plugin/math/math.js', async: true }
 				]
 			});
+			Reveal.configure({ slideNumber: true });
 
 		</script>
 
