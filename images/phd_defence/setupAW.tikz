@@ -1,0 +1,35 @@
+﻿\begin{tikzpicture}
+    \coordinate (y) at (0,5);
+    \coordinate (x) at (5,0);
+    \draw[<->] (y) node[left] {$y$} -- (0,0) --  (x) node[right] {$x$};
+
+   % error function profile
+   \coordinate (A) at (0,3);
+   \coordinate (B) at (1.5,-4);
+   \coordinate (C) at (4,-4);
+
+   % boundary layer thickness
+   \coordinate (C) at (2.3,4.5);
+   \draw[scale=0.5,domain=0:9,smooth,variable=\y,black,rotate=0,samples=300,densely dotted,thick] plot({sqrt(\y)},\y);
+   \draw[](C) node[below]{$\delta_c\left(y\right)$};
+
+   % velocity profile
+   \coordinate (s1) at (1.2,0.5);
+   \coordinate (s2) at (2.2,0.5);
+   \coordinate (s3) at (3.2,0.5);
+   \coordinate (e1) at (1.2,1.5);
+   \coordinate (e2) at (2.2,1.5);
+   \coordinate (e3) at (3.2,1.5);
+   \draw[->,thick] (s1)--(e1);
+   \draw[->,thick] (s2)--(e2);
+   \draw[->,thick] (s3)--(e3);
+   \draw[] (e3) node[below right] {$\mathbf{u}=\left(0,U_b\right)$};
+
+   % addional symbols
+   \coordinate (sig) at (-0.5,3);
+   \draw[inner sep=0.1em] (sig) node[above left] {$\Sigma$};
+   \draw[] (sig) -- (0,3.5);
+   \node[] at (-0.5,4) {$\Omega^-$};
+   \node[] at (0.5,4) {$\Omega^+$};
+
+\end{tikzpicture}

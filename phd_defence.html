@@ -53,10 +53,10 @@
 		  display: block;
 		  right: 8px;
 		  top: 8px;
-			height: 48px;
+			height: 64px;
 		  z-index: 31;
 		  font-family: Helvetica, sans-serif;
-		  font-size: 40px;
+		  font-size: 56px;
 		  line-height: 1;
 		  color: #fff;
 		  background-color: rgba(0, 0, 0, 0.4);
@@ -209,7 +209,7 @@
 						<li>Effect of underresolved meshes</li>
 						<li>Subgrid-scale modeling</li>
 						<li>Data-driven modeling</li>
-						<li>Hybrid approach for model assessment</li>
+						<li>Subgrid-scale model assessment</li>
 						<li>Comparison with experiments</li>
 						<li>Summary and outlook</li>
 					</ol>
@@ -289,7 +289,7 @@
 						<img src="images/phd_defence/sgs_source_term.png" alt="source_term" width="800" style="background:none; border:none; box-shadow:none;">
 						<small>
 						  Reaction source profile $\dot{\tilde{r}}$ in interface normal direction $x/\delta_c$ (dash-dotted blue line),
-							cell average of $\dot{\tilde{r}}$ (shaded blue), and product of averages (orange).
+							cell average of $\dot{\tilde{r}}$ (shaded blue), and product of averages (orange). The Damköhler number is defined as $Da=kd_b/U_b$.
 						</small>
 					</section>
 				</section>
@@ -318,7 +318,48 @@
 					</section>
 					<section>
 						<h2>(1) Substitute problem</h2>
-						history, mathematical problem
+						<div class=row_img style="width:100%">
+							<div class=column_img>
+								<div class=content_img>
+									<img src="images/phd_defence/setupAW.png" alt="sgs_setup" width="100%" style="background:none; border:none; box-shadow:none;">
+								</div>
+							</div>
+							<div class=column_img>
+								<div align="center">
+								<small>
+									$$ \partial_\tilde{y} \tilde{c} = \frac{1}{Pe}\partial_{\tilde{x}\tilde{x}} \tilde{c} - Da\ \tilde{c} $$
+									<ul>
+										<li style="padding-bottom:0.5em">
+											$\tilde{c}(\tilde{x}=0,\tilde{y}) = 1$
+										</li>
+										<li style="padding-bottom:0.5em">
+											$\tilde{c}(\tilde{x}>0,\tilde{y}=0) = 0$
+										</li>
+										<li style="padding-bottom:0.5em">
+											$\tilde{c}(\tilde{x}\rightarrow\infty,\tilde{y}) = 0$
+										</li>
+									</ul>
+								</small>
+								</div>
+							</div>
+						</div>
+						<small>
+							<ul>
+								<li>
+									<b>2004</b> - first idea, physisorption
+								</li>
+								<li>
+									<b>2010</b> - first implementation by <a href="http://tubiblio.ulb.tu-darmstadt.de/49894/">Alke, Bothe, Kröger, Weigand, Weirich and Weking</a>
+								</li>
+								<li>
+									<b>2013</b> - improved implementation by <a href="https://www.sciencedirect.com/science/article/pii/S0009250913003606">Bothe and Fleckenstein</a>
+								</li>
+								<li>
+									<b>2016</b> - extension to first order reaction by <a href="https://www.sciencedirect.com/science/article/pii/S0017931015306980?via%3Dihub">Gründing, Fleckenstein and Bothe</a>
+								</li>
+							</ul>
+
+						</small>
 					</section>
 					<section>
 						<h2>Solutions</h2>
@@ -332,24 +373,70 @@
 					</section>
 					<section>
 						<h2>(3.1) Correction</h2>
+						<ol>
+							<li style="padding-bottom:0.5em">
+								compute interface normal derivative:<br>
+								$\partial_\tilde{x} \tilde{c}|_{\tilde{x}=0} = 2/(\sqrt{\pi}\delta_{num})$
+							</li>
+							<li style="padding-bottom:0.5em">
+								correct numerical diffusive flux at $\tilde{x}=0$
+							</li>
+							<li style="padding-bottom:0.5em">
+								solve transport equation for $\tilde{c}$
+							</li>
+						</ol>
+						<p style="color:red;">
+							&#8594; saves one refinement level (half cell-width)
+						</p>
 						<div align="left">
-						<small>S. Fleckenstein, D. Bothe:<br>
+						<small>D. Bothe, S. Fleckenstein:<br>
 							<a href="https://www.sciencedirect.com/science/article/pii/S0009250913003606?via%3Dihub">A Volume-of-Fluid-based method for mass transfer processes at fluid particles (2013)</a>
 						</small>
 					</div>
 					</section>
 					<section>
 						<h2>(3.2) Correction</h2>
+						<div class=row_img>
+							<div class=column_img>
+								<div align="left">
+									<b>Idea:</b><br>
+									Correct convective and diffusive fluxes over <b>all</b> cell faces of an interface cell.
+								</div>
+							</div>
+							<div class=column_img>
+								<div align="right">
+									<img src="images/phd_defence/chopped_cube.png" alt="chopped_cube" height="250" style="background:none; border:none; box-shadow:none;">
+								</div>
+							</div>
+						</div>
+						<img src="images/phd_defence/area_integral_cases.png" alt="area_integral" width="600" style="background:none; border:none; box-shadow:none;">
+						<small>
+							A. Weiner, D.Bothe: <a href="https://www.sciencedirect.com/science/article/pii/S0021999117304941?via%3Dihub">Advanced subgrid-scale modeling for convection-dominated species transport at fluid interfaces with application to mass transfer from rising bubbles (2017)</a>
+						</small>
 					</section>
 					<section>
 						<h2>(2.2) Reconstruction</h2>
+						<video height="500" controls mute loop>
+							<source src="videos/integral_fitting.mp4">
+						</video>
 					</section>
 					<section>
 						<h2>Results</h2>
+						<p>
+							Stokes flow validation (semi-analytical reference) with<br>
+							$Sc=10^4,10^5,10^6,10^7$
+						</p>
+						<img src="images/phd_defence/stokes_flow_validation.png" alt="stokes_validation" width="1000" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
-						<h2>Limitations</h2>
-						<p>what if no analytical solution is available? e.g. complex reactions, substitute problem to simple</p>
+						<h2>Results</h2>
+						<p>
+							$Sh = \frac{k_L d_b}{D}$ &emsp; with &emsp; $k_L = \frac{\dot{N}}{A_{eff}\Delta c}$
+						</p>
+						<img src="images/phd_defence/sh_gl_sgs_analytic.png" alt="sh_glob" width="1000" style="background:none; border:none; box-shadow:none;">
+					</section>
+					<section>
+						<h2>Complex reactions?</h2>
 					</section>
 				</section>
 
@@ -357,105 +444,232 @@
 				<section>
 					<section>
 						<h2>Data-driven modeling</h2>
-						basic idea
+						<p>
+							<b>Idea:</b> Replace analytical solution with machine learning (ML) model.
+						</p>
+						<ol>
+							<li>
+								<b>Substitute problem</b><br>
+								<small>Find a representative substitute problem and <b>solve it numerically</b> to obtain <b>boundary layer data</b>.</small>
+							</li>
+							<li>
+								<b>Model creation</b><br>
+								<small>Select meaningful features (variables) and train a ML model</small>
+							</li>
+							<li>
+								<b>Correction</b><br>
+								<small>Correct convective fluxes, diffusive fluxes, and reaction source terms based on the <b>ML model</b>.</small>
+							</li>
+						</ol>
 					</section>
 					<section>
-						<h2>Substitute problem</h2>
-						setup and data generation
+						<h2>(1) Substitute problem</h2>
+						<div class=row_img style="width:100%">
+							<div class=column_img style="width:50%">
+								<img src="images/phd_defence/data_setup.png" alt="data_setup" height="500" style="background:none; border:none; box-shadow:none;">
+							</div>
+							<div class=column_img style="width:50%">
+								<div class=content_img>
+									<p>
+										numerical solution
+									</p>
+									<small>
+									<ul>
+										<li>
+											OpenFOAM&reg;
+										</li>
+										<li>
+											steady-state flow dynamics
+										</li>
+										<li>
+											parameters: $Re$, $Sc$, $Da$, shape, ...
+										</li>
+										<li>
+											finished in <b style="color:red;">minutes</b>
+										</li>
+									</ul>
+									</small>
+									<p>
+										data extraction
+									</p>
+									<small>
+										<ul>
+											<li>
+												features (input variables) should be available in target simulation
+											</li>
+											<li>
+												features motivated by boundary layer theory and previous modeling
+											</li>
+											<li>
+												down-sampling to coarse meshes
+											</li>
+											<li>
+												stored as comma separated values (csv)
+											</li>
+										</ul>
+									</small>
+								</div>
+							</div>
+						</div>
 					</section>
 					<section>
-						<h2>Supervised learning</h2>
+						<h2>(2.1) Feature selection</h2>
+						<p>
+							<b>Idea:</b> ranking of feature importance.
+						</p>
+						<img src="images/ML_model_score_error.png" alt="feature_importance" width="800" style="background:none; border:none; box-shadow:none;">
+						<p>
+							<div align=left>
+							<small>
+								A. Weiner, D. Hillenbrand, H. Marschall, D. Bothe:
+								<a href="https://onlinelibrary.wiley.com/doi/full/10.1002/ceat.201900044">Data‐Driven Subgrid‐Scale Modeling for Convection‐Dominated Concentration Boundary Layers (2019)</a>
+							</small>
+							</div>
+						</p>
 					</section>
 					<section>
-						<h2>Selecting meaningful features</h2>
+						<h2>(2.2) Model creation</h2>
+						<div class=row_img style="width:100%">
+							<div class=column_img>
+								<p>
+									Multilayer Perceptron
+								</p>
+								<img src="images/phd_defence/mlp_sketch.png" alt="mlp_sketch" width="100%" style="background:none; border:none; box-shadow:none;">
+								<small>
+									<ul>
+										<li>
+											6 layers with 40 neurons per layer
+										</li>
+										<li>
+											SELU activation function
+										</li>
+									</ul>
+								</small>
+							</div>
+							<div class=column_img style="width:40%; padding-left:50px">
+								<p>
+									model training
+								</p>
+								<small>
+									<ul>
+										<li>
+											mean squared error loss
+										</li>
+										<li>
+											one model per label
+										</li>
+										<li>
+											&asymp; 5 min training time per model
+										</li>
+										<li>
+											training on CPU with double precision
+										</li>
+									</ul>
+
+								</small>
+								<p>
+									implementation
+								</p>
+								<small>
+									<ul>
+										<li style="color:red">
+											PyTorch&reg;
+										</li>
+										<li>
+											export to TorchScript
+										</li>
+										<li>
+											dynamically loaded at runtime
+										</li>
+									</ul>
+								</small>
+							</div>
+						</div>
 					</section>
 					<section>
-						<h2>Correction</h2>
+						<h2>ML model assessment</h2>
+						<img src="images/phd_defence/phys_A_label_error_hist.png" alt="error_histogram" width="800" style="background:none; border:none; box-shadow:none;">
+						<p>
+							Histogram of the label errors for the transfer species (A) in case of physisorption.
+						</p>
 					</section>
 					<section>
-						<h2>Advantages and challenges</h2>
+						<h2>ML model assessment</h2>
+						<img src="images/phd_defence/phys_A_label_error_heat.png" alt="error_heat" width="800" style="background:none; border:none; box-shadow:none;">
+						<p>
+							Heatmap of the maximum label errors for the transfer species (A) in case of physisorption.
+						</p>
+					</section>
+					<section>
+						<h2>Challenges</h2>
+						<img src="images/phd_defence/feature_density_source.png" alt="feature_density" width="1000" style="background:none; border:none; box-shadow:none;">
+						<p>
+							<small>Feature density for the source terms of a parallel-consecutive reaction of type $A+P\rightarrow P$ and $A+P\rightarrow S$.</small>
+						</p>
+					</section>
+					<section>
+						<h2>Validation, Results?</h2>
 					</section>
 				</section>
 
 				<!-- model assessment -->
 				<section>
 					<section>
+						<h2>SGS Model assessment</h2>
+						<p align="left"><b>Aim:</b><br>create reference data for complex shapes and flow scenarios to assess model generalization</p>
+						<p align="left"><b>Idea:</b><br> decoupling of two-phase flow and species transport</p>
+					</section>
+					<section>
+						<h3>1. Two phase flow simulation</h3>
+						<img src="images/phd_defence/basilisk_volume_fraction_mesh_plic.png" alt="basilisk_vof" width="700" style="background:none; border:none; box-shadow:none;">
+						<p>
+							<small>Volume-of-Fluid (VoF)-based solver implemented in <a href="http://basilisk.fr/">Basilisk</a>.</small>
+						</p>
+					</section>
+					<section>
+						<img src="images/phd_defence/water_velocity_fields.png" alt="basilisk_vof" width="800" style="background:none; border:none; box-shadow:none;">
+						<p>
+							Extraction of <b>shapes</b> and <b>velocity</b> fields for a variety of physical paramters.
+						</p>
+					</section>
+					<section>
+						<img src="images/phd_defence/bhaga_velocity_fields.png" alt="basilisk_vof" width="800" style="background:none; border:none; box-shadow:none;">
+						<p>
+							Extraction of <b>shapes</b> and <b>velocity</b> fields for a variety of physical paramters.
+						</p>
+					</section>
+					<section>
+						<h3>2.1 Parameterization and approximation - shape</h3>
+					</section>
+					<section>
+						<h3>2.2 Parameterization and approximation - velocity</h3>
+					</section>
+					<section>
+						<h3>3. Unstructured meshing</h3>
+					</section>
+					<section>
+						<h3>4. Single phase flow solution</h3>
+					</section>
+					<section>
+						<h3>5. Species transport solution</h3>
+					</section>
+					<section>
+						<h2>High-fidelity reference data</h2>
+
+					</section>
+					<section>
 						<h2>Model assessment</h2>
-						<p>How to obtain reference data for</p>
-						<ol>
-							<li><b>complex</b> bubble shapes and</li>
-							<li><b>dynamic</b> shape deformation</li>
-						</ol>
-						<p>locally <b>and</b> globally?</p>
+						<img src="images/phd_defence/prismatic_layers_bhaga_03.png" alt="meshes" height="450" style="background:none; border:none; box-shadow:none;">
+						<p>
+							<small>Prismatic cell layers around a spherical-cap bubble with increasing mesh resolution.</small>
+						</p>
 					</section>
 					<section>
-						<h2>Dilemma</h2>
-						<div class="row_img">
-	 						<div class="column_img">
-								<div class="content_img">
-									<p>Volume of Fluid</p>
-									<small>
-										<ul>
-											<li>strong deformations</li>
-											<li>low computational cost</li>
-											<li>low accuracy</li>
-										</ul>
-									</small>
-		 							<img src="images/spp1740/vof_local_sh.png" alt="vof_sh_loc" height="250" style="background:none; border:none; box-shadow:none;">
-									<p><small>Image: <a href="https://www.sciencedirect.com/science/article/pii/S0021999117304941">A. Weiner, D. Bothe; J. Comput. Phys. (2017)</a></small></p>
-								</div>
-	 						</div>
-	 						<div class="column_img">
-								<div class="content_img">
-									<p>Interface Tracking</p>
-									<small>
-										<ul>
-											<li>small deformations</li>
-											<li>high computational cost</li>
-											<li>high accuracy</li>
-										</ul>
-									</small>
-									<img src="images/spp1740/it_local_sh.png" alt="it_sh_loc" height="250" style="background:none; border:none; box-shadow:none;">
-									<p><small>Image: <a href="https://www.sciencedirect.com/science/article/pii/S2590140019300140">A. Weiner, J. Timmermann, C. Pesci, J.Grewe, M. Hoffmann, M.Schlüter, D.Bothe</a></small></p>
-	 						</div>
-						</div>
-					</section>
-					<section>
-						<h2>Decoupling of two phase flow and species transport</h2>
-						<ol>
-							<li>Two-phase flow simulation (VoF)</li>
-							<li>Extraction and approximation of shape and boundary conditions (machine learning)</li>
-							<li>Single phase solution (liquid) of momentum and species transport</li>
-						</ol>
-					</section>
-					<section>
-						<h2>Two phase flow simulation</h2>
-						<img src="images/shape_variety.png" alt="bhaga_velocity" width="800" style="background:none; border:none; box-shadow:none;">
-					</section>
-					<section>
-						<h2>Oscillations in VOF data</h2>
-						<img src="images/spp1740/bhaga_2_tail_velocity.png" alt="bhaga_velocity_tail" width="800" style="background:none; border:none; box-shadow:none;">
-					</section>
-					<section>
-						<h2>Shape and BC</h2>
-						<img src="images/spp1740/shape_approximation_bhaga.png" alt="bhaga_shape" width="600" style="background:none; border:none; box-shadow:none;">
-						<img src="images/spp1740/velocity_interface_approximation.png" alt="bhaga_interface_velocity" width="600" style="background:none; border:none; box-shadow:none;">
-					</section>
-					<section>
-						<h2>Single phase solution</h2>
-						<div class="row_img">
-	 						<div class="column_img">
-								<div class="content_img">
-									<small>original tow-phase flow</small>
-		 							<img src="images/spp1740/bhaga_dimpled_streamlines.png" alt="dimpled_streamlines" height="500" style="background:none; border:none; box-shadow:none;">
-								</div>
-	 						</div>
-	 						<div class="column_img">
-								<div class="content_img">
-									<small>single phase approximation</small>
-									<img src="images/spp1740/dimpled_mass_preview.png" alt="dimpled_mass" height="500" style="background:none; border:none; box-shadow:none;">
-	 							</div>
-							</div>
+						<h2>Model assessment</h2>
+						<img src="images/phd_defence/table_head_dell.png" alt="table_dell" width="800" style="background:none; border:none; box-shadow:none;">
+						<div align="left">
+							<small>Reaction types<br>
+								decay: $A\rightarrow P$; single: $A + B \rightarrow P$; consecutive: $A+B\rightarrow P$ &amp; $A + P \rightarrow S$</small>
 						</div>
 					</section>
 				</section>
@@ -463,86 +677,124 @@
 				<!-- comparison with experiments -->
 				<section>
 					<section>
-						<h2>Air bubbles rising in water</h2>
-						<ul>
-							<li>bubble size $d_b=3...7mm$</li>
-							<li>VoF simulation for Hydrodynamic solution (<a href="http://basilisk.fr/">Basilisk</a>)</li>
-							<li>Single phase approximation for species transport (planned, <a href="http://openfoam.com/">OpenFOAM</a>, <a href="https://pytorch.org/">PyTorch</a>)</li>
-							<li>experiments by David Merker (Prof. Kraume)</li>
-						</ul>
+						<h2>Comparison with experiments</h2>
 					</section>
 					<section>
-					<style>
-						.row_video {
-							display: table;
-							width: 100%;
-						}
-						.column_video {
-							display: table-cell;
-							text-align: center;
-							width: 50%;
-						}
-						.content_video {
-							display: inline-block;
-						}
-					</style>
-						<div class="row_video">
-	 						<div class="column_video">
-								<div class="content_video">
-									<small>water/air: $d_{eq}=3~mm$</small>
-									<video height="500" controls mute autoplay loop>
-										<source src="videos/b8_mesh_plic.ogv">
-									</video>
-								</div>
-	 						</div>
-	 						<div class="column_video">
-								<div class="content_video">
-									<small>water/air: $d_{eq}=5~mm$</small>
-									<video height="500" controls mute autoplay loop>
-										<source src="videos/b10_mesh_plic.ogv">
-									</video>
-								</div>
-	 						</div>
-						</div>
+						<h2>Interface Tracking</h2>
 					</section>
 					<section>
-						<h2>Terminal velocity</h2>
-						<img src="images/spp1740/velocities.png" alt="terminal_velocity" width="800" style="background:none; border:none; box-shadow:none;">
+						<h2>Velocity</h2>
 					</section>
 					<section>
-						<h2>Velocity distribution</h2>
-						<img src="images/spp1740/velocity_distribution.png" alt="velocity_distribution" width="600" style="background:none; border:none; box-shadow:none;">
+						<h2>Local velocity</h2>
 					</section>
 					<section>
-						<h2>Some statistics</h2>
-						<img src="images/spp1740/water_air_statistics.png" alt="statistics" width="800" style="background:none; border:none; box-shadow:none;">
+						<h2>Oxygen concentration in the wake</h2>
+					</section>
+					<section>
+						<h2>Effect of laser sheet width</h2>
+					</section>
+					<section>
+						<h2>Mass transfer coefficient</h2>
+					</section>
+					<section>
+						<h2>Local Sherwood number</h2>
 					</section>
 				</section>
 
 				<!-- summary and outlook -->
 				<section>
 					<section>
-						<h2>Summary</h2>
+						<h2>Summary I</h2>
 						<ul>
 							<li>high-$Pe$ number problem (boundary layer) &#10004;</li>
-							<li>SGS modeling for 1st order reaction &#10004;</li>
-							<hr>
-							<li>SGS modeling for selective reactions (&#10004;)</li>
-							<li>Validation with complex and dynamic interfaces (&#10004;)</li>
+							<li>SGS modeling for complex reactions &#10004;</li>
+							<li>hybrid approach for high-fidelity reference data &#10004;</li>
+							<li>validation with complex bubble shapes &#10004;</li>
+							<li>qualitative and quantitaive agreement with experiments &#10004;</li>
+							<li>new understanding of dynamic surfactant adsorption &#10004;</li>
 						</ul>
 					</section>
 					<section>
+						<h2>Summary II</h2>
+						<p>
+							Well documented, fully reproducible, public research results and methods:
+						</p>
+						<ul>
+							<li><a href="https://github.com/AndreWeiner/phd_notebooks">https://github.com/AndreWeiner/phd_notebooks</a></li>
+							<li><a href="https://github.com/AndreWeiner/phd_basilisk">https://github.com/AndreWeiner/phd_basilisk</a></li>
+							<li><a href="https://github.com/AndreWeiner/phd_openfoam">https://github.com/AndreWeiner/phd_openfoam</a></li>
+						</ul>
+						<p>
+							Solution based on Git/Github, Docker/Dockerhub and TUDatalib.
+						</p>
+					</section>
+					<section>
+						<h2>Summary III</h2>
+						<small>Pathway paved for data-driven solutions in computational fluid dynamics.</small>
+						<div class=row_img style="width:100%">
+							<div class=column_img style="width:70%">
+								<img src="images/multiclass_classification.png" alt="classification" width="100%" style="background:none; border:none; box-shadow:none;">
+							</div>
+							<div class=column_img style="width:30%">
+								<small>
+								<ul>
+									<li style="padding-bottom:0.5em">
+										production ready software stack and workflow
+									</li>
+									<li style="padding-bottom:0.5em">
+										radical gain in accuracy and performance
+									</li>
+									<li>
+										<a href="https://andreweiner.github.io/reveal.js/ofw2019_slides.html#/">training</a> and <a href="https://github.com/AndreWeiner/machine-learning-applied-to-cfd">repository</a> for ML + CFD
+									</li>
+								</ul>
+								</small>
+							</div>
+						</div>
+					</section>
+					<section>
 						<h2>Outlook</h2>
-						dynamic assessment, 3D, bulk modeling, apply to other fluid dynamical problems, learning from data
+						<div class=row_img style="width:100%">
+							<div class=column_img sytle="width:50%; padding-right:10px">
+								<small>
+									<ul>
+										<li>
+											(data-driven) modeling for the liquid bulk
+										</li>
+										<li>
+											assessment for dynamic interfaces
+										</li>
+									</ul>
+								</small>
+								<video height="400" style="padding-top:20px" controls autoplay mute loop>
+									<source src="videos/pure_mesh_motion.ogv">
+								</video>
+							</div>
+							<div class=column_img style="width:50%; padding-left:10px">
+								<small>
+									<ul>
+										<li>
+											application to realted boundary layer problems
+										</li>
+									</ul>
+								</small>
+								<video height="400" style="padding-top:20px" controls autoplay mute loop>
+									<source src="videos/b8_mesh_plic.ogv">
+								</video>
+							</div>
+						</div>
 					</section>
 				</section>
 
 				<!-- end -->
 				<section style="text-align: left;">
 					<h1>THE END</h1>
+					<p>
+						Special thanks to David Merker, Jens Timmermann, Chiara Pesci and Dennis Hillenbrand
+					</p>
 					<p>Thank you for your attention!
 					<p>Get in touch: <a href="mailto:weiner@mma.tu-darmstadt.de">weiner@mma.tu-darmstadt.de</a></p>
-					<p>Time for discussion ...</p>
 					<div class="row_logo">
  						<div class="column_logo">
 							<div class="content_logo">
@@ -566,7 +818,7 @@
 						<h2>Publications</h2>
 					</section>
 					<section>
-						Super-focus mixer
+						<h2>Reproducibility</h2>
 					</section>
 					<section>
 						<h2>Pendant bubble method</h2>
