@@ -604,7 +604,7 @@
 						<h2>Challenges</h2>
 						<img src="images/phd_defence/feature_density_source.png" alt="feature_density" width="1000" style="background:none; border:none; box-shadow:none;">
 						<p>
-							<small>Feature density for the source terms of a parallel-consecutive reaction of type $A+P\rightarrow P$ and $A+P\rightarrow S$.</small>
+							<small>Feature density for the source terms of a parallel-consecutive reaction of type $A+B\rightarrow P$ and $A+P\rightarrow S$.</small>
 						</p>
 					</section>
 					<section>
@@ -627,35 +627,59 @@
 						</p>
 					</section>
 					<section>
-						<img src="images/phd_defence/water_velocity_fields.png" alt="basilisk_vof" width="800" style="background:none; border:none; box-shadow:none;">
 						<p>
-							Extraction of <b>shapes</b> and <b>velocity</b> fields for a variety of physical paramters.
+							Extraction of <b>shapes</b> and <b>velocity</b> fields.
 						</p>
+						<img src="images/phd_defence/water_velocity_fields.png" alt="basilisk_vof" width="800" style="background:none; border:none; box-shadow:none;">
+						<small>Air bubbles of size $d_b = 1.0/1.4/1.8~mm$ rising in water at room temperature.</small>
 					</section>
 					<section>
-						<img src="images/phd_defence/bhaga_velocity_fields.png" alt="basilisk_vof" width="800" style="background:none; border:none; box-shadow:none;">
 						<p>
-							Extraction of <b>shapes</b> and <b>velocity</b> fields for a variety of physical paramters.
+							Extraction of <b>shapes</b> and <b>velocity</b> fields.
 						</p>
+						<img src="images/phd_defence/bhaga_velocity_fields.png" alt="basilisk_vof" width="800" style="background:none; border:none; box-shadow:none;">
+						<small>Air bubbles rising in aqueous sugar solutions. Characteristic shapes: dimpled-ellipsoidal, spherical cap, and skirted.</small>
 					</section>
 					<section>
 						<h3>2.1 Parameterization and approximation - shape</h3>
+						$$\tilde{r} = \tilde{r}(\varphi)\quad\text{for}\quad 0\le\varphi\le\pi$$
+						<img src="images/phd_defence/radius_approximation.png" alt="shape_approx" width="1000" style="background:none; border:none; box-shadow:none;">
+						<small>Raduis of an ellipsoidal air bubble rising in water.</small>
 					</section>
 					<section>
 						<h3>2.2 Parameterization and approximation - velocity</h3>
+						<small>
+						$$\tilde{u}_\tau |_\Sigma = \tilde{u}_\tau |_\Sigma(\varphi)\quad\text{for}\quad 0\le\varphi\le\pi\quad
+						\text{with}\quad \tilde{u}_\tau = \tilde{\mathbf{u}}\cdot\tau$$
+						</small>
+						<img src="images/phd_defence/velocity_approximation.png" alt="shape_approx" width="1000" style="background:none; border:none; box-shadow:none;">
+						<small>Tangential velocity component at the interface of an ellipsoidal air bubble rising in water.</small>
 					</section>
 					<section>
 						<h3>3. Unstructured meshing</h3>
+						<img src="images/phd_defence/mesh_impression.png" alt="mesh_impression" width="700" style="background:none; border:none; box-shadow:none;">
+						<small>Single phase mesh of an dimpled ellipsoidal bubble created with <b>snappyHexMesh</b>.</small>
 					</section>
 					<section>
 						<h3>4. Single phase flow solution</h3>
+						<img src="images/phd_defence/bhaga_02_l16_of_velocity_fields.png" alt="single_phase_flow" height="400" style="background:none; border:none; box-shadow:none;">
+						<small>Magnitude of velocity vector field around a dimpled ellipsoidal bubble.
+							Velocity boundary condition at the interface: prescribed velocity (left) and free-slip condition (right).</small>
+					</section>
+					<section>
+						<h3>4. Single phase flow solution</h3>
+						<img src="images/phd_defence/dell_streamlines.png" alt="single_phase_steam" width="800" style="background:none; border:none; box-shadow:none;">
+						<small>Streamlines around a dimpled ellipsoidal bubble: two-phase simulation (left), prescribed velocity (center), free-slip condition (right).</small>
 					</section>
 					<section>
 						<h3>5. Species transport solution</h3>
+						<img src="images/phd_defence/bhaga_02_consecutive.png" alt="species_fields" width="700" style="background:none; border:none; box-shadow:none;">
+						<small>Concentration fields around a dimpled ellipsoidal bubble for a parallel-consecutive reaction of type $A+B\rightarrow P$ and $A+P\rightarrow S$.</small>
 					</section>
 					<section>
 						<h2>High-fidelity reference data</h2>
-
+						<img src="images/phd_defence/bhaga_02_global_sh_dirichlet_vs_slip.png" alt="global_sh" width="800" style="background:none; border:none; box-shadow:none;">
+						<small>Global Sherwood number $Sh$ and enhancement factor $E$ for a dimpled ellipsoidal bubble and various reaction types.</small>
 					</section>
 					<section>
 						<h2>Model assessment</h2>
@@ -678,27 +702,46 @@
 				<section>
 					<section>
 						<h2>Comparison with experiments</h2>
+						<div class=row_img style="width:100%">
+							<div class=column_img style="width:50%">
+								<img src="images/phd_defence/experiment.png" alt="rise_velocity_exp_sim" width="80%" style="background:none; border:none; box-shadow:none;">
+							</div>
+							<div class=column_img style="width:50%">
+								<img src="images/phd_defence/mesh_b.png" alt="it_mesh" width="60%" style="background:none; border:none; box-shadow:none;">
+							</div>
+						</div>
 					</section>
 					<section>
 						<h2>Interface Tracking</h2>
+						<div class=row_img style="width:100%">
+							<div class=column_img style="width:50%">
+
+							</div>
+							<div class=column_img style="width:50%">
+								<img src="images/phd_defence/mesh_a.png" alt="it_mesh" width="51%" style="background:none; border:none; box-shadow:none;">
+								<img src="images/phd_defence/mesh_b.png" alt="it_mesh" width="51%" style="background:none; border:none; box-shadow:none;">
+							</div>
+						</div>
+
 					</section>
 					<section>
 						<h2>Velocity</h2>
+						<img src="images/phd_defence/rise_velocity_exp_sim.png" alt="rise_velocity_exp_sim" width="800" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
 						<h2>Local velocity</h2>
+						<img src="images/phd_defence/clean_vs_cont_vel_crop.png" alt="streamlines_clean_cont" width="600" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
-						<h2>Oxygen concentration in the wake</h2>
-					</section>
-					<section>
-						<h2>Effect of laser sheet width</h2>
-					</section>
-					<section>
-						<h2>Mass transfer coefficient</h2>
-					</section>
-					<section>
-						<h2>Local Sherwood number</h2>
+						<h2>Oxygen transport</h2>
+						<div class=row_img style="width:100%">
+							<div class=column_img style="width:50%">
+								<img src="images/phd_defence/exp_vs_sim_wake.png" alt="oxygen_wake" width="60%" style="background:none; border:none; box-shadow:none;">
+							</div>
+							<div class=column_img style="width:50%">
+								<img src="images/phd_defence/local_sh_number.png" alt="local_sh" width="100%" style="background:none; border:none; box-shadow:none;">
+							</div>
+						</div>
 					</section>
 				</section>
 
