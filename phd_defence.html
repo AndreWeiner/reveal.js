@@ -704,43 +704,75 @@
 						<h2>Comparison with experiments</h2>
 						<div class=row_img style="width:100%">
 							<div class=column_img style="width:50%">
-								<img src="images/phd_defence/experiment.png" alt="rise_velocity_exp_sim" width="80%" style="background:none; border:none; box-shadow:none;">
+								<img src="images/phd_defence/experiment.png" alt="rise_velocity_exp_sim" width="70%" style="background:none; border:none; box-shadow:none;">
 							</div>
 							<div class=column_img style="width:50%">
-								<img src="images/phd_defence/mesh_b.png" alt="it_mesh" width="60%" style="background:none; border:none; box-shadow:none;">
+								<p>
+									Interface Tracking
+								</p>
+								<img src="images/phd_defence/mesh_b.png" alt="it_mesh" width="50%" style="background:none; border:none; box-shadow:none;">
 							</div>
+						</div>
+						<div align="left">
+						<small>A. Weiner, J. Timmermann, C. Pesci, J. Grewe, M. Hoffmann, M. Schlüter, D. Bothe:<br>
+						<a href="https://www.sciencedirect.com/science/article/pii/S2590140019300140">Experimental and numerical investigation of reactive species transport around a small rising bubble (2019)</a></small>
 						</div>
 					</section>
 					<section>
 						<h2>Interface Tracking</h2>
 						<div class=row_img style="width:100%">
 							<div class=column_img style="width:50%">
+								<small>
+									<ul>
+										<li style="padding-bottom:1.0em">
+											direct implementation of momentum jump condition on $ \Sigma (t) $<br>
+											$ [\![ p\mathbf{I} - \eta \left( \nabla \mathbf{u} + \nabla \mathbf{u}^\mathsf{T} \right)]\!] \cdot \mathbf{n}_\Sigma =
+	\sigma\kappa\mathbf{n}_\Sigma + \nabla_\Sigma \sigma$
+										</li>
+										<li style="padding-bottom:1.0em">
+											sorption library $ s^\Sigma + [\![ -D\nabla c ]\!]\cdot \mathbf{n}_\Sigma = 0$
+										</li>
+										<li style="padding-bottom:1.0em">
+											surface tension isotherms $\sigma = \sigma (c^\Sigma)$
+										</li>
 
+									</ul>
+								</small>
+								<div align="left">
+									<small>C. Pesci, A. Weiner, H. Marschall, D. Bothe:<br>
+									<a href="https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/computational-analysis-of-single-rising-bubbles-influenced-by-soluble-surfactant/74FFCE053782E4E0901EFD77CDAF4518">Computational analysis of single rising bubbles influenced by soluble surfactant (2018)</a></small>
+								</div>
 							</div>
 							<div class=column_img style="width:50%">
 								<img src="images/phd_defence/mesh_a.png" alt="it_mesh" width="51%" style="background:none; border:none; box-shadow:none;">
 								<img src="images/phd_defence/mesh_b.png" alt="it_mesh" width="51%" style="background:none; border:none; box-shadow:none;">
 							</div>
 						</div>
-
 					</section>
 					<section>
 						<h2>Velocity</h2>
 						<img src="images/phd_defence/rise_velocity_exp_sim.png" alt="rise_velocity_exp_sim" width="800" style="background:none; border:none; box-shadow:none;">
+						<small>Termial velocity plotted against the bubble diameter. Experimenal, numerical, theoretical and literature results.</small>
 					</section>
 					<section>
 						<h2>Local velocity</h2>
 						<img src="images/phd_defence/clean_vs_cont_vel_crop.png" alt="streamlines_clean_cont" width="600" style="background:none; border:none; box-shadow:none;">
+						<small>Streamlines and magnitude of interfacial velocity for clean (left) and contaminated (right) interfaces. The glyphs depict local Marangoni forces.</small>
 					</section>
 					<section>
 						<h2>Oxygen transport</h2>
 						<div class=row_img style="width:100%">
-							<div class=column_img style="width:50%">
+							<div class=column_img style="width:45%">
 								<img src="images/phd_defence/exp_vs_sim_wake.png" alt="oxygen_wake" width="60%" style="background:none; border:none; box-shadow:none;">
 							</div>
-							<div class=column_img style="width:50%">
+							<div class=column_img style="width:55%">
 								<img src="images/phd_defence/local_sh_number.png" alt="local_sh" width="100%" style="background:none; border:none; box-shadow:none;">
+								<small>Local Sherwood number for clean (left) and contaminated (right) interfaces.</small>
 							</div>
+						</div>
+						<div align="left">
+						<small>A. Weiner, J. Timmermann, C. Pesci, J. Grewe, M. Hoffmann, M. Schlüter, D. Bothe:<br>
+						<a href="https://www.sciencedirect.com/science/article/pii/S2590140019300140">Experimental and numerical investigation of reactive species transport around a small rising bubble (2019)</a></small>
 						</div>
 					</section>
 				</section>
