@@ -84,14 +84,14 @@
 \draw[->,blue] ({\R * cos(80)}, {\R * sin(80)}) -- ({\R * cos(80)}, {\Rv * sin(80)});%alpha 80
 \draw[->,blue] ({\R * cos(70)}, {\R * sin(70)}) -- ({\R * cos(70)}, {\Rv * sin(70)});%alpha 70
 \draw[->,blue] ({\R * cos(60)}, {\R * sin(60)}) -- ({\R * cos(60)}, {\Rv * sin(60)});%alpha 60
-\draw ({\R * cos(70)}, {\R * sin(70)}) node[above right]{\textcolor{blue}{$(\mathbf{u})_{\partial \Omega, \mathrm{in}} = - \mathbf{u}_{\mathrm{b}}$}};
+\draw ({\R * cos(70)}, {\R * sin(70)}) node[above right]{\textcolor{blue}{inflow}};
 
 \draw[draw,ultra thick,red,opacity=0.7] (5.08,0) arc (0:-90:5.08cm);
 \draw[->,red] ({\Rc * cos(90)}, {-\Rc * sin(90)}) -- ({\Rc * cos(90)}, {-\Rvo * sin(90)});%alpha 80
 \draw[->,red] ({\Rc * cos(80)}, {-\Rc * sin(80)}) -- ({\Rc * cos(80)}, {-\Rvo * sin(80)});%alpha 80
 \draw[->,red] ({\Rc * cos(70)}, {-\Rc * sin(70)}) -- ({\Rc * cos(70)}, {-\Rvo * sin(70)});%alpha 70
 \draw[->,red] ({\Rc * cos(60)}, {-\Rc * sin(60)}) -- ({\Rc * cos(60)}, {-\Rvo * sin(60)});%alpha 60
-\draw ({\Rc * cos(70)}, {-\Rvo * sin(70)}) node[below right]{\textcolor{red}{$(\mathbf{n} \cdot \nabla \mathbf{u})_{\partial \Omega, \mathrm{out}} = 0$}};
+\draw ({\Rc * cos(70)}, {-\Rvo * sin(70)}) node[below right]{\textcolor{red}{outflow}};
 
 \coordinate (X) at (1.5,0);
 \coordinate (Y) at (0,1.5);
@@ -103,13 +103,22 @@
 \coordinate (IO) at ({\R * cos(65)}, {\R * sin(65)});
 \coordinate (Ci) at (1.2,0.8);
 \draw[color=black] (D) -- (Ci);
-\draw[color=black] (Ci) node[above right]{$\mathbf{n}\times(\mathbf{S}\cdot\mathbf{n})=0$};
-\draw[color=black] (Ci) node[below right]{(free slip)};
+\draw[color=black] (Ci) node[right]{free slip};
+%\draw[color=black] (Ci) node[below right]{};
 
 \coordinate (PO) at (0.7,-0.2);
 \coordinate (POi) at (1.2,-0.8);
 \draw[color=black] (E) -- (POi);
-\draw[color=black] (POi) node[below right]{fixed shape};
+\draw[color=black] (POi) node[right]{fixed shape};
+
+\coordinate (E1) at (0.5, -2.0);
+\draw (E1) node[right]{- Navier-Stokes eq.};
+\coordinate (E2) at (0.5, -2.5);
+\draw (E2) node[right]{- incompressible};
+\coordinate (E3) at (0.5, -3.0);
+\draw (E3) node[right]{- Newtonian};
+\coordinate (E4) at (0.5, -3.5);
+\draw (E4) node[right]{- isothermal};
 
 %\draw[thick][color=black] (B) to [bend left=23] (C);
 %\draw[thick][color=black] (C) to [bend left=35] (D);

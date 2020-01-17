@@ -51,15 +51,16 @@
 		.reveal .slide-number {
 		  position: absolute;
 		  display: block;
-		  right: 8px;
-		  top: 8px;
-			height: 64px;
+		  left: 8px;
+		  bottom: 8px;
+			height: 48px;
+			width: 50px;
 		  z-index: 31;
 		  font-family: Helvetica, sans-serif;
-		  font-size: 56px;
+		  font-size: 32px;
 		  line-height: 1;
-		  color: #fff;
-		  background-color: rgba(0, 0, 0, 0.4);
+		  color: #000000;
+		  background-color: rgba(0, 0, 0, 0);
 		  padding: 5px; }
 
 	</style>
@@ -77,7 +78,7 @@
 						<small>Andre Weiner, <a href="mailto:weiner@mma.tu-darmstadt.de">weiner@mma.tu-darmstadt.de</a></small><br>
 						<small>First supervisor: <b>Prof. Dr. rer. nat. Dieter Bothe</b></small><br>
 						<small>Second supervisor: <b>Prof. Dr.-Ing. Peter Stephan</b></small><br>
-						<small>Slides available at: <a href="https://andreweiner.github.io/reveal.js/phd_defence.html#/">andreweiner.github.io/reveal.js/phd_defence.html</a></small>
+<!--						<small>Slides available at: <a href="https://andreweiner.github.io/reveal.js/phd_defence.html#/">andreweiner.github.io/reveal.js/phd_defence.html</a></small> -->
 					</p>
 
 					<style>
@@ -119,7 +120,7 @@
 									<p>
 										<small>
 												<b>micro reactor</b><br>
-												size: $mm$-range<br>
+												size: millimeter<br>
 												source: <a href="http://www.dfg-spp1740.de/">SPP 1740</a>
 										</small>
 									</p>
@@ -145,7 +146,7 @@
 									<p>
 										<small>
 											<b>bubble column reactor</b><br>
-											size: $m$-range<br>
+											size: meter<br>
 											source: <a href="https://tel.archives-ouvertes.fr/tel-01267349/document">R. M. Raimundo, ENI</a>
 										</small>
 									</p>
@@ -159,18 +160,13 @@
 						<p>What about the &laquoarrows&raquo?</p>
 					</section>
 					<section>
-						<video height="500" controls mute autoplay loop>
-							<source src="videos/no_bubbles.mp4">
-						</video>
-						<p>
-							Video by courtesy of <a href="https://www.verfahrenstechnik.tu-berlin.de/menue/ueber_uns/mitarbeiterinnen/doktoranden/msc_david_merker/">David Merker</a>.
-						</p>
-					</section>
-					<section>
 						<h2>High Péclet number problem</h2>
 						<img src="images/phd_defence/high_pe_bl.png" alt="kueck_exp" width="800" style="background:none; border:none; box-shadow:none;">
 						<small>
-							<p>Image source: U. D. Kück et al.: Analyse des Grenzschichtnahen Stofftransports an frei aufsteigenden Gasblasen. CIT (2009), 1599-1606</p>
+							<div align="left">
+								<p>U. D. Kück, M. Schlüter, N. Räbiger:<br>
+								<a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/cite.200900034">Analyse des grenzschichtnahen Stofftransports an frei aufsteigenden Gasblasen (2009)</a></p>
+							</div>
 						</small>
 					</section>
 					<section>
@@ -190,9 +186,13 @@
 							</li>
 						</ul>
 						<p class="fragment" data-fragment-index="4">
-							$\delta_c/\delta_h$ typically <b style="color:red;">10 ... 100</b>
+							$\delta_h/\delta_c$ typically <b style="color:red;">10 ... 100</b>
+						</p>
+						<p class="fragment" data-fragment-index="4">
+							feasible simulations up to $Pe\approx 1000$ (3D, HPC)
 						</p>
 					</section>
+					<!--
 					<section>
 						<h2>Computational limit</h2>
 						<img src="images/phd_defence/pe_comparison.png" alt="pe_influence" width="800" style="background:none; border:none; box-shadow:none;">
@@ -200,6 +200,7 @@
 							Two-phase DNS limit (3D): $Pe\approx 1000$.
 						</p>
 					</section>
+				-->
 				</section>
 
 				<!-- outline -->
@@ -246,6 +247,7 @@
 							</div>
 						</div>
 					</section>
+					<!--
 					<section>
 						<img src="images/phd_defence/water_01_phys_single.png" alt="phys_single" width="800" style="background:none; border:none; box-shadow:none;">
 						<p>
@@ -254,6 +256,7 @@
 							</small>
 						</p>
 					</section>
+				-->
 					<section>
 						<h2>Transfer species - A</h2>
 						<img src="images/phd_defence/sgs_flux_A.png" alt="flux_A" width="800" style="background:none; border:none; box-shadow:none;">
@@ -308,7 +311,7 @@
 							</li>
 							<li>
 								<b>Reconstruction</b><br>
-								<small>Adjust the profile function based on local simulation data (cell-width, average concentration, ...)</small>
+								<small>Adjust the profile function based on local simulation data (cell-width, average concentration, ...).</small>
 							</li>
 							<li>
 								<b>Correction</b><br>
@@ -327,7 +330,8 @@
 							<div class=column_img>
 								<div align="center">
 								<small>
-									$$ \partial_\tilde{y} \tilde{c} = \frac{1}{Pe}\partial_{\tilde{x}\tilde{x}} \tilde{c} - Da\ \tilde{c} $$
+									dimensionless form<br>
+									$$ \partial_\tilde{y} \tilde{c} = \frac{1}{Pe}\partial_{\tilde{x}\tilde{x}} \tilde{c}$$
 									<ul>
 										<li style="padding-bottom:0.5em">
 											$\tilde{c}(\tilde{x}=0,\tilde{y}) = 1$
@@ -361,10 +365,12 @@
 
 						</small>
 					</section>
+					<!--
 					<section>
 						<h2>Solutions</h2>
 						<img src="images/phd_defence/simple_substitute_problem.png" alt="substitute_problem" width="1000" style="background:none; border:none; box-shadow:none;">
 					</section>
+				-->
 					<section>
 						<h2>(2.1) Reconstruction</h2>
 						<video height="500" controls mute loop>
@@ -404,14 +410,15 @@
 								</div>
 							</div>
 							<div class=column_img>
-								<div align="right">
+								<div align="center" style="padding-bottom:30px">
 									<img src="images/phd_defence/chopped_cube.png" alt="chopped_cube" height="250" style="background:none; border:none; box-shadow:none;">
+									<small>Control volume (cube) with embedded interface (plane).</small>
 								</div>
 							</div>
 						</div>
-						<img src="images/phd_defence/area_integral_cases.png" alt="area_integral" width="600" style="background:none; border:none; box-shadow:none;">
+						<!--<img src="images/phd_defence/area_integral_cases.png" alt="area_integral" width="600" style="background:none; border:none; box-shadow:none;">-->
 						<small>
-							A. Weiner, D.Bothe: <a href="https://www.sciencedirect.com/science/article/pii/S0021999117304941?via%3Dihub">Advanced subgrid-scale modeling for convection-dominated species transport at fluid interfaces with application to mass transfer from rising bubbles (2017)</a>
+							A. Weiner, D. Bothe: <a href="https://www.sciencedirect.com/science/article/pii/S0021999117304941?via%3Dihub">Advanced subgrid-scale modeling for convection-dominated species transport at fluid interfaces with application to mass transfer from rising bubbles (2017)</a>
 						</small>
 					</section>
 					<section>
@@ -422,11 +429,8 @@
 					</section>
 					<section>
 						<h2>Results</h2>
-						<p>
-							Stokes flow validation (semi-analytical reference) with<br>
-							$Sc=10^4,10^5,10^6,10^7$
-						</p>
 						<img src="images/phd_defence/stokes_flow_validation.png" alt="stokes_validation" width="1000" style="background:none; border:none; box-shadow:none;">
+						<small>Normalized concentration field of Stokes-flow reference solution (left half) and subgrid-scale solution (right half) for $Sc=\nu/D=10^4/10^5/10^6/10^7$ (left to right).</small>
 					</section>
 					<section>
 						<h2>Results</h2>
@@ -436,7 +440,7 @@
 						<img src="images/phd_defence/sh_gl_sgs_analytic.png" alt="sh_glob" width="1000" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
-						<h2>Complex reactions?</h2>
+						<h2>Complex reactions</h2>
 					</section>
 				</section>
 
@@ -454,13 +458,72 @@
 							</li>
 							<li>
 								<b>Model creation</b><br>
-								<small>Select meaningful features (variables) and train a ML model</small>
+								<small>Select meaningful features (variables) and train a ML model.</small>
 							</li>
 							<li>
 								<b>Correction</b><br>
 								<small>Correct convective fluxes, diffusive fluxes, and reaction source terms based on the <b>ML model</b>.</small>
 							</li>
 						</ol>
+					</section>
+					<section>
+						<h2>ML terminology</h2>
+						<p>
+
+						$s$ instances of
+						<a style="color:red">
+							feature
+						</a>
+						-
+						<a style="color:blue">
+							label
+						</a>
+						pairs
+						</p>
+						<table>
+    					<thead><tr>
+								<th>$s$</th>
+            		<th style="color:red">$x_{1,s}$</th>
+            		<th style="color:red">$x_{2,s}$</th>
+								<th style="color:red">$x_{3,s}$</th>
+            		<th style="color:blue">$y_s$</th>
+        			</tr></thead>
+        			<tbody><tr>
+								<th>1</th>
+            		<td style="color:red">0.1</td>
+            		<td style="color:red">0.4</td>
+            		<td style="color:red">0.6</td>
+								<td style="color:blue">0.5</td>
+        			</tr>
+        			<tr>
+								<th>2</th>
+            		<td style="color:red">...</td>
+            		<td style="color:red">...</td>
+            		<td style="color:red">...</td>
+								<td style="color:blue">...</td>
+        			</tr></tbody>
+    				</table>
+						<p>
+							<div class=row_img style="width:100%">
+								<div class=column_img style="width:45%">
+									<div align="right">
+										<small>ML model</small><br>
+										<small>prediction</small><br>
+										<small>error norm</small>
+									</div>
+								</div>
+								<div class=column_img style="width:10%">
+
+								</div>
+								<div class=column_img style="width:45%">
+									<div align="left">
+										<small>$f_m = f_m(x_{1}, x_{2}, x_{3})$</small><br>
+										<small>$\hat{y}_s = f_m(x_{1,s}, x_{2,s}, x_{3,s})$</small><br>
+										<small>$L_i = L_i(y_s - \hat{y}_s)$</small>
+									</div>
+								</div>
+							</div>
+						</p>
 					</section>
 					<section>
 						<h2>(1) Substitute problem</h2>
@@ -482,7 +545,7 @@
 											steady-state flow dynamics
 										</li>
 										<li>
-											parameters: $Re$, $Sc$, $Da$, shape, ...
+											parameters: $Re$, $Sc_i$, $Da_i$, shape, ...
 										</li>
 										<li>
 											finished in <b style="color:red;">minutes</b>
@@ -517,7 +580,33 @@
 						<p>
 							<b>Idea:</b> ranking of feature importance.
 						</p>
-						<img src="images/ML_model_score_error.png" alt="feature_importance" width="800" style="background:none; border:none; box-shadow:none;">
+						<div class=row_img>
+							<div class=column_img>
+								<img src="images/phd_defence/feature_selection_crop.png" alt="feature_importance" width="800" style="background:none; border:none; box-shadow:none;">
+							</div>
+							<div class=column_img>
+								<p>
+									algorithms
+								</p>
+								<small>
+									<ul>
+										<li>
+											regression forest
+										</li>
+										<li>
+											sequential backward selection
+										</li>
+										<li>
+											sequential forward selection
+										</li>
+									</ul>
+								</small>
+								<p>
+									example (left)
+								</p>
+								$f_m = f_m(\bar{c},Da,\tilde{r})$
+							</div>
+						</div>
 						<p>
 							<div align=left>
 							<small>
@@ -588,11 +677,22 @@
 					</section>
 					<section>
 						<h2>ML model assessment</h2>
-						<img src="images/phd_defence/phys_A_label_error_hist.png" alt="error_histogram" width="800" style="background:none; border:none; box-shadow:none;">
+						<div class=row_img style="width:100%">
+							<div class=column_img>
+								<img src="images/phd_defence/histogram_crop.png" alt="error_histogram" height="400px" style="background:none; border:none; box-shadow:none;">
+							</div>
+							<div class=column_img>
+								<img src="images/phd_defence/heatmap_crop.png" alt="error_heatmap" height="400px" style="background:none; border:none; box-shadow:none;">
+							</div>
+						</div>
 						<p>
-							Histogram of the label errors for the transfer species (A) in case of physisorption.
+							<small>
+								Histogram (left) and heatmap (right) of the label error for the transfer species (A).
+								Reminder: the height of a bar in a histogram depicts the number of instances in the range the bar covers. The index $01$ indicates a min-max-scaling.
+							</small>
 						</p>
 					</section>
+					<!--
 					<section>
 						<h2>ML model assessment</h2>
 						<img src="images/phd_defence/phys_A_label_error_heat.png" alt="error_heat" width="800" style="background:none; border:none; box-shadow:none;">
@@ -600,15 +700,9 @@
 							Heatmap of the maximum label errors for the transfer species (A) in case of physisorption.
 						</p>
 					</section>
+				-->
 					<section>
-						<h2>Challenges</h2>
-						<img src="images/phd_defence/feature_density_source.png" alt="feature_density" width="1000" style="background:none; border:none; box-shadow:none;">
-						<p>
-							<small>Feature density for the source terms of a parallel-consecutive reaction of type $A+B\rightarrow P$ and $A+P\rightarrow S$.</small>
-						</p>
-					</section>
-					<section>
-						<h2>Validation, Results?</h2>
+						<h2>Validation, Results</h2>
 					</section>
 				</section>
 
@@ -616,8 +710,8 @@
 				<section>
 					<section>
 						<h2>SGS Model assessment</h2>
-						<p align="left"><b>Aim:</b><br>create reference data for complex shapes and flow scenarios to assess model generalization</p>
-						<p align="left"><b>Idea:</b><br> decoupling of two-phase flow and species transport</p>
+						<p align="left"><b>Aim:</b><br>Create reference data for complex shapes and flow scenarios to assess model generalization.</p>
+						<p align="left"><b>Idea:</b><br> Decoupling of two-phase flow and species transport.</p>
 					</section>
 					<section>
 						<h3>1. Two phase flow simulation</h3>
@@ -641,24 +735,26 @@
 						<small>Air bubbles rising in aqueous sugar solutions. Characteristic shapes: dimpled-ellipsoidal, spherical cap, and skirted.</small>
 					</section>
 					<section>
-						<h3>2.1 Parameterization and approximation - shape</h3>
-						$$\tilde{r} = \tilde{r}(\varphi)\quad\text{for}\quad 0\le\varphi\le\pi$$
+						<h3>2.1 Parametrization and approximation - shape</h3>
+						<small>
+							$$\tilde{r} = \tilde{r}(\varphi)\quad\text{for}\quad 0\le\varphi\le\pi$$
+						</small>
 						<img src="images/phd_defence/radius_approximation.png" alt="shape_approx" width="1000" style="background:none; border:none; box-shadow:none;">
-						<small>Raduis of an ellipsoidal air bubble rising in water.</small>
+						<small>Radius of an ellipsoidal air bubble rising in water. Symmetry in circumferencial direction is assumed.</small>
 					</section>
 					<section>
-						<h3>2.2 Parameterization and approximation - velocity</h3>
+						<h3>2.2 Parametrization and approximation - velocity</h3>
 						<small>
 						$$\tilde{u}_\tau |_\Sigma = \tilde{u}_\tau |_\Sigma(\varphi)\quad\text{for}\quad 0\le\varphi\le\pi\quad
 						\text{with}\quad \tilde{u}_\tau = \tilde{\mathbf{u}}\cdot\tau$$
 						</small>
 						<img src="images/phd_defence/velocity_approximation.png" alt="shape_approx" width="1000" style="background:none; border:none; box-shadow:none;">
-						<small>Tangential velocity component at the interface of an ellipsoidal air bubble rising in water.</small>
+						<small>Tangential velocity component at the interface of an ellipsoidal air bubble rising in water. Symmetry in circumferencial direction is assumed.</small>
 					</section>
 					<section>
 						<h3>3. Unstructured meshing</h3>
 						<img src="images/phd_defence/mesh_impression.png" alt="mesh_impression" width="700" style="background:none; border:none; box-shadow:none;">
-						<small>Single phase mesh of an dimpled ellipsoidal bubble created with <b>snappyHexMesh</b>.</small>
+						<small>Single phase mesh of a dimpled ellipsoidal bubble created with <b>snappyHexMesh</b>.</small>
 					</section>
 					<section>
 						<h3>4. Single phase flow solution</h3>
@@ -676,11 +772,13 @@
 						<img src="images/phd_defence/bhaga_02_consecutive.png" alt="species_fields" width="700" style="background:none; border:none; box-shadow:none;">
 						<small>Concentration fields around a dimpled ellipsoidal bubble for a parallel-consecutive reaction of type $A+B\rightarrow P$ and $A+P\rightarrow S$.</small>
 					</section>
+					<!--
 					<section>
 						<h2>High-fidelity reference data</h2>
 						<img src="images/phd_defence/bhaga_02_global_sh_dirichlet_vs_slip.png" alt="global_sh" width="800" style="background:none; border:none; box-shadow:none;">
 						<small>Global Sherwood number $Sh$ and enhancement factor $E$ for a dimpled ellipsoidal bubble and various reaction types.</small>
 					</section>
+				-->
 					<section>
 						<h2>Model assessment</h2>
 						<img src="images/phd_defence/prismatic_layers_bhaga_03.png" alt="meshes" height="450" style="background:none; border:none; box-shadow:none;">
@@ -690,10 +788,9 @@
 					</section>
 					<section>
 						<h2>Model assessment</h2>
-						<img src="images/phd_defence/table_head_dell.png" alt="table_dell" width="800" style="background:none; border:none; box-shadow:none;">
-						<div align="left">
-							<small>Reaction types<br>
-								decay: $A\rightarrow P$; single: $A + B \rightarrow P$; consecutive: $A+B\rightarrow P$ &amp; $A + P \rightarrow S$</small>
+						<img src="images/phd_defence/sh_dimpled_dev.png" alt="table_dell" width="1000" style="background:none; border:none; box-shadow:none;">
+						<div align="center">
+							<small>Comparison of the global Sherwood number computed with standard discretization (linear) and subgrid-scale model (SGS) on several meshes. The reference value can be found in the rightmost column.</small>
 						</div>
 					</section>
 				</section>
@@ -707,16 +804,48 @@
 								<img src="images/phd_defence/experiment.png" alt="rise_velocity_exp_sim" width="70%" style="background:none; border:none; box-shadow:none;">
 							</div>
 							<div class=column_img style="width:50%">
-								<p>
-									Interface Tracking
-								</p>
-								<img src="images/phd_defence/mesh_b.png" alt="it_mesh" width="50%" style="background:none; border:none; box-shadow:none;">
+								<img src="images/phd_defence/mesh_b.png" alt="it_mesh" width="60%" style="background:none; border:none; box-shadow:none;">
 							</div>
 						</div>
-						<div align="left">
-						<small>A. Weiner, J. Timmermann, C. Pesci, J. Grewe, M. Hoffmann, M. Schlüter, D. Bothe:<br>
-						<a href="https://www.sciencedirect.com/science/article/pii/S2590140019300140">Experimental and numerical investigation of reactive species transport around a small rising bubble (2019)</a></small>
+						<div align="center">
+						<small>Comparsion of the reactive mass transfer at small oxygen bubbles $d_b < 1~mm$ rising in water. Reaction: sulfite-sulfate oxidation. Measurement principle: laser-induced fluorescence.</small>
 						</div>
+					</section>
+					<section>
+						<h2>Mathematical model</h2>
+						<div class=row_img sytle="width:100%">
+							<div class=column_img style="width:40%">
+								<small>
+								<div align="left">
+									<div style="align:left; padding-bottom:20px">
+										<b>mass balance and jump</b>
+									</div>
+									<div style="align:left; padding-bottom:20px">
+										$\frac{\partial \rho}{\partial t} + \nabla \cdot \left( \rho\mathbf{u} \right) = 0\quad\text{in}\quad \Omega^\pm (t)$
+									</div>
+									<div style="align:left; padding-bottom:20px">
+										$[\![ \mathbf{u}] \!] \cdot \mathbf{n}_\Sigma = 0\quad\text{on}\quad \Sigma (t)$
+									</div>
+								</div>
+								</small>
+							</div>
+							<div class=column_img style="width:60%">
+								<img src="images/phd_defence/sharp_interface.png" alt="sharp_interface" width="100%" style="background:none; border:none; box-shadow:none;">
+							</div>
+						</div>
+						<small>
+							<div style="align:left; padding-bottom:20px">
+								<b>momentum balance and jump</b>
+							</div>
+							<div style="align:left; padding-bottom:20px">
+								$\frac{\partial \rho \mathbf{u}}{\partial t} + \nabla \cdot \left( \rho \mathbf{u} \otimes \mathbf{u} \right) =
+								-\nabla p + \nabla \cdot \left( \eta \left( \nabla \mathbf{u} + \nabla \mathbf{u}^\mathsf{T} \right) \right) + \rho\mathbf{b} \quad\text{in}\quad \Omega^\pm (t)$
+							</div>
+							<div style="align:left; padding-bottom:0px">
+								$ [\![ p\mathbf{I} - \eta \left( \nabla \mathbf{u} + \nabla \mathbf{u}^\mathsf{T} \right)]\!] \cdot \mathbf{n}_\Sigma =
+								\sigma\kappa\mathbf{n}_\Sigma + \nabla_\Sigma \sigma\quad\text{on}\quad \Sigma (t) $
+							</div>
+						</small>
 					</section>
 					<section>
 						<h2>Interface Tracking</h2>
@@ -725,17 +854,18 @@
 								<small>
 									<ul>
 										<li style="padding-bottom:1.0em">
-											direct implementation of momentum jump condition on $ \Sigma (t) $<br>
-											$ [\![ p\mathbf{I} - \eta \left( \nabla \mathbf{u} + \nabla \mathbf{u}^\mathsf{T} \right)]\!] \cdot \mathbf{n}_\Sigma =
-	\sigma\kappa\mathbf{n}_\Sigma + \nabla_\Sigma \sigma$
+											numerical equivalent of sharp interface model
+										</li>
+										<li style="padding-bottom:1.0em">
+											surface tension isotherms<br>
+											$\sigma = \sigma (c^\Sigma)$
 										</li>
 										<li style="padding-bottom:1.0em">
 											sorption library $ s^\Sigma + [\![ -D\nabla c ]\!]\cdot \mathbf{n}_\Sigma = 0$
 										</li>
 										<li style="padding-bottom:1.0em">
-											surface tension isotherms $\sigma = \sigma (c^\Sigma)$
+											here: <b>Langmuir fast sorption</b> model
 										</li>
-
 									</ul>
 								</small>
 								<div align="left">
@@ -752,7 +882,7 @@
 					<section>
 						<h2>Velocity</h2>
 						<img src="images/phd_defence/rise_velocity_exp_sim.png" alt="rise_velocity_exp_sim" width="800" style="background:none; border:none; box-shadow:none;">
-						<small>Termial velocity plotted against the bubble diameter. Experimenal, numerical, theoretical and literature results.</small>
+						<small>Terminal velocity plotted against the bubble diameter. Experimental, numerical, theoretical and literature results.</small>
 					</section>
 					<section>
 						<h2>Local velocity</h2>
@@ -763,6 +893,7 @@
 						<h2>Oxygen transport</h2>
 						<div class=row_img style="width:100%">
 							<div class=column_img style="width:45%">
+								<small>Experiment vs. Simulation</small>
 								<img src="images/phd_defence/exp_vs_sim_wake.png" alt="oxygen_wake" width="60%" style="background:none; border:none; box-shadow:none;">
 							</div>
 							<div class=column_img style="width:55%">
@@ -780,53 +911,21 @@
 				<!-- summary and outlook -->
 				<section>
 					<section>
-						<h2>Summary I</h2>
+						<h2>Summary</h2>
+						<small>
 						<ul>
-							<li>high-$Pe$ number problem (boundary layer) &#10004;</li>
-							<li>SGS modeling for complex reactions &#10004;</li>
-							<li>hybrid approach for high-fidelity reference data &#10004;</li>
-							<li>validation with complex bubble shapes &#10004;</li>
-							<li>qualitative and quantitaive agreement with experiments &#10004;</li>
-							<li>new understanding of dynamic surfactant adsorption &#10004;</li>
+							<li>high-$Pe$ number problem (boundary layer)</li>
+							<li>influence on numerical solution</li>
+							<li>SGS modeling for complex reactions</li>
+							<li>hybrid approach for high-fidelity reference data</li>
+							<li>validation with complex bubble shapes</li>
+							<li>qualitative and quantitative agreement with experiments</li>
+							<hr>
+							<li>new understanding of dynamic surfactant adsorption</li>
+							<li>well documented, fully reproducible, public research results and methods</li>
+							<li>pathway paved for data-driven solutions in computational fluid dynamics</li>
 						</ul>
-					</section>
-					<section>
-						<h2>Summary II</h2>
-						<p>
-							Well documented, fully reproducible, public research results and methods:
-						</p>
-						<ul>
-							<li><a href="https://github.com/AndreWeiner/phd_notebooks">https://github.com/AndreWeiner/phd_notebooks</a></li>
-							<li><a href="https://github.com/AndreWeiner/phd_basilisk">https://github.com/AndreWeiner/phd_basilisk</a></li>
-							<li><a href="https://github.com/AndreWeiner/phd_openfoam">https://github.com/AndreWeiner/phd_openfoam</a></li>
-						</ul>
-						<p>
-							Solution based on Git/Github, Docker/Dockerhub and TUDatalib.
-						</p>
-					</section>
-					<section>
-						<h2>Summary III</h2>
-						<small>Pathway paved for data-driven solutions in computational fluid dynamics.</small>
-						<div class=row_img style="width:100%">
-							<div class=column_img style="width:70%">
-								<img src="images/multiclass_classification.png" alt="classification" width="100%" style="background:none; border:none; box-shadow:none;">
-							</div>
-							<div class=column_img style="width:30%">
-								<small>
-								<ul>
-									<li style="padding-bottom:0.5em">
-										production ready software stack and workflow
-									</li>
-									<li style="padding-bottom:0.5em">
-										radical gain in accuracy and performance
-									</li>
-									<li>
-										<a href="https://andreweiner.github.io/reveal.js/ofw2019_slides.html#/">training</a> and <a href="https://github.com/AndreWeiner/machine-learning-applied-to-cfd">repository</a> for ML + CFD
-									</li>
-								</ul>
-								</small>
-							</div>
-						</div>
+						</small>
 					</section>
 					<section>
 						<h2>Outlook</h2>
@@ -850,7 +949,7 @@
 								<small>
 									<ul>
 										<li>
-											application to realted boundary layer problems
+											application to related boundary layer problems
 										</li>
 									</ul>
 								</small>
@@ -891,9 +990,58 @@
 					</section>
 					<section>
 						<h2>Publications</h2>
+						<small>
+							<div align="left">
+
+
+							<div style="align:left; padding-bottom:20px">
+								A. Weiner, D. Bothe:<br>
+								<a href="https://www.sciencedirect.com/science/article/pii/S0021999117304941?via%3Dihub">
+								Advanced subgrid-scale modeling for convection-dominated species transport at fluid interfaces with application to mass transfer from rising bubbles, J. Comput. Phys. (2017)</a>
+							</div>
+							<div style="align:left; padding-bottom:20px">
+								C. Pesci, A. Weiner, H. Marschall, D. Bothe:<br>
+								<a href="https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/computational-analysis-of-single-rising-bubbles-influenced-by-soluble-surfactant/74FFCE053782E4E0901EFD77CDAF4518">Computational analysis of single rising bubbles influenced by soluble surfactant, J. Fluid Mech., (2018)</a>
+							</div>
+							<div style="align:left; padding-bottom:20px">
+								A. Weiner, J. Timmermann, C. Pesci, J. Grewe, M. Hoffmann, M. Schlüter, D. Bothe:<br>
+								<a href="https://www.sciencedirect.com/science/article/pii/S2590140019300140">Experimental and numerical investigation of reactive species transport around a small rising bubble, Chem. Eng. Sci., (2019)</a>
+							</div>
+							<div style="align:left; padding-bottom:20px">
+								A. Weiner, D. Hillenbrand, H. Marschall, D. Bothe:<br>
+								<a href="https://onlinelibrary.wiley.com/doi/full/10.1002/ceat.201900044">Data‐Driven Subgrid‐Scale Modeling for Convection‐Dominated Concentration Boundary Layers, Chem. Eng. and Techn. (2019)</a>
+							</div>
+							</div>
+						</small>
 					</section>
 					<section>
 						<h2>Reproducibility</h2>
+						<img src="images/spp1740/reproducibility_strategy.png" alt="reproducibility" width="500px" style="background:none; border:none; box-shadow:none;">
+						<small>
+						<ul>
+							<li><a href="https://github.com/AndreWeiner/phd_notebooks">https://github.com/AndreWeiner/phd_notebooks</a></li>
+							<li><a href="https://github.com/AndreWeiner/phd_basilisk">https://github.com/AndreWeiner/phd_basilisk</a></li>
+							<li><a href="https://github.com/AndreWeiner/phd_openfoam">https://github.com/AndreWeiner/phd_openfoam</a></li>
+						</ul>
+						<p>
+							Solution based on Git/Github, Docker/Dockerhub and TUDatalib.
+						</p>
+						</small>
+					</section>
+					<section>
+						<h2>ML Challenges</h2>
+						<img src="images/phd_defence/feature_density_source.png" alt="feature_density" width="1000" style="background:none; border:none; box-shadow:none;">
+						<p>
+							<small>Feature density for the source terms of a parallel-consecutive reaction of type $A+B\rightarrow P$ and $A+P\rightarrow S$.</small>
+						</p>
+					</section>
+					<section>
+						<video height="500" controls mute autoplay loop>
+							<source src="videos/no_bubbles.mp4">
+						</video>
+						<p>
+							Video by courtesy of <a href="https://www.verfahrenstechnik.tu-berlin.de/menue/ueber_uns/mitarbeiterinnen/doktoranden/msc_david_merker/">David Merker</a>.
+						</p>
 					</section>
 					<section>
 						<h2>Pendant bubble method</h2>
@@ -906,13 +1054,16 @@
 							</p>
 					</section>
 					<section>
-						Adsorption measurement
-					</section>
-					<section>
 						<h2>Interpolation error B</h2>
+						<video height="500" controls mute loop>
+							<source src="videos/flux_b.mp4">
+						</video>
 					</section>
 					<section>
 						<h2>Interpolation error P</h2>
+						<video height="500" controls mute loop>
+							<source src="videos/flux_p.mp4">
+						</video>
 					</section>
 				</section>
 
