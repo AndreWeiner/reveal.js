@@ -154,11 +154,13 @@
 							</div>
 						</div>
 					</section>
+					<!--
 					<section>
 						<h2>Scale-up strategy</h2>
 						<img src="images/phd_defence/scale_up.png" alt="scale_up" width="1000" style="background:none; border:none; box-shadow:none;">
 						<p>What about the &laquoarrows&raquo?</p>
 					</section>
+				-->
 					<section>
 						<h2>High Péclet number problem</h2>
 						<img src="images/phd_defence/high_pe_bl.png" alt="kueck_exp" width="800" style="background:none; border:none; box-shadow:none;">
@@ -175,20 +177,20 @@
 							$d_b=1~mm$ water/oxygen at room temperature
 						</p>
 						<ul>
-							<li class="fragment" data-fragment-index="1">
-								$$ Re\approx 250;\quad \delta_h/d_b \propto Re^{-1/2};\quad\delta_h\approx 45~\mu m $$
-							</li>
-							<li class="fragment" data-fragment-index="2">
-								$$ Sc\approx 500;\quad \delta_c/\delta_h \propto Sc^{-1/2};\quad\delta_c\approx 2.5~\mu m $$
-							</li>
-							<li class="fragment" data-fragment-index="3">
+							<li>
 								$Pe = Sc\ Re = \nu_l / D_{O_2} \cdot U_b d_b/\nu_l \approx 10^5 $
 							</li>
+							<li>
+								$$ Re\approx 250;\quad \delta_h/d_b \propto Re^{-1/2};\quad\delta_h\approx 45~\mu m $$
+							</li>
+							<li>
+								$$ Sc\approx 500;\quad \delta_c/\delta_h \propto Sc^{-1/2};\quad\delta_c\approx 2.5~\mu m $$
+							</li>
 						</ul>
-						<p class="fragment" data-fragment-index="4">
+						<p>
 							$\delta_h/\delta_c$ typically <b style="color:red;">10 ... 100</b>
 						</p>
-						<p class="fragment" data-fragment-index="4">
+						<p>
 							feasible simulations up to $Pe\approx 1000$ (3D, HPC)
 						</p>
 					</section>
@@ -222,18 +224,19 @@
 						<h2>Underresolved meshes</h2>
 						<div class=row_img>
 							<div class=column_img style="width:60%">
-								<small>
+							<!--
 								$$ 2A + B \rightarrow P $$
 								<ul>
 									<li>$A$ - transfer species</li>
 									<li>$B$ - bulk species</li>
 									<li>$P$ - product species</li>
-								</ul>
-								$$ \partial_t c_j + \nabla \cdot (c_j\mathbf{u} - D_j \nabla c) = \dot{r}_j\quad \text{in}\quad \Omega^+ $$
+								</ul>-->
+								<small>
+								$$ \partial_t c_A + \nabla \cdot (c_A\mathbf{u} - D_A \nabla c) = 0 \quad \text{in}\quad \Omega^+ $$
 								<ul>
 									<li style="padding-bottom:0.5em">$c_A|_\Sigma = const.$</li>
-									<li style="padding-bottom:0.5em">$\partial_n c_{B}|_\Sigma = 0$, $\partial_n c_{P}|_\Sigma = 0$</li>
-									<li style="padding-bottom:0.5em">$\dot{r}_j = \pm kc_A^2c_B$</li>
+									<!--<li style="padding-bottom:0.5em">$\partial_n c_{B}|_\Sigma = 0$, $\partial_n c_{P}|_\Sigma = 0$</li>
+									<li style="padding-bottom:0.5em">$\dot{r}_j = \pm kc_A^2c_B$</li>-->
 									<li>$\mathbf{u}$ - given velocity vector field</li>
 									<li><b>finite volume discretization</b></li>
 								</ul>
@@ -270,30 +273,6 @@
 						<video height="500" controls mute loop>
 							<source src="videos/flux_a.mp4">
 						</video>
-					</section>
-					<section>
-						<h2>Bulk species - B</h2>
-						<img src="images/phd_defence/sgs_flux_B.png" alt="flux_B" width="800" style="background:none; border:none; box-shadow:none;">
-						<small>
-						  Normalized concentration profile $\tilde{c}_B$ in interface normal direction $x/\delta_c$ for the <b>bulk species</b> (dashed blue line),
-							average concentration values per cell (shaded blue), and linear reconstruction (orange).
-						</small>
-					</section>
-					<section>
-						<h2>Product species - P</h2>
-						<img src="images/phd_defence/sgs_flux_P.png" alt="flux_P" width="800" style="background:none; border:none; box-shadow:none;">
-						<small>
-						  Normalized concentration profile $\tilde{c}_P$ in interface normal direction $x/\delta_c$ for the <b>product species</b> (dash-dotted blue line),
-							average concentration values per cell (shaded blue), and linear reconstruction (orange).
-						</small>
-					</section>
-					<section>
-						<h2>Source term</h2>
-						<img src="images/phd_defence/sgs_source_term.png" alt="source_term" width="800" style="background:none; border:none; box-shadow:none;">
-						<small>
-						  Reaction source profile $\dot{\tilde{r}}$ in interface normal direction $x/\delta_c$ (dash-dotted blue line),
-							cell average of $\dot{\tilde{r}}$ (shaded blue), and product of averages (orange). The Damköhler number is defined as $Da=kd_b/U_b$.
-						</small>
 					</section>
 				</section>
 
@@ -439,9 +418,6 @@
 						</p>
 						<img src="images/phd_defence/sh_gl_sgs_analytic.png" alt="sh_glob" width="1000" style="background:none; border:none; box-shadow:none;">
 					</section>
-					<section>
-						<h2>Complex reactions</h2>
-					</section>
 				</section>
 
 				<!-- data driven modeling-->
@@ -575,49 +551,9 @@
 							</div>
 						</div>
 					</section>
+
 					<section>
-						<h2>(2.1) Feature selection</h2>
-						<p>
-							<b>Idea:</b> ranking of feature importance.
-						</p>
-						<div class=row_img>
-							<div class=column_img>
-								<img src="images/phd_defence/feature_selection_crop.png" alt="feature_importance" width="800" style="background:none; border:none; box-shadow:none;">
-							</div>
-							<div class=column_img>
-								<p>
-									algorithms
-								</p>
-								<small>
-									<ul>
-										<li>
-											regression forest
-										</li>
-										<li>
-											sequential backward selection
-										</li>
-										<li>
-											sequential forward selection
-										</li>
-									</ul>
-								</small>
-								<p>
-									example (left)
-								</p>
-								$f_m = f_m(\bar{c},Da,\tilde{r})$
-							</div>
-						</div>
-						<p>
-							<div align=left>
-							<small>
-								A. Weiner, D. Hillenbrand, H. Marschall, D. Bothe:
-								<a href="https://onlinelibrary.wiley.com/doi/full/10.1002/ceat.201900044">Data‐Driven Subgrid‐Scale Modeling for Convection‐Dominated Concentration Boundary Layers (2019)</a>
-							</small>
-							</div>
-						</p>
-					</section>
-					<section>
-						<h2>(2.2) Model creation</h2>
+						<h2>(2) Model creation</h2>
 						<div class=row_img style="width:100%">
 							<div class=column_img>
 								<p>
@@ -675,23 +611,6 @@
 							</div>
 						</div>
 					</section>
-					<section>
-						<h2>ML model assessment</h2>
-						<div class=row_img style="width:100%">
-							<div class=column_img>
-								<img src="images/phd_defence/histogram_crop.png" alt="error_histogram" height="400px" style="background:none; border:none; box-shadow:none;">
-							</div>
-							<div class=column_img>
-								<img src="images/phd_defence/heatmap_crop.png" alt="error_heatmap" height="400px" style="background:none; border:none; box-shadow:none;">
-							</div>
-						</div>
-						<p>
-							<small>
-								Histogram (left) and heatmap (right) of the label error for the transfer species (A).
-								Reminder: the height of a bar in a histogram depicts the number of instances in the range the bar covers. The index $01$ indicates a min-max-scaling.
-							</small>
-						</p>
-					</section>
 					<!--
 					<section>
 						<h2>ML model assessment</h2>
@@ -701,9 +620,6 @@
 						</p>
 					</section>
 				-->
-					<section>
-						<h2>Validation, Results</h2>
-					</section>
 				</section>
 
 				<!-- model assessment -->
@@ -714,25 +630,71 @@
 						<p align="left"><b>Idea:</b><br> Decoupling of two-phase flow and species transport.</p>
 					</section>
 					<section>
+						<div class=row_img style="width:100%">
+							<div class=column_img style="width:33%;padding-right:5px;padding-left:5px">
+								<img src="images/phd_defence/snap_shot_vof.png" alt="vof_sol" height="400px" style="background:none; border:none; box-shadow:none;">
+								<p>
+									<small>1. Two-phase flow simulation (Volume-of-Fluid)</small>
+								</p>
+							</div>
+							<div class=column_img style="width:33%;padding-right:5px;padding-left:5px">
+								<img src="images/phd_defence/snap_shot_shape.png" alt="shape" height="400px" style="background:none; border:none; box-shadow:none;">
+								<p>
+									<small>2. Parametrization of shape and interfacial velocity</small>
+								</p>
+							</div>
+							<div class=column_img style="width:33%;padding-right:5px;padding-left:5px">
+								<img src="images/phd_defence/snap_shot_stl.png" alt="stl" height="400px" style="background:none; border:none; box-shadow:none;">
+								<p>
+									<small>3. Geometry generation and export (STL format)</small>
+								</p>
+							</div>
+						</div>
+					</section>
+					<section>
+						<div class=row_img style="width:100%">
+							<div class=column_img style="width:33%;padding-right:5px;padding-left:5px">
+								<img src="images/phd_defence/snap_shot_mesh.png" alt="mesh" height="400px" style="background:none; border:none; box-shadow:none;">
+								<p>
+									<small>4. Single phase mesh</small>
+								</p>
+							</div>
+							<div class=column_img style="width:33%;padding-right:5px;padding-left:5px">
+								<img src="images/phd_defence/snap_shot_hydro.png" alt="flow" height="400px" style="background:none; border:none; box-shadow:none;">
+								<p>
+									<small>5. Flow solution</small>
+								</p>
+							</div>
+							<div class=column_img style="width:33%;padding-right:5px;padding-left:5px">
+								<img src="images/phd_defence/snap_shot_transport.png" alt="species" height="400px" style="background:none; border:none; box-shadow:none;">
+								<p>
+									<small>6. Species transport</small>
+								</p>
+							</div>
+						</div>
+					</section>
+					<!--
+					<section>
 						<h3>1. Two phase flow simulation</h3>
 						<img src="images/phd_defence/basilisk_volume_fraction_mesh_plic.png" alt="basilisk_vof" width="700" style="background:none; border:none; box-shadow:none;">
 						<p>
 							<small>Volume-of-Fluid (VoF)-based solver implemented in <a href="http://basilisk.fr/">Basilisk</a>.</small>
 						</p>
 					</section>
+
 					<section>
 						<p>
 							Extraction of <b>shapes</b> and <b>velocity</b> fields.
 						</p>
 						<img src="images/phd_defence/water_velocity_fields.png" alt="basilisk_vof" width="800" style="background:none; border:none; box-shadow:none;">
-						<small>Air bubbles of size $d_b = 1.0/1.4/1.8~mm$ rising in water at room temperature.</small>
+						<small>Normalized magnitutde of velocity vector and streamlines for air bubbles of size $d_b = 1.0/1.4/1.8~mm$ rising in water at room temperature.</small>
 					</section>
 					<section>
 						<p>
 							Extraction of <b>shapes</b> and <b>velocity</b> fields.
 						</p>
 						<img src="images/phd_defence/bhaga_velocity_fields.png" alt="basilisk_vof" width="800" style="background:none; border:none; box-shadow:none;">
-						<small>Air bubbles rising in aqueous sugar solutions. Characteristic shapes: dimpled-ellipsoidal, spherical cap, and skirted.</small>
+						<small>Normalized magnitude velocity vector and streamlines for air bubbles rising in aqueous sugar solutions. Characteristic shapes: dimpled-ellipsoidal, spherical cap, and skirted.</small>
 					</section>
 					<section>
 						<h3>2.1 Parametrization and approximation - shape</h3>
@@ -772,6 +734,7 @@
 						<img src="images/phd_defence/bhaga_02_consecutive.png" alt="species_fields" width="700" style="background:none; border:none; box-shadow:none;">
 						<small>Concentration fields around a dimpled ellipsoidal bubble for a parallel-consecutive reaction of type $A+B\rightarrow P$ and $A+P\rightarrow S$.</small>
 					</section>
+				-->
 					<!--
 					<section>
 						<h2>High-fidelity reference data</h2>
@@ -780,7 +743,7 @@
 					</section>
 				-->
 					<section>
-						<h2>Model assessment</h2>
+						<h2>Mesh dependency</h2>
 						<img src="images/phd_defence/prismatic_layers_bhaga_03.png" alt="meshes" height="450" style="background:none; border:none; box-shadow:none;">
 						<p>
 							<small>Prismatic cell layers around a spherical-cap bubble with increasing mesh resolution.</small>
@@ -874,8 +837,9 @@
 								</div>
 							</div>
 							<div class=column_img style="width:50%">
-								<img src="images/phd_defence/mesh_a.png" alt="it_mesh" width="51%" style="background:none; border:none; box-shadow:none;">
-								<img src="images/phd_defence/mesh_b.png" alt="it_mesh" width="51%" style="background:none; border:none; box-shadow:none;">
+								<img src="images/phd_defence/mesh_b.png" alt="it_mesh" height="250px" style="background:none; border:none; box-shadow:none;">
+								<img src="images/phd_defence/stagCap.png" alt="stag_cap" height="250px" style="background:none; border:none; box-shadow:none;">
+								<small><b>Surfactant</b> - surface active agent</small>
 							</div>
 						</div>
 					</section>
@@ -1054,16 +1018,98 @@
 							</p>
 					</section>
 					<section>
+						<h2>Bulk species - B</h2>
+						<img src="images/phd_defence/sgs_flux_B.png" alt="flux_B" width="800" style="background:none; border:none; box-shadow:none;">
+						<small>
+						  Normalized concentration profile $\tilde{c}_B$ in interface normal direction $x/\delta_c$ for the <b>bulk species</b> (dashed blue line),
+							average concentration values per cell (shaded blue), and linear reconstruction (orange).
+						</small>
+					</section>
+					<section>
 						<h2>Interpolation error B</h2>
 						<video height="500" controls mute loop>
 							<source src="videos/flux_b.mp4">
 						</video>
 					</section>
 					<section>
+						<h2>Product species - P</h2>
+						<img src="images/phd_defence/sgs_flux_P.png" alt="flux_P" width="800" style="background:none; border:none; box-shadow:none;">
+						<small>
+						  Normalized concentration profile $\tilde{c}_P$ in interface normal direction $x/\delta_c$ for the <b>product species</b> (dash-dotted blue line),
+							average concentration values per cell (shaded blue), and linear reconstruction (orange).
+						</small>
+					</section>
+					<section>
 						<h2>Interpolation error P</h2>
 						<video height="500" controls mute loop>
 							<source src="videos/flux_p.mp4">
 						</video>
+					</section>
+					<section>
+						<h2>Source term</h2>
+						<img src="images/phd_defence/sgs_source_term.png" alt="source_term" width="800" style="background:none; border:none; box-shadow:none;">
+						<small>
+						  Reaction source profile $\dot{\tilde{r}}$ in interface normal direction $x/\delta_c$ (dash-dotted blue line),
+							cell average of $\dot{\tilde{r}}$ (shaded blue), and product of averages (orange). The Damköhler number is defined as $Da=kd_b/U_b$.
+						</small>
+					</section>
+					<section>
+						<h2>Feature selection</h2>
+						<p>
+							<b>Idea:</b> ranking of feature importance.
+						</p>
+						<div class=row_img>
+							<div class=column_img>
+								<img src="images/phd_defence/feature_selection_crop.png" alt="feature_importance" width="800" style="background:none; border:none; box-shadow:none;">
+							</div>
+							<div class=column_img>
+								<p>
+									algorithms
+								</p>
+								<small>
+									<ul>
+										<li>
+											regression forest
+										</li>
+										<li>
+											sequential backward selection
+										</li>
+										<li>
+											sequential forward selection
+										</li>
+									</ul>
+								</small>
+								<p>
+									example (left)
+								</p>
+								$f_m = f_m(\bar{c},Da,\tilde{r})$
+							</div>
+						</div>
+						<p>
+							<div align=left>
+							<small>
+								A. Weiner, D. Hillenbrand, H. Marschall, D. Bothe:
+								<a href="https://onlinelibrary.wiley.com/doi/full/10.1002/ceat.201900044">Data‐Driven Subgrid‐Scale Modeling for Convection‐Dominated Concentration Boundary Layers (2019)</a>
+							</small>
+							</div>
+						</p>
+					</section>
+					<section>
+						<h2>ML model assessment</h2>
+						<div class=row_img style="width:100%">
+							<div class=column_img>
+								<img src="images/phd_defence/histogram_crop.png" alt="error_histogram" height="400px" style="background:none; border:none; box-shadow:none;">
+							</div>
+							<div class=column_img>
+								<img src="images/phd_defence/heatmap_crop.png" alt="error_heatmap" height="400px" style="background:none; border:none; box-shadow:none;">
+							</div>
+						</div>
+						<p>
+							<small>
+								Histogram (left) and heatmap (right) of the label error for the transfer species (A).
+								Reminder: the height of a bar in a histogram depicts the number of instances in the range the bar covers. The index $01$ indicates a min-max-scaling.
+							</small>
+						</p>
 					</section>
 				</section>
 
