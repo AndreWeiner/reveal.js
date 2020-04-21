@@ -198,7 +198,9 @@
 					<ol>
 						<li>Hybrid approach overview</li>
 						<li>Volume-of-Fluid simulations</li>
-						<li><s>Shape parametrization and approximation</s></li>
+						<li><s>Shape parametrization and approximation</s><br>
+							<a href="https://github.com/AndreWeiner/phd_notebooks/blob/master/notebooks/basilisk_2D_shape_approximation_simple.ipynb">learn more</a>
+						</li>
 						<li>Velocity at the interface</li>
 						<li>Single-phase flow dynamics</li>
 						<li>Single-phase mass transfer</li>
@@ -259,14 +261,14 @@
 						<h2>Parametrization and machine learning</h2>
 						<ol>
 							<li>extract velocity vector from two-phase simulations</li>
+							<li>create ML model based on extracted data (here: multilayer perceptron, PyTorch)</li>
+							<li>export model to <b>torch script (.pt)</b></li>
 							<li>
 								<ul>
 									<li>star-shaped: $u_\parallel = u_\parallel (\varphi)$ with polar angle $\varphi$</li>
 									<li>complex shapes: $u_\parallel = u_\parallel (s)$ with arc length $s$</li>
 								</ul>
 							</li>
-							<li>create ML model based on extracted data (here: multilayer perceptron, PyTorch)</li>
-							<li>export model to <b>torch script (.pt)</b></li>
 						</ol>
 					</section>
 					<section>
@@ -422,7 +424,7 @@ bubble
 						<li><a href="https://www.myheutagogy.com">myheutagogy.com</a></li>
 						<li><a href="https://github.com/AndreWeiner">github.com/AndreWeiner</a></li>
 						<li><a href="https://www.linkedin.com/in/andre-weiner-a79752133/">LinkedIn</a></li>
-						<li>From first of May 2020: <a href="https://www.tu-braunschweig.de/ism/arbeitsgruppen/flow-modelling-and-control">Flow modeling and control, ISM, TU Braunschweig</a></li>
+						<li>From May 2020: <a href="https://www.tu-braunschweig.de/ism/arbeitsgruppen/flow-modelling-and-control">Flow modeling and control, ISM, TU Braunschweig</a></li>
 					</ul>
 					</small>
 					<div class="row_logo">
@@ -437,6 +439,10 @@ bubble
 							</div>
  						</div>
 					</div>
+				</section>
+				<section>
+					<h2>Mesh tail region</h2>
+					<img src="images/gofun/tail_zoom.png" alt="tail_mesh" width="800" style="background:none; border:none; box-shadow:none;">
 				</section>
 
 			</div>
