@@ -186,6 +186,10 @@
 							feasible simulations up to $Pe\approx 1000$ (3D, HPC)
 						</p>
 					</section>
+					<section>
+						<h2>Basic idea</h2>
+						<p>mitigate complexity by decoupling two-phase flow and mass transfer</p>
+					</section>
 				</section>
 
 				<!-- outline -->
@@ -194,7 +198,7 @@
 					<ol>
 						<li>Hybrid approach overview</li>
 						<li>Volume-of-Fluid simulations</li>
-						<li>Shape parametrization and approximation</li>
+						<li><s>Shape parametrization and approximation</s></li>
 						<li>Velocity at the interface</li>
 						<li>Single-phase flow dynamics</li>
 						<li>Single-phase mass transfer</li>
@@ -206,9 +210,11 @@
 				<section>
 					<section>
 						<h2>Hybrid approach overview</h2>
+						<img src="images/gofun/hybrid_a_b_c.png" alt="overview_1" width="800" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
 						<h2>Hybrid approach overview</h2>
+						<img src="images/gofun/hybrid_d_e_f.png" alt="overview_1" width="800" style="background:none; border:none; box-shadow:none;">
 					</section>
 				</section>
 
@@ -216,13 +222,16 @@
 				<section>
 					<section>
 						<h2>Volume-of-Fluid simulations</h2>
+						<img src="images/gofun/basilisk_volume_fraction_mesh_plic.png" alt="vof_sim" width="600" style="background:none; border:none; box-shadow:none;">
+						<small><p>Keywords: Basilisk, geometrical advection with PLIC recontruction, adaptive mesh refinement, curvature computation based on height functions, <a href="https://github.com/AndreWeiner/phd_basilisk">learn more (Github)</a>.</p></small>
 					</section>
 					<section>
 						<h2>Characteristic bubble shapes</h2>
+						<img src="images/gofun/velocity_fields.png" alt="shapes" width="600" style="background:none; border:none; box-shadow:none;">
+						<small><p>From left to right: ellipsoidal, spherical cap, dimpled ellipsoidal.</p></small>
 					</section>
 				</section>
-
-				<!-- Shape parametrization and approximation -->
+<!--
 				<section>
 					<section>
 						<h2>Shape parametrization - simple</h2>
@@ -231,14 +240,39 @@
 						<h2>Shape approximation</h2>
 					</section>
 				</section>
-
+ -->
 				<!-- Velocity at the interface -->
 				<section>
 					<section>
 						<h2>Velocity at the interface</h2>
+						<ul>
+							<li style="padding-bottom:0.5em">mathematical framework: <b>sharp interface model</b></li>
+							<li style="padding-bottom:0.5em">mass conservation at the interface:
+								$\quad u_{\bot}^{gas} = u_{\bot}^{liq} $
+							</li>
+							<li style="padding-bottom:0.5em">steady shape: $\quad u_{\bot}^{gas} = u_{\bot}^{liq} = 0$</li>
+							<li style="padding-bottom:0.5em">assumption: $\quad u_{\parallel}^{gas} = u_{\parallel}^{liq}$</li>
+						</ul>
+						<p >How to model <span style="color:red">$u_{\parallel}^{liq}$</span> in single-phase simulations?</p>
 					</section>
 					<section>
-
+						<h2>Parametrization and machine learning</h2>
+						<ol>
+							<li>extract velocity vector from two-phase simulations</li>
+							<li>
+								<ul>
+									<li>star-shaped: $u_\parallel = u_\parallel (\varphi)$ with polar angle $\varphi$</li>
+									<li>complex shapes: $u_\parallel = u_\parallel (s)$ with arc length $s$</li>
+								</ul>
+							</li>
+							<li>create ML model based on extracted data (here: multilayer perceptron, PyTorch)</li>
+							<li>export model to <b>torch script (.pt)</b></li>
+						</ol>
+					</section>
+					<section>
+						<h2>Final model</h2>
+						<img src="images/gofun/basilisk_2D_u_t_complex.png" alt="velocity_model" width="800" style="background:none; border:none; box-shadow:none;">
+						<p>Learn more: <a href="https://tuprints.ulb.tu-darmstadt.de/11405/">publication</a>, <a href="https://github.com/AndreWeiner/phd_notebooks">Jupyter notebooks</a></p>
 					</section>
 				</section>
 
@@ -246,9 +280,92 @@
 				<section>
 					<section>
 						<h2>Single-phase flow dynamics</h2>
+						<img src="images/gofun/solution_domain.png" alt="domain" height="500" style="background:none; border:none; box-shadow:none;">
 					</section>
 					<section>
-						<h2>Mathematical model</h2>
+						<h2>Implementation in OpenFOAM</h2>
+						<p><a href="https://github.com/AndreWeiner/phd_openfoam/blob/master/boundary_conditions/bubbleSurfaceVelocitySimple/bubbleSurfaceVelocitySimpleFvPatchVectorField.H"></a>bubbleSurfaceVelocitySimpleFvPatchVectorField.H</p>
+						<pre class="cpp"><code data-trim data-line-numbers="1-11">
+class bubbleSurfaceVelocitySimpleFvPatchVectorField
+:
+    public fixedValueFvPatchVectorField
+{
+    // Private data
+        ...
+        //- name of the PyTorch model
+        word model_name_;
+
+        //- PyTorch model
+        torch::jit::script::Module pyTorch_model_;
+        ...
+						</code></pre>
+					</section>
+					<section>
+						<h2>Implementation in OpenFOAM</h2>
+						<p><a href="https://github.com/AndreWeiner/phd_openfoam/blob/master/boundary_conditions/bubbleSurfaceVelocitySimple/bubbleSurfaceVelocitySimpleFvPatchVectorField.C"></a>bubbleSurfaceVelocitySimpleFvPatchVectorField.C</p>
+						<pre class="cpp"><code data-trim data-line-numbers="11,13">
+Foam::bubbleSurfaceVelocitySimpleFvPatchVectorField::
+bubbleSurfaceVelocitySimpleFvPatchVectorField
+(
+    const fvPatch& p,
+    const DimensionedField&lt;vector, volMesh&gt;& iF,
+    const dictionary& dict
+)
+:
+    fixedValueFvPatchField&lt;vector&gt;(p, iF, dict, false),
+    ...
+    model_name_(dict.lookupOrDefault&lt;word&gt;("model", "velocity_model.pt"))
+{
+    pyTorch_model_ = torch::jit::load(model_name_);
+}
+						</code></pre>
+					</section>
+					<section>
+						<h2>Implementation in OpenFOAM</h2>
+						<p><a href="https://github.com/AndreWeiner/phd_openfoam/blob/master/boundary_conditions/bubbleSurfaceVelocitySimple/bubbleSurfaceVelocitySimpleFvPatchVectorField.C"></a>bubbleSurfaceVelocitySimpleFvPatchVectorField.C</p>
+						<pre class="cpp"><code data-trim data-line-numbers="4-13">
+void Foam::bubbleSurfaceVelocitySimpleFvPatchVectorField::updateCoeffs()
+{
+    ...
+    // run forward pass to compute tangential velocity
+    std::vector&lt;torch::jit::IValue&gt; modelFeatures{phiTensor};
+    torch::Tensor uTensor = pyTorch_model_.forward(modelFeatures).toTensor();
+    auto uAccessor = uTensor.accessor&lt;double,1&gt;();
+
+    vectorField surfaceVelocity(Cf.size(), Zero);
+    forAll(surfaceVelocity, faceI)
+    {
+        surfaceVelocity[faceI] = tau[faceI] * uAccessor[faceI];
+    }
+	...
+						</code></pre>
+					</section>
+					<section>
+						<h2>Boundary condition</h2>
+						<p><em>bubble</em> patch in <b>0/U</b></p>
+						<pre class="cpp"><code data-trim data-line-numbers="1-10">
+bubble
+{
+    type            bubbleSurfaceVelocitySimple;
+    origin          (0 0 0);
+    axis            (0 1 0);
+    normal          (0 0 -1);
+    model           "bhaga_02_u_tau.pt";
+}
+						</code></pre>
+					</section>
+					<section>
+						<h2>Meshes</h2>
+						<img src="images/gofun/ref_0_mesh.png" alt="wedge_mesh" width="800" style="background:none; border:none; box-shadow:none;">
+						<p>Wedge mesh creation: blockMesh, snappyHexMesh, extrudeMesh, collapseEdges</p>
+					</section>
+					<section>
+						<h2>Comparison to free slip</h2>
+						<img src="images/gofun/of_vs_basilisk_streamlines.png" alt="streamlines" width="800" style="background:none; border:none; box-shadow:none;">
+						<small>
+							<p><a href="https://github.com/AndreWeiner/phd_openfoam">OpenFoam test cases on Github</a><br>
+							<a href="https://github.com/AndreWeiner/phd_notebooks">Jupyter notebooks for post-processing on Github</a></p>
+						</small>
 					</section>
 				</section>
 
@@ -256,9 +373,13 @@
 				<section>
 					<section>
 						<h2>Single-phase mass transfer</h2>
+						<img src="images/gofun/conc_fields.png" alt="concentration" height="400" style="background:none; border:none; box-shadow:none;">
+						<p>Physisorption $ A^{gas} \rightarrow A^{liq}$</p>
 					</section>
 					<section>
-						<h2>Mathematical model</h2>
+						<h2>Global Sherwood number</h2>
+						<img src="images/gofun/global_sh_dirichlet_vs_slip.png" alt="global_sh" width="800" style="background:none; border:none; box-shadow:none;">
+						<p>Comparison of global Sherwood number computed with Dirichlet and slip boundary condition.</p>
 					</section>
 				</section>
 
@@ -266,47 +387,22 @@
 				<section>
 					<section>
 						<h2>Summary</h2>
-						<small>
 						<ul>
-							<li>high-$Pe$ number problem (boundary layer)</li>
-							<li>influence on numerical solution</li>
-							<li>SGS modeling for complex reactions</li>
-							<li>hybrid approach for high-fidelity reference data</li>
-							<li>validation with complex bubble shapes</li>
-							<li>qualitative and quantitative agreement with experiments</li>
-							<hr>
-							<li>new understanding of dynamic surfactant adsorption</li>
-							<li>well documented, fully reproducible, public research results and methods</li>
-							<li>pathway paved for data-driven solutions in computational fluid dynamics</li>
+							<li>hybrid approach: decoupling of two-phase flow and species transfer problem</li>
+							<li><b>computationally efficient:</b> minutes to hours on a single core (end to end)</li>
+							<li><b>data-driven:</b> machine learning maps information from two-phase to single-phase simulations</li>
 						</ul>
-						</small>
 					</section>
 					<section>
 						<h2>Outlook</h2>
+						<p>assessment for dynamic interfaces</p>
 						<div class=row_img style="width:100%">
 							<div class=column_img sytle="width:50%; padding-right:10px">
-								<small>
-									<ul>
-										<li>
-											(data-driven) modeling for the liquid bulk
-										</li>
-										<li>
-											assessment for dynamic interfaces
-										</li>
-									</ul>
-								</small>
 								<video height="400" style="padding-top:20px" controls autoplay mute loop>
 									<source src="videos/pure_mesh_motion.ogv">
 								</video>
 							</div>
 							<div class=column_img style="width:50%; padding-left:10px">
-								<small>
-									<ul>
-										<li>
-											application to related boundary layer problems
-										</li>
-									</ul>
-								</small>
 								<video height="400" style="padding-top:20px" controls autoplay mute loop>
 									<source src="videos/b8_mesh_plic.ogv">
 								</video>
@@ -318,10 +414,17 @@
 				<!-- end -->
 				<section style="text-align: left;">
 					<h1>THE END</h1>
-					<p>Thank you for your attention!
-					<p>Get in touch: <a href="mailto:andre.weiner@yahoo.de">andre.weiner@yahoo.de</a></p>
-					<p>Website: <a href="https://www.myheutagogy.com">myheutagogy.com</a></p>
-					<p>From first of May 2020: <a href="https://www.tu-braunschweig.de/ism/arbeitsgruppen/flow-modelling-and-control">Flow modeling and control, ISM, TU Braunschweig</a></p>
+					<p>Thank you for your attention!<br>
+					Get in touch:</p>
+					<small>
+					<ul>
+						<li><a href="mailto:andre.weiner@yahoo.de">andre.weiner@yahoo.de</a></li>
+						<li><a href="https://www.myheutagogy.com">myheutagogy.com</a></li>
+						<li><a href="https://github.com/AndreWeiner">github.com/AndreWeiner</a></li>
+						<li><a href="https://www.linkedin.com/in/andre-weiner-a79752133/">LinkedIn</a></li>
+						<li>From first of May 2020: <a href="https://www.tu-braunschweig.de/ism/arbeitsgruppen/flow-modelling-and-control">Flow modeling and control, ISM, TU Braunschweig</a></li>
+					</ul>
+					</small>
 					<div class="row_logo">
  						<div class="column_logo">
 							<div class="content_logo">
