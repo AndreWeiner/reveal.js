@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+
+	<title>An introduction to supervised learning by example: path regime classification</title>
+
+	<meta name="description" content="ism_internal_training">
+	<meta name="author" content="Andre Weiner">
+
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/white.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+
+	<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+</head>
+
+<style>
+	.row_img {
+		display: table;
+	}
+
+	.column_img {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 50%;
+	}
+
+	.content_img {
+		display: inline-block;
+	}
+
+	.reveal .slide-number {
+		position: absolute;
+		display: block;
+		left: 8px;
+		bottom: 8px;
+		height: 48px;
+		width: 50px;
+		z-index: 31;
+		font-family: Helvetica, sans-serif;
+		font-size: 32px;
+		line-height: 1;
+		color: #000000;
+		background-color: rgba(0, 0, 0, 0);
+		padding: 5px;
+	}
+</style>
+
+<body>
+
+	<div class="reveal">
+
+		<!-- Any section element inside of this container is displayed as a slide -->
+		<div class="slides">
+			<!-- title slide -->
+			<section>
+				<h3>An introduction to <span style="color: red">supervised learning</span> by example: path regime
+					classification</h3>
+				<p>
+					<small>Andre Weiner, <a
+							href="https://www.tu-braunschweig.de/en/ism/research-workgroups/flow-modelling-and-control">Flow
+							Modeling and Control Group</a></small><br>
+					<small>Technical University of Braunschweig, <a
+							href="https://www.tu-braunschweig.de/en/ism">Institute of Fluid Mechanics</a></small>
+				</p>
+
+				<style>
+					.row_logo {
+						display: table;
+					}
+
+					.column_logo {
+						display: table-cell;
+						vertical-align: middle;
+						text-align: center;
+						width: 50%;
+					}
+
+					.content_logo {
+						display: inline-block;
+					}
+				</style>
+				<div class="row_logo">
+					<div class="column_logo">
+						<div class="content_logo">
+							<img src="images/tubs_logo.png" alt="tubs_logo"
+								style="background:none; border:none; box-shadow:none;">
+						</div>
+					</div>
+					<div class="column_logo">
+						<div class="content_logo">
+							<table>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9993;</th>
+									<td style="border: 0; padding-right: 20px;"><a
+											href="mailto:a.weiner@tu-bs.de">Mail</a></th>
+									<td style="border: 0; padding-right: 5px;">&#9741;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://www.linkedin.com/in/andre-weiner-a79752133/">LinkedIn</a></td>
+								</tr>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9997;</td>
+									<td style="border: 0; padding-right: 20px;"><a
+											href="https://myheutagogy.com/">Blog</a></td>
+									<td style="border: 0; padding-right: 5px;">&#10026;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://github.com/AndreWeiner">Github</a></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- outline -->
+			<section>
+				<h2>Outline</h2>
+				<ol>
+					<li>ML terminology and notation</li>
+					<li>Path regime classification</li>
+					<li>Ideas for applications</li>
+					<li>Learning resources</li>
+				</ol>
+				<p><b>Goal:</b> understand when to use supervised ML</p>
+			</section>
+
+			<!-- ML terminology and notation-->
+			<section>
+				<section>
+					<h2>ML terminology and notation</h2>
+					<p>Just enough to get you started ...</p>
+				</section>
+				<section data-background="images/formula1_car_transparent.png">
+					<h2>Features and Labels</h2>
+					<table>
+						<thead>
+							<tr>
+								<th><span style="color:red;">Feature 1</span> $Re$</th>
+								<th><span style="color:red;">Feature 2</span> $\alpha$</th>
+								<th>...</th>
+								<th><span style="color:green;">Label 1</span> $c_d$</th>
+								<th><span style="color:green;">Label 2</span> regime</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>334</td>
+								<td>2</td>
+								<td>...</td>
+								<td>0.123</td>
+								<td>laminar</td>
+							</tr>
+							<tr>
+								<td>334</td>
+								<td>4</td>
+								<td>...</td>
+								<td>0.284</td>
+								<td>laminar</td>
+							</tr>
+							<tr>
+								<td>12004</td>
+								<td>2</td>
+								<td>...</td>
+								<td>0.573</td>
+								<td>turbulent</td>
+							</tr>
+							<tr>
+								<td>12004</td>
+								<td>4</td>
+								<td>...</td>
+								<td>0.834</td>
+								<td>turbulent</td>
+							</tr>
+							<tr>
+								<td>...</td>
+								<td>...</td>
+								<td>...</td>
+								<td>...</td>
+								<td>...</td>
+							</tr>
+						</tbody>
+					</table>
+					<p>Image source: <a href="https://www.flickr.com/photos/kitware/2293740417">Kitware Inc., Flickr</a>
+					</p>
+				</section>
+				<section>
+					<h2>Supervised ML</h2>
+					<p>Learning based on <b>features</b> and <b>labels</b></p>
+					<img src="images/regression_classification_web.svg" alt="Regression and Classification" width="800"
+						style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<h2>Feature and label vectors</h2>
+					<p>
+
+						$N_s$ <span style="color: green">samples</span> of $N_f$
+						<a style="color:red">
+							features
+						</a>
+						and $N_l$
+						<a style="color:blue">
+							labels
+						</a>
+					</p>
+					<table>
+						<thead>
+							<tr>
+								<th style="color: green">$s$</th>
+								<th style="color:red">$x_{1}$</th>
+								<th style="color:red">...</th>
+								<th style="color:red">$x_{N_f}$</th>
+								<th style="color:blue">$y_{1}$</th>
+								<th style="color:blue">...</th>
+								<th style="color:blue">$y_{N_l}$</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th style="color: green">1</th>
+								<td style="color:red">0.1</td>
+								<td style="color:red">...</td>
+								<td style="color:red">0.6</td>
+								<td style="color:blue">0.5</td>
+								<td style="color:blue">...</td>
+								<td style="color:blue">0.2</td>
+							</tr>
+							<tr>
+								<th style="color: green">...</th>
+								<td style="color:red">...</td>
+								<td style="color:red">...</td>
+								<td style="color:red">...</td>
+								<td style="color:blue">...</td>
+								<td style="color:blue">...</td>
+								<td style="color:blue">...</td>
+							</tr>
+							<tr>
+								<th style="color: green">$N_s$</th>
+								<td style="color:red">1.0</td>
+								<td style="color:red">...</td>
+								<td style="color:red">0.7</td>
+								<td style="color:blue">0.4</td>
+								<td style="color:blue">...</td>
+								<td style="color:blue">0.2</td>
+							</tr>
+						</tbody>
+					</table>
+					<p>ML models often map <b>multiple inputs</b> to <b>multiple outputs!</b></p>
+				</section>
+				<section>
+					<h2>Feature vector</h2>
+					<p>
+						$$ \mathrm{x} = \left[x_{1}, x_{2}, ..., x_{N_f}\right]^T $$
+						$\mathrm{x}$ - column vector of length $N_f$
+					</p>
+					<p>
+						$$ \mathrm{X} = \left[\mathrm{x}_{1}, \mathrm{x}_{2}, ..., \mathrm{x}_{N_f}\right] $$
+						$\mathrm{X}$ - matrix with $N_s$ rows and $N_f$ columns
+					</p>
+				</section>
+				<section>
+					<h2>Label vector</h2>
+					<p>
+						$$ \mathrm{y} = \left[y_{1}, y_{2}, ..., y_{N_l}\right]^T $$
+						$\mathrm{y}$ - column vector of length $N_l$
+					</p>
+					<p>
+						$$ \mathrm{Y} = \left[\mathrm{y}_{1}, \mathrm{y}_{2}, ..., \mathrm{y}_{N_l}\right] $$
+						$\mathrm{Y}$ - matrix with $N_s$ rows and $N_l$ columns
+					</p>
+				</section>
+				<section>
+					<h2>ML model and prediction</h2>
+					<p>
+						$$ f_m : \mathbb{R}^{N_f} \rightarrow \mathbb{R}^{N_l} $$
+						$f_m$ - ML model mapping from the feature space $\mathbb{R}^{N_f}$ to the label space
+						$\mathbb{R}^{N_l}$
+						$$ \hat{\mathrm{y}} = f_m(x_1, x_2, ..., x_{N_f}) $$
+						$\hat{\mathrm{y}}$ - (model) prediction
+					</p>
+				</section>
+			</section>
+
+			<!-- summary and outlook -->
+			<section>
+				<section>
+					<style>
+						.row_video {
+							display: table;
+							width: 100%;
+						}
+
+						.column_video {
+							display: table-cell;
+							text-align: center;
+							width: 50%;
+						}
+
+						.content_video {
+							display: inline-block;
+						}
+					</style>
+					<h2>Path regime classification</h2>
+					<div class="row_video">
+						<div class="column_video">
+							<div class="content_video">
+								<small>water/air: $d_{eq}=3~mm$</small>
+								<video height="400" controls mute autoplay loop>
+									<source src="videos/b8_mesh_plic.ogv">
+								</video>
+							</div>
+						</div>
+						<div class="column_video">
+							<div class="content_video">
+								<small>water/air: $d_{eq}=5~mm$</small>
+								<video height="400" controls mute autoplay loop>
+									<source src="videos/b10_mesh_plic.ogv">
+								</video>
+							</div>
+						</div>
+					</div>
+				</section>
+			</section>
+
+
+			<!-- summary and outlook -->
+			<section>
+				<section>
+					<h2>Outlook</h2>
+					<div class=row_img style="width:100%">
+						<div class=column_img sytle="width:50%; padding-right:10px">
+							<small>
+								<ul>
+									<li>
+										(data-driven) modeling for the liquid bulk
+									</li>
+									<li>
+										assessment for dynamic interfaces
+									</li>
+								</ul>
+							</small>
+							<video height="400" style="padding-top:20px" controls autoplay mute loop>
+								<source src="videos/pure_mesh_motion.ogv">
+							</video>
+						</div>
+						<div class=column_img style="width:50%; padding-left:10px">
+							<small>
+								<ul>
+									<li>
+										application to related boundary layer problems
+									</li>
+								</ul>
+							</small>
+							<video height="400" style="padding-top:20px" controls autoplay mute loop>
+								<source src="videos/b8_mesh_plic.ogv">
+							</video>
+						</div>
+					</div>
+				</section>
+			</section>
+
+			<!-- end -->
+			<section style="text-align: left;">
+				<h1>THE END</h1>
+				<p>
+					Special thanks to David Merker, Jens Timmermann, Chiara Pesci and Dennis Hillenbrand
+				</p>
+				<p>Thank you for your attention!
+				<p>Get in touch: <a href="mailto:weiner@mma.tu-darmstadt.de">weiner@mma.tu-darmstadt.de</a></p>
+				<div class="row_logo">
+					<div class="column_logo">
+						<div class="content_logo">
+							<img src="images/mma_logo.jpg" alt="mma_logo"
+								style="background:none; border:none; box-shadow:none;">
+						</div>
+					</div>
+					<div class="column_logo">
+						<div class="content_logo">
+							<img src="images/spp1740_logo.svg" alt="spp1740_logo"
+								style="background:none; border:none; box-shadow:none;">
+						</div>
+					</div>
+				</div>
+			</section>
+
+		</div>
+
+	</div>
+
+	<script src="js/reveal.js"></script>
+
+	<script>
+
+		// More info https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			center: true,
+			hash: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// More info https://github.com/hakimel/reveal.js#dependencies
+			dependencies: [
+				{ src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/highlight/highlight.js', async: true },
+				{ src: 'plugin/search/search.js', async: true },
+				{ src: 'plugin/zoom-js/zoom.js', async: true },
+				{ src: 'plugin/notes/notes.js', async: true },
+				{ src: 'plugin/math/math.js', async: true }]
+		});
+		Reveal.configure({ slideNumber: true });
+
+	</script>
+
+</body>
+
+</html>
