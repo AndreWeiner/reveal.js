@@ -134,13 +134,69 @@
 				</div>
 			</section>
 
+			<!-- warm up questions -->
+			<section>
+				<section>
+					<h2>Some warm-up questions ...</h2>
+				</section>
+				<section>
+					<h2>Machine learning (ML)?</h2>
+				</section>
+				<section>
+					<h2>Supervised machine learning?</h2>
+				</section>
+				<section>
+					<h2>difference between</h2>
+					<p>
+					<ul>
+						<li>supervised ML,</li>
+						<li><span style="color: red">un</span>supervised ML,</li>
+						<li>reinforcement learning?</li>
+					</ul>
+					</p>
+				</section>
+				<section>
+					<h2>Deep learning?</h2>
+					<ol>
+						<li style="list-style-type: upper-latin;">synonym for ML</li>
+						<li style="list-style-type: upper-latin;">algorithm to find cats in images/videos</li>
+						<li style="list-style-type: upper-latin;">magical black box problem solver</li>
+						<li style="list-style-type: upper-latin;">none of the above</li>
+					</ol>
+				</section>
+				<section>
+					<h2>(Deep) neural networks are used to solve</h2>
+					<ol>
+						<li style="list-style-type: upper-latin;">supervised ML problems</li>
+						<li style="list-style-type: upper-latin;">unsupervised ML problem</li>
+						<li style="list-style-type: upper-latin;">reinforcement learning problems</li>
+						<li style="list-style-type: upper-latin;">all of the above</li>
+					</ol>
+				</section>
+				<section>
+					<h2>Python?</h2>
+					<ol>
+						<li style="list-style-type: upper-latin;">no idea</li>
+						<li style="list-style-type: upper-latin;">I know what it is but I've never used it</li>
+						<li style="list-style-type: upper-latin;">basic knowledge/experience</li>
+					</ol>
+				</section>
+				<section>
+					<h2>Jupyter notebooks?</h2>
+					<ol>
+						<li style="list-style-type: upper-latin;">no idea</li>
+						<li style="list-style-type: upper-latin;">I know what it is but I've never used it</li>
+						<li style="list-style-type: upper-latin;">basic knowledge/experience</li>
+					</ol>
+				</section>
+			</section>
+
 			<!-- outline -->
 			<section>
 				<h2>Outline</h2>
 				<ol>
 					<li>ML terminology and notation</li>
 					<li>Path regime classification</li>
-					<li>Ideas for applications</li>
 					<li>Learning resources</li>
 				</ol>
 				<p><b>Goal:</b> understand when to use supervised ML</p>
@@ -212,10 +268,46 @@
 						style="background:none; border:none; box-shadow:none;">
 				</section>
 				<section>
+					<h2>Classification or regression?</h2>
+				</section>
+				<section>
+					<p>Creating a transport model $\mu (T)$ based on experimental data ...</p>
+					<ol>
+						<li style="list-style-type: upper-latin;">regression</li>
+						<li style="list-style-type: upper-latin;">classification</li>
+						<li style="list-style-type: upper-latin;">could be both</li>
+					</ol>
+				</section>
+				<section>
+					<p>Creating a wall function to for the turbulent viscosity in RANS simulations ...</p>
+					<ol>
+						<li style="list-style-type: upper-latin;">regression</li>
+						<li style="list-style-type: upper-latin;">classification</li>
+						<li style="list-style-type: upper-latin;">could be both</li>
+					</ol>
+				</section>
+				<section>
+					<p>Impact behavior of a droplet on a surface ...</p>
+					<ol>
+						<li style="list-style-type: upper-latin;">regression</li>
+						<li style="list-style-type: upper-latin;">classification</li>
+						<li style="list-style-type: upper-latin;">could be both</li>
+					</ol>
+				</section>
+				<section>
+					<p>Predict the stability regime of a rising bubble ...</p>
+					<ol>
+						<li style="list-style-type: upper-latin;">regression</li>
+						<li style="list-style-type: upper-latin;">classification</li>
+						<li style="list-style-type: upper-latin;">could be both</li>
+					</ol>
+				</section>
+
+				<section>
 					<h2>Feature and label vectors</h2>
 					<p>
 
-						$N_s$ <span style="color: green">samples</span> of $N_f$
+						$N$ <span style="color: green">samples</span> of $N_f$
 						<a style="color:red">
 							features
 						</a>
@@ -227,7 +319,7 @@
 					<table>
 						<thead>
 							<tr>
-								<th style="color: green">$s$</th>
+								<th style="color: green">$i$</th>
 								<th style="color:red">$x_{1}$</th>
 								<th style="color:red">...</th>
 								<th style="color:red">$x_{N_f}$</th>
@@ -256,7 +348,7 @@
 								<td style="color:blue">...</td>
 							</tr>
 							<tr>
-								<th style="color: green">$N_s$</th>
+								<th style="color: green">$N$</th>
 								<td style="color:red">1.0</td>
 								<td style="color:red">...</td>
 								<td style="color:red">0.7</td>
@@ -291,19 +383,51 @@
 					</p>
 				</section>
 				<section>
+					<p>In the artificial dataset from before ($Re$, $\alpha$, $c_d$, regime),
+						what is the value of <span style="color: red">$N_f$</span> if we use all available features?</p>
+					<ol>
+						<li style="list-style-type: upper-latin;">1</li>
+						<li style="list-style-type: upper-latin;">2</li>
+						<li style="list-style-type: upper-latin;">4</li>
+					</ol>
+				</section>
+				<section>
+					<p>In the artificial dataset from before ($Re$, $\alpha$, $c_d$, regime), what is the value of <span
+							style="color:red">$N_l$</span>?</p>
+					<ol>
+						<li style="list-style-type: upper-latin;">1</li>
+						<li style="list-style-type: upper-latin;">2</li>
+						<li style="list-style-type: upper-latin;">problem dependent</li>
+					</ol>
+				</section>
+				<section>
 					<h2>ML model and prediction</h2>
 					<p>
-						$$ f_m : \mathbb{R}^{N_f} \rightarrow \mathbb{R}^{N_l} $$
-						$f_m$ - ML model mapping from the feature space $\mathbb{R}^{N_f}$ to the label space
+						$$ f_\mathrm{w} : \mathbb{R}^{N_f} \rightarrow \mathbb{R}^{N_l} $$
+						$f_\mathrm{w}$ - ML model with weights $\mathrm{w}$ mapping from the feature space
+						$\mathbb{R}^{N_f}$ to the label space
 						$\mathbb{R}^{N_l}$
-						$$ \hat{\mathrm{y}} = f_m(x_1, x_2, ..., x_{N_f}) $$
+						$$ \hat{\mathrm{y}} = f_\mathrm{w}(x_1, x_2, ..., x_{N_f}) $$
 						$\hat{\mathrm{y}}$ - (model) prediction
 					</p>
 				</section>
 			</section>
 
-			<!-- summary and outlook -->
+			<!-- path regime classification -->
 			<section>
+				<section>
+					<h2>Path regime classification</h2>
+					<ul>
+						<li><a href="https://github.com/AndreWeiner/machine-learning-applied-to-cfd">Github
+								repository</a></li>
+						<li><a
+								href="https://github.com/AndreWeiner/machine-learning-applied-to-cfd/blob/master/notebooks/path_regime_classification.ipynb">path_regime_classification.ipynb</a>
+						</li>
+						<li>open <a
+								href="https://cloudstorage.tu-braunschweig.de/getlink/fiSFgJSDeqSS3oa7JokcL5Ai/path_regime_classification.html">path_regime_classification.html</a>
+							in a browser</li>
+					</ul>
+				</section>
 				<section>
 					<style>
 						.row_video {
@@ -321,12 +445,11 @@
 							display: inline-block;
 						}
 					</style>
-					<h2>Path regime classification</h2>
 					<div class="row_video">
 						<div class="column_video">
 							<div class="content_video">
 								<small>water/air: $d_{eq}=3~mm$</small>
-								<video height="400" controls mute autoplay loop>
+								<video height="500" controls mute autoplay loop>
 									<source src="videos/b8_mesh_plic.ogv">
 								</video>
 							</div>
@@ -334,74 +457,398 @@
 						<div class="column_video">
 							<div class="content_video">
 								<small>water/air: $d_{eq}=5~mm$</small>
-								<video height="400" controls mute autoplay loop>
+								<video height="500" controls mute autoplay loop>
 									<source src="videos/b10_mesh_plic.ogv">
 								</video>
 							</div>
 						</div>
 					</div>
 				</section>
-			</section>
-
-
-			<!-- summary and outlook -->
-			<section>
 				<section>
-					<h2>Outlook</h2>
-					<div class=row_img style="width:100%">
-						<div class=column_img sytle="width:50%; padding-right:10px">
-							<small>
-								<ul>
-									<li>
-										(data-driven) modeling for the liquid bulk
-									</li>
-									<li>
-										assessment for dynamic interfaces
-									</li>
-								</ul>
-							</small>
-							<video height="400" style="padding-top:20px" controls autoplay mute loop>
-								<source src="videos/pure_mesh_motion.ogv">
-							</video>
-						</div>
-						<div class=column_img style="width:50%; padding-left:10px">
-							<small>
-								<ul>
-									<li>
-										application to related boundary layer problems
-									</li>
-								</ul>
-							</small>
-							<video height="400" style="padding-top:20px" controls autoplay mute loop>
-								<source src="videos/b8_mesh_plic.ogv">
-							</video>
-						</div>
-					</div>
+					<img src="images/path_regimes.png" alt="path_regimes" width="700"
+						style="background:none; border:none; box-shadow:none;">
+					<p>Source: <a href="https://www.nature.com/articles/ncomms7268">M. K. Tripathi et al. 2015,</a>
+						figure 1.</p>
+				</section>
+				<section>
+					<h2>Potential issues ...</h2>
+					<p>assuming the decision boundary were created manually, e.g., using a graphical tool (Gimp,
+						Inkscape, Photoshop, ...)</p>
+				</section>
+				<section>
+					<img src="images/classification_2020/path_data_scatter.svg" alt="path_data" width="800"
+						style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<h2>Extension to higher dimensions?</h2>
+					<ol>
+						<li style="list-style-type: upper-latin;">easy</li>
+						<li style="list-style-type: upper-latin;">hard</li>
+						<li style="list-style-type: upper-latin;">impossible</li>
+					</ol>
+				</section>
+				<section>
+					<h2>Usage in software?</h2>
+					<ol>
+						<li style="list-style-type: upper-latin;">easy</li>
+						<li style="list-style-type: upper-latin;">hard</li>
+						<li style="list-style-type: upper-latin;">impossible</li>
+					</ol>
+				</section>
+				<section>
+					<h2>Solution?</h2>
+					<h2 style="color: red">Supervised ML!</h2>
+				</section>
+				<section>
+					<h2>Data visualization</h2>
+					<img src="images/classification_2020/path_data_raw_scatter.svg" alt="path_data" width="800"
+						style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<h2>Feature distribution</h2>
+					<img src="images/classification_2020/path_data_raw_hist.svg" alt="path_data" width="800"
+						style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<h2>What was different in the publication?</h2>
+					<ol>
+						<li style="list-style-type: upper-latin;">scaling to range $0...1$</li>
+						<li style="list-style-type: upper-latin;">normalization to zero mean and unity stdev</li>
+						<li style="list-style-type: upper-latin;">logarithmic axis</li>
+					</ol>
+				</section>
+				<section>
+					<h2>Feature scaling</h2>
+					<img src="images/classification_2020/path_data_scatter.svg" alt="path_data" width="800"
+						style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<h2>Scaled feature distribution</h2>
+					<img src="images/classification_2020/path_data_log_hist.svg" alt="path_data" width="800"
+						style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<h2>Issues with raw features?</h2>
+					<ol>
+						<li style="list-style-type: upper-latin;">numerical stability</li>
+						<li style="list-style-type: upper-latin;">high sensitivity to extreme data</li>
+						<li style="list-style-type: upper-latin;">low sensitivity to extreme data</li>
+						<li style="list-style-type: upper-latin;">unequal sensitivity to different features</li>
+						<li style="list-style-type: upper-latin;">all of the above</li>
+					</ol>
+				</section>
+				<section>
+					<h2>Manual binary classification</h2>
+					<img src="images/classification_2020/path_data_scatter.svg" alt="path_data" width="800"
+						style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<h2>Only regions I and II</h2>
+					<p>$ Ga^\prime = log(Ga) $, $ Eo^\prime = log(Eo) $</p>
+					<p>$$ z(Ga^\prime, Eo^\prime) = w_1Ga^\prime + w_2Eo^\prime + b $$</p>
+					<p>
+						$$
+						H(z (Ga^\prime, Eo^\prime)) = \left\{\begin{array}{lr}
+						0, & \text{if } z \leq 0\\
+						1, & \text{if } z \gt 0
+						\end{array}\right.
+						$$
+					</p>
+				</section>
+				<section>
+					<p>Play with the sliders in the Jupyter notebook!</p>
+					<img src="images/classification_2020/manual_binary_classification.svg" alt="path_data" width="800"
+						style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<h2>Finding the weights by means of optimization</h2>
+				</section>
+				<section>
+					<h2>Compact notation</h2>
+					<p>Linearly weighted inputs
+						$$
+						z_i=z(\mathrm{x}_i)=\sum\limits_{j=1}^{N_f}w_jx_{ij}
+						$$
+					</p>
+					<p>with
+						$$
+						\mathrm{x}_i = \left[ Ga^\prime_i, Eo^\prime_i, 1 \right],\quad \mathrm{w} = \left[ w_1, w_2, b
+						\right]^T
+						$$
+					</p>
+				</section>
+				<section>
+					<h2>Binary encoding</h2>
+					<p>True label:
+						$$
+						y_i = \left\{\begin{array}{lr}
+						0, & \text{for region I }\\
+						1, & \text{for region II}
+						\end{array}\right.
+						$$
+					</p>
+					<p>Predicted label:
+						$$
+						\hat{y}_i = H(z_i) = \left\{\begin{array}{lr}
+						0, & \text{if } z_i \leq 0\\
+						1, & \text{if } z_i \gt 0
+						\end{array}\right.
+						$$
+					</p>
+				</section>
+				<section>
+					<h2>Loss function</h2>
+					<p>Loss function
+						$$
+						L(\mathrm{w}) = \frac{1}{2}\sum\limits_{i=1}^N \left(y_i - \hat{y}_i(\mathrm{x}_i,\mathrm{w})
+						\right)^2
+						$$
+					</p>
+					<p>The term in parenthesis can take the values<br>$1$, $0$, or $-1$.</p>
+				</section>
+				<section>
+					<h2>Gradient decent</h2>
+					<p>Simple update rule for the weights <small>
+							$$
+							\mathrm{w}^{n+1} = \mathrm{w}^n - \eta \frac{\partial L(\mathrm{w})}{\partial \mathrm{w}} =
+							\begin{pmatrix}w_1^n\\
+							w_2^n\\
+							b^n
+							\end{pmatrix} + \eta
+							\sum\limits_{i=1}^N \left(y_i - \hat{y}_i(\mathrm{x}_i,\mathrm{w}^n) \right)
+							\begin{pmatrix}Ga^\prime_i\\
+							Eo^\prime_i\\
+							1
+							\end{pmatrix}
+							$$</small>
+					</p>
+					<p>$n$ - current iteration, $\eta$ - learning rate</p>
+				</section>
+				<section>
+					<p>performing gradient decent for some iterations ...</p>
+					<img src="images/classification_2020/perceptron_loss.svg" alt="path_data" width="800"
+						style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<p>the result ...</p>
+					<img src="images/classification_2020/perceptron_classification.svg" alt="path_data" width="800"
+						style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<h2>Issues with the <b>perceptron</b> algorithm?</h2>
+				</section>
+				<section>
+					<p>Guaranteed convergence (zero loss)?</p>
+					<ol>
+						<li style="list-style-type: upper-latin;">yes</li>
+						<li style="list-style-type: upper-latin;">no</li>
+						<li style="list-style-type: upper-latin;">data dependent</li>
+					</ol>
+				</section>
+				<section>
+					<h2>Conditional probabilities</h2>
+					$$ p(y=1 | \mathrm{x}) $$
+					<p>speak: probability $p$ of the event $y=1$ given $\mathrm{x}$</p>
+					$$ \hat{y} = f_\mathrm{w}(\mathrm{x}) = p(y=1 | \mathrm{x})$$
+					<p>model predicts <span style="color: red">class probability</span> instead of class!</p>
+				</section>
+				<section>
+					<p>What is the expected value of $p(y=1 | \mathrm{x})$ for points far in <span
+							style="color: red">region II</span>?</p>
+					<ol>
+						<li style="list-style-type: upper-latin;">close to zero</li>
+						<li style="list-style-type: upper-latin;">about 0.5</li>
+						<li style="list-style-type: upper-latin;">close to one</li>
+					</ol>
+				</section>
+				<section>
+					<p>What is the expected value of $p(y=1 | \mathrm{x})$ for points far in <span
+							style="color: red">region I</span>?</p>
+					<ol>
+						<li style="list-style-type: upper-latin;">close to zero</li>
+						<li style="list-style-type: upper-latin;">about 0.5</li>
+						<li style="list-style-type: upper-latin;">close to one</li>
+					</ol>
+				</section>
+				<section>
+					<p>What is the expected value of $p(y=1 | \mathrm{x})$ for points close to the decision boundary?
+					</p>
+					<ol>
+						<li style="list-style-type: upper-latin;">close to zero</li>
+						<li style="list-style-type: upper-latin;">about 0.5</li>
+						<li style="list-style-type: upper-latin;">close to one</li>
+					</ol>
+				</section>
+				<section>
+					<p>What is the expected value of <span style="color: red">$p(y=0 | \mathrm{x})$</span> for points
+						far in region I</span>?</p>
+					<ol>
+						<li style="list-style-type: upper-latin;">close to zero</li>
+						<li style="list-style-type: upper-latin;">about 0.5</li>
+						<li style="list-style-type: upper-latin;">close to one</li>
+					</ol>
+				</section>
+				<section>
+					<p>How to convert $z(\mathrm{x})$ to a probability?</p>
+					<ol>
+						<li style="list-style-type: upper-latin;">sinus: $\mathrm{sin}(z)$</li>
+						<li style="list-style-type: upper-latin;">hyperbolic tangents: $\mathrm{tanh}(z)$</li>
+						<li style="list-style-type: upper-latin;">sigmoid: $\sigma(z)$</li>
+					</ol>
+				</section>
+				<section>
+					<p>sigmoid function $\sigma (z) = \frac{1}{1+e^{-z}}$</p>
+					<img src="images/classification_2020/sigmoid_function.svg" alt="path_data" width="800"
+						style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<p>based on the perceptron classifier's weights ...</p>
+					<img src="images/classification_2020/conditional_probabilities.svg" alt="path_data" width="800"
+						style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<h2>Joint probabilities - likelihood function</h2>
+					$$ l(\mathrm{w}) = \prod\limits_i^{N} p_i(y_i | \mathrm{x}_i, \mathrm{w}) $$
+					<p>principle of maximum likelihood</p>
+					$$ \mathrm{w}^* = \underset{\mathrm{w}}{\mathrm{argmax}}\ l(\mathrm{w}). $$
+				</section>
+				<section>
+					<p>Which of the following is equivalent to $l(\mathrm{w}) = \prod\limits_i^{N} p_i(y_i |
+						\mathrm{x}_i, \mathrm{w})$?</p>
+					<ol>
+						<li style="list-style-type: upper-latin;">$$ \prod\limits_i^{N} \left[ y_i^{\hat{y}_i}
+							(1-y_i)^{(1-\hat{y}_i)}\right] $$</li>
+						<li style="list-style-type: upper-latin;">$$ \prod\limits_i^{N} \left[ \hat{y}_i^{y_i}
+							(1-\hat{y}_i)^{(1-y_i)}\right] $$</li>
+					</ol>
+				</section>
+				<section>
+					<h2>Log-likelihood and binary cross entropy</h2>
+
+					<p>
+						$$
+						\mathrm{log}(l(\mathrm{w})) = \sum\limits_{i=1}^N y_i \mathrm{ln}(\hat{y}_i) + (1-y_i)
+						\mathrm{ln}(1-\hat{y}_i)
+						$$
+					</p>
+					<p>
+						$$
+						L(\mathrm{w}) = -\frac{1}{N}\sum\limits_{i=1}^N y_i \mathrm{ln}(\hat{y}_i) + (1-y_i)
+						\mathrm{ln}(1-\hat{y}_i)
+						$$
+					</p>
+				</section>
+				<section>
+					<p>performing gradient decent for some iterations ...</p>
+					<img src="images/classification_2020/log_regression_loss.svg" alt="path_data" width="800"
+						style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<p>the result ...</p>
+					<img src="images/classification_2020/log_regression_classification.svg" alt="path_data" width="800"
+						style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<p>Next step: separating region I from region II <b>and</b> III</p>
+					<img src="images/classification_2020/path_data_scatter.svg" alt="path_data" width="800"
+						style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<p>First: <b>two</b> linear models</p>
+					<img src="images/classification_2020/two_binary_classifications.svg" alt="path_data" width="800"
+						style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<p>Recipe to combine the two linear models:</p>
+					<ol>
+						<li>compute weighted sum of individual models</li>
+						<li>convert the weighted sum to a probability using $\sigma$</li>
+					</ol>
+				</section>
+				<section>
+					<p>combined linear models</p>
+					<img src="images/classification_2020/nonlinear_classification.svg" alt="path_data" width="800"
+						style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<img src="images/classification_2020/combined_linear_models.svg" alt="path_data" width="800"
+						style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<h2>Almost there - extension to multiple classes</h2>
+				</section>
+				<section>
+					<h2>One hot encoding</h2>
+					<img src="images/classification_2020/one_hot_encoding.png" alt="path_data" width="800"
+						style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<p>What is the length of the label vector if we have 10 classes (regimes)?</p>
+					<ol>
+						<li style="list-style-type: upper-latin;">1</li>
+						<li style="list-style-type: upper-latin;">2</li>
+						<li style="list-style-type: upper-latin;">5</li>
+						<li style="list-style-type: upper-latin;">10</li>
+					</ol>
+				</section>
+				<section>
+					<p>What does the label vector look like if we have 4 classes and the true label is class 3 / regime 3?</p>
+					<ol>
+						<li style="list-style-type: upper-latin;">$\mathrm{y}_i = \left[ 1, 0, 0, 0 \right]^T$</li>
+						<li style="list-style-type: upper-latin;">$\mathrm{y}_i = \left[ 0, 0, 1, 0 \right]^T$</li>
+						<li style="list-style-type: upper-latin;">$\mathrm{y}_i = \left[ 1, 0, 1, 0 \right]^T$</li>
+						<li style="list-style-type: upper-latin;">$\mathrm{y}_i = \left[ 0, 0, 3, 0 \right]^T$</li>
+					</ol>
+				</section>
+				<section>
+					<p><b>Softmax function</b> and <b>categorical cross entropy</b> for $K$ classes:</p>
+					<p>
+						$$ p(y_{j}=1 | \mathrm{x}) = \frac{e^{z_{j}}}{\sum_{j=0}^{K-1} e^{z_{j}}} $$
+					</p>
+					<p>
+						$$ L(\mathrm{w}) = -\frac{1}{N} \sum\limits_{j=0}^{K-1}\sum\limits_{i=1}^{N} y_{ij} \mathrm{ln}\left( \hat{y}_{ij} \right) $$
+					</p>
+				</section>
+				<section>
+					<h2>Implementation in PyTorch</h2>
+					<pre class="python"><code data-trim data-line-numbers="1-15">
+						class PyTorchClassifier(nn.Module):
+						  '''Multi-layer perceptron with 3 hidden layers.
+						  '''
+						  def __init__(self, n_features=2, n_classes=5, n_neurons=60, activation=torch.sigmoid):
+							super().__init__()
+							self.activation = activation
+							self.layer_1 = nn.Linear(n_features, n_neurons)
+							self.layer_2 = nn.Linear(n_neurons, n_neurons)
+							self.layer_3 = nn.Linear(n_neurons, n_classes)
+						
+						  def forward(self, x):
+							x = self.activation(self.layer_1(x))
+							x = self.activation(self.layer_2(x))
+							return F.log_softmax(self.layer_3(x), dim=1)
+												</code></pre>
+				</section>
+				<section>
+					<p>Hurray!</p>
+					<img src="images/classification_2020/mlp_classification.svg" alt="path_data" width="800"
+						style="background:none; border:none; box-shadow:none;">
 				</section>
 			</section>
 
 			<!-- end -->
 			<section style="text-align: left;">
 				<h1>THE END</h1>
+				<h3>Thank you for you attention!</h3>
 				<p>
-					Special thanks to David Merker, Jens Timmermann, Chiara Pesci and Dennis Hillenbrand
+					Where to go from here?
 				</p>
-				<p>Thank you for your attention!
-				<p>Get in touch: <a href="mailto:weiner@mma.tu-darmstadt.de">weiner@mma.tu-darmstadt.de</a></p>
-				<div class="row_logo">
-					<div class="column_logo">
-						<div class="content_logo">
-							<img src="images/mma_logo.jpg" alt="mma_logo"
-								style="background:none; border:none; box-shadow:none;">
-						</div>
-					</div>
-					<div class="column_logo">
-						<div class="content_logo">
-							<img src="images/spp1740_logo.svg" alt="spp1740_logo"
-								style="background:none; border:none; box-shadow:none;">
-						</div>
-					</div>
-				</div>
+				<ul>
+					<li><a href="https://www.udacity.com/course/intro-to-machine-learning--ud120">Udacity ML course</a>
+						(free)</li>
+					<li><a href="https://scikit-learn.org/stable/">Scikit Learn</a></li>
+					<li><a href="https://pytorch.org/">PyTorch</a></li>
+					<li><a href="https://www.tensorflow.org/">Tensorflow</a></li>
+				</ul>
 			</section>
 
 		</div>
