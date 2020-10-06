@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+
+	<title>Creating data-driven CFD workflows using OpenFOAM and PyTorch</title>
+
+	<meta name="description" content="openfoam_conference_2020">
+	<meta name="author" content="Andre Weiner">
+
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/white.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+
+	<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+</head>
+
+<style>
+	.row_img {
+		display: table;
+	}
+
+	.column_img {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 50%;
+	}
+
+	.column_five {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 20%;
+	}
+
+	.content_img {
+		display: inline-block;
+	}
+
+	.reveal .slide-number {
+		position: absolute;
+		display: block;
+		left: 8px;
+		bottom: 8px;
+		height: 48px;
+		width: 50px;
+		z-index: 31;
+		font-family: Helvetica, sans-serif;
+		font-size: 32px;
+		line-height: 1;
+		color: #000000;
+		background-color: rgba(0, 0, 0, 0);
+		padding: 5px;
+	}
+</style>
+
+<body>
+
+	<div class="reveal" data-video="small top-right">
+
+		<!-- Any section element inside of this container is displayed as a slide -->
+		<div class="slides">
+			<!-- title slide -->
+			<section data-video="small top-right">
+				<h3>Creating <span style="color: red">data-driven</span> CFD workflows using <span
+						style="color: red">OpenFOAM</span> and <span style="color: red">PyTorch</span></h3>
+				<p>
+					<small>Andre Weiner<sup><small>1</small></sup>, Chiara Pesci<sup><small>2</small></sup>, Tomislav
+						Marić<sup><small>3</small></sup>, Richard Semaan<sup><small>1</small></sup>, Dieter
+						Bothe<sup><small>3</small></sup></small><br>
+					<small><sup><small>1</small></sup>TU Braunschweig <a
+							href="https://www.tu-braunschweig.de/en/ism">ISM</a>, <sup><small>2</small></sup> ESI GmbH,
+						<sup><small>3</small></sup> TU Darmstadt <a
+							href="https://www.mma.tu-darmstadt.de/index/index.en.jsp">MMA</a></small>
+				</p>
+
+				<style>
+					.row_logo {
+						display: table;
+					}
+
+					.column_logo {
+						display: table-cell;
+						vertical-align: middle;
+						text-align: center;
+						width: 50%;
+					}
+
+					.content_logo {
+						display: inline-block;
+					}
+				</style>
+				<div class="row_logo">
+					<div class="column_logo">
+						<div class="content_logo">
+							<img src="images/tubs_logo.png" alt="tubs_logo"
+								style="background:none; border:none; box-shadow:none;">
+						</div>
+					</div>
+					<div class="column_logo">
+						<div class="content_logo">
+							<table>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9993;</th>
+									<td style="border: 0; padding-right: 20px;"><a
+											href="mailto:a.weiner@tu-bs.de">Mail</a></th>
+									<td style="border: 0; padding-right: 5px;">&#9741;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://www.linkedin.com/in/andre-weiner-a79752133/">LinkedIn</a></td>
+								</tr>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9997;</td>
+									<td style="border: 0; padding-right: 20px;"><a
+											href="https://myheutagogy.com/">Blog</a></td>
+									<td style="border: 0; padding-right: 5px;">&#10026;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://github.com/AndreWeiner">Github</a></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- motivation -->
+			<section>
+				<img src="images/of_conf_2020/ml_cfd_trend.svg" alt="ml_cfd_trend"
+					style="background:none; border:none; box-shadow:none; width: 800px">
+				<p>Research output ML + CFD</p>
+			</section>
+
+			<!-- outline -->
+			<section>
+				<h2>Outline</h2>
+				<ol>
+					<li>Data-driven workflows</li>
+					<li>PyTorch</li>
+					<li>Supervised learning</li>
+					<li>Unsupervised learning</li>
+					<li>Reinforcement learning</li>
+				</ol>
+			</section>
+
+			<!-- Data-driven workflows -->
+			<section>
+				<section>
+					<h2>What is data?</h2>
+					<div style="position:relative; width:800px; height: 350px; margin:0 auto;">
+						<img src="images/of_conf_2020/mag_vel_snapshot_crop.png" alt="cylinder_vel"
+							style="background:none; border:none; box-shadow:none; width: 800px; position: absolute; top: 0; left: 0">
+						<img src="images/of_conf_2020/cylinder_drag_over_time.svg" alt="cylinder_drag"
+							style="background:none; border:none; box-shadow:none; width: 800px; position: absolute; top: 0; left: 0"
+							class="fragment">
+					</div>
+					<p><small>primary data: scalar/vector fields, boundary fields, integral values</small></p>
+				</section>
+				<section>
+					<div style="position:relative; width:800px; height: 400px; margin:0 auto;">
+						<pre class="raw"><code data-trim data-line-numbers="1-20">
+# log.rhoPimpleFoam
+Courant Number mean: 0.020065182 max: 0.77497916
+deltaT = 6.4813615e-07
+Time = 1.22219e-06
+
+PIMPLE: iteration 1
+diagonal:  Solving for rho, Initial residual = 0, Final residual = 0, No Iterations 0
+DILUPBiCGStab:  Solving for Ux, Initial residual = 0.0034181127, Final residual = 6.0056507e-05, No Iterations 1
+DILUPBiCGStab:  Solving for Uy, Initial residual = 0.0052004883, Final residual = 0.00012352706, No Iterations 1
+DILUPBiCGStab:  Solving for e, Initial residual = 0.06200185, Final residual = 0.0014223046, No Iterations 1
+limitTemperature limitT Lower limited 0 (0%) of cells
+limitTemperature limitT Upper limited 0 (0%) of cells
+limitTemperature limitT Unlimited Tmax 329.54945
+Unlimited Tmin 280.90821
+					</code>
+					<code class="fragment fade-in" data-trim data-line-numbers="5-20">
+						Checking geometry...
+						...
+						Mesh has 2 solution (non-empty) directions (1 1 0)
+						All edges aligned with or perpendicular to non-empty directions.
+						Boundary openness (1.4469362e-19 3.3639901e-21 -2.058499e-13) OK.
+						Max cell openness = 2.4668495e-16 OK.
+						Max aspect ratio = 3.0216602 OK.
+						Minimum face area = 7.0705331e-08. Maximum face area = 0.00033983685.  Face area magnitudes OK.
+						Min volume = 1.2975842e-10. Max volume = 6.2366859e-07.  Total volume = 0.0017254212.  Cell volumes OK.
+						Mesh non-orthogonality Max: 60.489216 average: 4.0292071
+						Non-orthogonality check OK.
+						Face pyramids OK.
+						Max skewness = 1.1453509 OK.
+						Coupled point location match (average 0) OK.
+						</code>
+				</pre>
+					</div>
+					<p><small>secondary data: log files, input dictionaries, mesh quality metrics, ...</small></p>
+				</section>
+				<section>
+					<h2>What is a data-driven workflow?</h2>
+					<img src="images/of_conf_2020/data_workflows_2.svg" alt="workflow_2"
+						style="background:none; border:none; box-shadow:none; width: 800px">
+					<p><small>Example: creating a <b>surrogate</b> or <b>reduced-order</b> model based on numerical
+							data.</small></p>
+				</section>
+				<section>
+					<img src="images/of_conf_2020/data_workflows_1.svg" alt="workflow_1"
+						style="background:none; border:none; box-shadow:none; width: 800px">
+					<p><small>Example: creating a space and time dependent <b>boundary</b> condition based on numerical
+							or experimental data.</small></p>
+				</section>
+				<section>
+					<img src="images/of_conf_2020/data_workflows_3.svg" alt="workflow_3"
+						style="background:none; border:none; box-shadow:none; width: 800px">
+					<p><small>Example: creating <b>closure models</b> based on numerical data.</small></p>
+				</section>
+				<section>
+					<img src="images/of_conf_2020/data_workflows_4.svg" alt="workflow_4"
+						style="background:none; border:none; box-shadow:none; width: 500px">
+					<p><small>Example: <b>active flow control</b> or <b>shape optimization</b>.</small></p>
+				</section>
+			</section>
+
+			<!-- PyTorch -->
+			<section>
+				<section>
+					<h2>ML/deep learning frameworks</h2>
+					<ul>
+						<li><a href="https://pytorch.org">PyTorch</a></li>
+						<li><a href="https://www.tensorflow.org/">Tensorflow</a></li>
+						<li><a href="https://scikit-learn.org/stable/">scikit-learn</a></li>
+						<li><a href="http://spark.apache.org/docs/latest/ml-guide.html">Spark MLlib</a></li>
+						<li>...</li>
+					</ul>
+					<p>criteria: workflow, algorithms, data size, programming language, platform, ...</p>
+				</section>
+				<section data-background-iframe="https://pytorch.org" data-background-interactive>
+					<div
+						style="position: absolute; width: 45%; right: 0; box-shadow: 0 4px 8px rgba(255,255,255,1.0), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 30px; text-align: left;">
+						<p>Why PyTorch?</p>
+						<ul>
+							<li>easy to use and set up</li>
+							<li>Python/C++/Java frontend</li>
+							<li>easy exchange and optimization of models thanks to <a
+									href="https://pytorch.org/docs/stable/jit.html">TorchScript</a></li>
+							<li>Python and C++ APIs closely aligned</li>
+						</ul>
+					</div>
+				</section>
+				<section>
+					<h2>Getting started</h2>
+					<ul>
+						<li><a href="https://github.com/AndreWeiner/of_pytorch_docker">Github</a>: Docker + OpenFOAM +
+							PyTorch</li>
+						<li>accompanying <a
+								href="https://myheutagogy.com/2020/08/19/running-pytorch-models-in-openfoam-basic-setup-and-examples/#more-344">blog
+								post</a></li>
+						<li>
+							article about <a
+								href="https://tmaric.gitlab.io/posts/pytorch-sequential/">torch::Sequential</a> by
+							Tomislav Marić
+						</li>
+						<li><a href="https://github.com/AndreWeiner/machine-learning-applied-to-cfd">Github:</a> ML
+							applied to CFD</li>
+						<li><a href="https://github.com/AndreWeiner/phd_openfoam">Github:</a> boundary layer modeling
+						</li>
+						<li>PyTorch <a href="https://github.com/prabhuomkar/pytorch-cpp">C++ examples</a></li>
+						<li><a href="https://pytorch.org/docs/stable/torch.html">Python</a> and <a
+								href="https://pytorch.org/cppdocs/">C++</a> APIs</li>
+					</ul>
+				</section>
+			</section>
+
+			<!-- supervised learning -->
+			<section>
+				<section>
+					<h3>Supervised learning</h3>
+					<img src="images/regression_classification_web.svg" alt="supervised_learning"
+						style="background:none; border:none; box-shadow:none; width: 800px">
+					<p><small>Creating a mapping from <b>features</b> to <b>labels</b> based on examples.</small></p>
+				</section>
+				<section>
+					<p>Example: mapping the velocity from two-phase to single-phase simulations.</p>
+					<div class="row_logo">
+						<div class="column_logo">
+							<p align="justify">
+								<small><b>Problem:</b> obtain reference data for local and global mass transfer at high
+									Schmidt ($Sc$) and Péclet ($Pe$) numbers.</small>
+							</p>
+							<div class="content_logo">
+								<img src="images/of_conf_2020/dieter.jpg" alt="dieter_bothe"
+									style="background:none; border:none; box-shadow:none; height: 180px">
+								<p><small><a
+											href="mailto:bothe@mma.tu-darmstadt.de">bothe@mmm.tu-darmstadt.de</a></small>
+								</p>
+							</div>
+						</div>
+						<div class="column_logo">
+							<div class="content_logo">
+								<div class="content_logo">
+									<img src="images/of_conf_2020/dimple_ellipsoidal.png" alt="dimpled_ellipsoidal"
+										style="background:none; border:none; box-shadow:none; width: 52%">
+									<small>Dimpled-ellipsoidal bubble</small>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+				<section>
+					<img src="images/gofun/hybrid_a_b_c.png" alt="hybrid_1"
+						style="background:none; border:none; box-shadow:none; width: 800px">
+					<p><small>Learn more in chapter 6 of <a href="https://tuprints.ulb.tu-darmstadt.de/11405/">my
+								thesis</a>.</small></p>
+				</section>
+				<section>
+					<img src="images/gofun/hybrid_d_e_f.png" alt="hybrid_2"
+						style="background:none; border:none; box-shadow:none; width: 800px">
+					<p><small>Learn more in chapter 6 of <a href="https://tuprints.ulb.tu-darmstadt.de/11405/">my
+								thesis</a>.</small></p>
+				</section>
+				<section>
+					<p>Extension to dynamically deforming bubbles together with Irian Hierck, Claire Claassen, and <a
+							href="mailto:m.w.baltussen@tue.nl">Maike Baltussen</a> @ <b>TU Eindhoven</b></p>
+					<ul>
+						<li><b>Data:</b>
+							<ol>
+								<small>
+									<li>rise velocity</li>
+									<li>interface position</li>
+									<li>interface velocity</li>
+								</small>
+							</ol>
+						<li><b>PyTorch models:</b>
+
+							<ol><small>
+									<li>inlet velocity $\mathbf{u}_{in} = \mathbf{u}_{in}(\tilde{t})$</li>
+									<li>bubble radius $r_{b} = r_{b}(\tilde{t}, \vartheta)$</li>
+									<li>surface velocity $\mathbf{u}_{\Sigma} = \mathbf{u}_{\Sigma}(\tilde{t},
+										\vartheta)$</li>
+								</small></ol>
+						<li><b>OpenFOAM:</b>
+							<ul>
+								<small>
+									<li>boundary conditions for velocity and mesh motion</li>
+								</small>
+							</ul>
+					</ul>
+				</section>
+				<section>
+					<video height="500" controls muted loop>
+						<source src="videos/all_cases_sc100.ogv">
+					</video>
+					<p><small>Transient concentration field for different Reynolds numbers $Re$ and constant Schmidt
+							number $Sc=100$.</small></p>
+				</section>
+				<section>
+					<video height="500" controls muted loop>
+						<source src="videos/mesh_zoom_bl.ogv">
+					</video>
+					<p><small>Mesh motion and zoom view of concentration boundary layer for $Re=569$ and
+							$Sc=100$.</small></p>
+				</section>
+				<section>
+					<img src="images/of_conf_2020/sh_glob_mesh_dependency.svg" alt="sh_mesh_dep"
+						style="background:none; border:none; box-shadow:none; width: 900px">
+					<p><small>Global Sherwood number $Sh$ for two different mesh resolutions (3250 and 6500
+							cells/diameter). ~7h, serial, 2.4 GHz</small></p>
+				</section>
+			</section>
+
+			<!-- unsupervised learning -->
+			<section>
+				<section>
+					<h2>Unsupervised learning</h2>
+					<div style="position:relative; width:800px; height: 350px; margin:0 auto;">
+						<img src="images/of_conf_2020/unsupervised_1.svg" alt="unsupervised_1"
+							style="background:none; border:none; box-shadow:none; width: 800px; position: absolute; top: 0; left: 0">
+						<img src="images/of_conf_2020/unsupervised_2.svg" alt="unsupervised_2"
+							style="background:none; border:none; box-shadow:none; width: 800px; position: absolute; top: 0; left: 0"
+							class="fragment">
+						<img src="images/of_conf_2020/unsupervised_3.svg" alt="unsupervised_3"
+							style="background:none; border:none; box-shadow:none; width: 800px; position: absolute; top: 0; left: 0"
+							class="fragment">
+					</div>
+					<p><small>Finding patterns in <b>unlabeled</b> data.</small></p>
+				</section>
+				<section>
+					<p>Example: dynamic mode decomposition (DMD) of the flow past a cylinder.</p>
+					<div class="row_logo">
+						<div class="column_logo">
+							<p align="justify">
+								<small><b>Problem:</b> find a reduced representation based on coherent flow structures.
+									Flow past a cylinder; $Re=100$.</small>
+							</p>
+							<div class="content_logo">
+								<img src="images/of_conf_2020/chiara.jpg" alt="chiara_pesci"
+									style="background:none; border:none; box-shadow:none; height: 180px">
+								<p><small><a
+											href="mailto:chiara.pesci@esi-group.com">chiara.pesci@esi-group.com</a></small>
+								</p>
+							</div>
+						</div>
+						<div class="column_logo">
+							<div class="content_logo">
+								<div class="content_logo">
+									<video height="310px" controls autoplay muted loop>
+										<source src="videos/cylinder_short.mp4">
+									</video>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+				<section>
+					<img src="images/of_conf_2020/flowField_DMD_small.png" alt="snapshots"
+						style="background:none; border:none; box-shadow:none; height: 600px">
+				</section>
+				<section>
+					<h2>Classical DMD</h2>
+					<ul><small>
+							<li>data matrices: $$\mathbf{X} = \left[ \mathbf{x}_1, \mathbf{x}_2, \dots, \mathbf{x}_{N-1}
+								\right]^T\text{, }\mathbf{X}^\prime = \left[ \mathbf{x}_2, \mathbf{x}_3, \dots,
+								\mathbf{x}_{N} \right]^T$$</li>
+							<li>singular value decomposition (SVD): $$\mathbf{X} = \mathbf{U}\mathbf{\Sigma}
+								\mathbf{V}^T$$</li>
+							<li>rank $r$ approximation of linear operator: $$ \mathbf{A}=\mathbf{X}^\prime \mathbf{X}^T
+								\text{, } \tilde{\mathbf{A}} = \mathbf{U}^T_r \mathbf{A}\mathbf{U}_r $$</li>
+							<li>Eigen-decomposition: $$\tilde{\mathbf{A}}\mathbf{W} = \mathbf{W}\mathbf{\Lambda}\text{,
+								} \Phi = \mathbf{X}^\prime \mathbf{V} \mathbf{\Sigma}^{-1}\mathbf{W}$$</li>
+						</small></ul>
+					<p><small>Learn more in <a href="https://www.youtube.com/watch?v=sQvrK8AGCAo&t=436s">this
+								video</a>.</small></p>
+				</section>
+				<section>
+					<h2>DMD in OpenFOAM</h2>
+					<ul><small>
+							<li>implemented as function object <a
+									href="https://www.openfoam.com/documentation/guides/latest/doc/guide-fos-field-STDMD.html">STDMD</a>
+								(streaming DMD)</li>
+							<li>main output:
+								<ul>
+									<li>temporal behavior: <b>STDMD.dat</b> in postProcessing</li>
+									<li>spatial modes: <b>modeReal1U</b> in time folders</li>
+								</ul>
+							</li>
+							<li>
+								What is this useful for?
+								<ul>
+									<li>reconstruct fields at any time $t$</li>
+									<li>find and analyze coherent structures</li>
+									<li>build reduced-order models (ROMs)</li>
+								</ul>
+							</li>
+						</small></ul>
+				</section>
+				<section>
+					<img src="images/of_conf_2020/realModes.png" alt="modes"
+						style="background:none; border:none; box-shadow:none; width: 800px">
+				</section>
+				<section>
+					<h2>flowtorch</h2>
+					<div class="row_logo">
+						<div class="column_logo">
+							<small>
+								<p><span style="color: #EE4C2C">flowTorch</span> is a unified framework for</p>
+								<ol>
+									<li>data loading</li>
+									<li>pre-processing</li>
+									<li>modal decomposition</li>
+									<li>reduced-order models</li>
+								</ol>
+							</small>
+							<div class="content_logo">
+								<img src="images/of_conf_2020/richard_semaan.png" alt="richard_seeman"
+									style="background:none; border:none; box-shadow:none; height: 180px">
+								<p><small><a href="mailto:r.semaan@tu-bs.de">r.semaan@tu-bs.de</a></small></p>
+							</div>
+						</div>
+						<div class="column_logo">
+							<div class="content_logo">
+								<div class="content_logo">
+									<img src="images/of_conf_2020/for2895_logo.png" alt="for2895"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+									<small>
+										<p>flowTorch in a nutshell</p>
+										<ul>
+											<li>uses <b>PyTorch</b> as backend (<a
+													href="https://pytorch.org/">pytorch.org</a>)</li>
+											<li>parallel computations on <b>CPUs/GPUs</b></li>
+											<li><b>mixed precision</b> single/double</li>
+											<li><b>open-source</b> release planned (MIT)</li>
+											<li>implemented as a <b>Python library</b></li>
+										</ul>
+									</small>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</section>
+
+			<!-- reinforcement learning -->
+			<section>
+				<section>
+					<h2>(Deep) Reinforcement learning</h2>
+					<img src="images/reinforcement_web.svg" alt="rl_overview"
+									style="background:none; border:none; box-shadow:none; width: 600px">
+					<p><small>Create an intelligent agent that learns to map <b>states</b> to <b>actions</b> such that cumulative rewards are maximized.</small></p>
+				</section>
+				<section>
+					<p>Example: active flow control for drag reduction.</p>
+							<img src="videos/2D_flow_control.gif" alt="flow_control" width="700" style="background:none; border:none; box-shadow:none;">
+							<p><small>Source: Jean Rabault et al., <a href="https://github.com/jerabaul29/Cylinder2DFlowControlDRL"> check out the code!</a> Follow our progress on <a href="https://github.com/darshan315/flow_past_cylender_by_DRL">Github</a>; together with Darshan Thummar.</small></p>
+				</section>
+				<section>
+					<p>Example: accelerating OpenFOAM simulations.</p>
+					<div class="row_logo">
+						<div class="column_logo">
+							<p align="justify">
+								<small><b>Problem:</b> setting inner and outer iterations in $p$-$U$ coupling; linear solver settings.</small>
+							</p>
+							<div class="content_logo">
+								<img src="images/of_conf_2020/maric_portrait.jpg" alt="tomislav_maric"
+									style="background:none; border:none; box-shadow:none; height: 180px">
+								<p><small><a
+											href="mailto:maric@mma.tu-darmstadt.de">maric@mma.tu-darmstadt.de</a></small>
+								</p>
+							</div>
+						</div>
+						<div class="column_logo">
+							<div class="content_logo">
+								<div class="content_logo">
+									<div style="position:relative; width:400px; height: 350px; margin:0 auto;">
+									<pre><code data-trim>
+										// system/fvSolution
+										p
+										{
+										  solver      GAMG;
+										  smoother    GaussSeidel;
+										  tolerance   1e-6;
+										  relTol      0.01;
+										}
+										...
+										PIMPLE
+										{
+										  nOuterCorrectors    50;
+										  nCorrectors         1;
+										  nNonOrthogonalCorrectors 1;
+										  ...
+										}
+									</code></pre>
+								</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</section>
+
+			<!-- end -->
+			<section style="text-align: left;">
+				<h1>THE END</h1>
+				<h3>Thank you for you attention!</h3>
+				<div class="row_img">
+					<div class="column_five">
+						<div class="content_logo">
+							<img src="images/of_conf_2020/andre_weiner.jpg" alt="andre"
+								style="background:none; border:none; box-shadow:none; height: 180px">
+						</div>
+					</div>
+					<div class="column_five">
+						<div class="content_logo">
+							<img src="images/of_conf_2020/chiara.jpg" alt="chiara"
+								style="background:none; border:none; box-shadow:none; height: 180px">
+						</div>
+					</div>
+					<div class="column_five">
+						<div class="content_logo">
+							<img src="images/of_conf_2020/maric_portrait.jpg" alt="tomislav"
+								style="background:none; border:none; box-shadow:none; height: 180px">
+						</div>
+					</div>
+					<div class="column_five">
+						<div class="content_logo">
+							<img src="images/of_conf_2020/richard_semaan.png" alt="richard"
+								style="background:none; border:none; box-shadow:none; height: 180px">
+						</div>
+					</div>
+					<div class="column_five">
+						<div class="content_logo">
+							<img src="images/of_conf_2020/dieter.jpg" alt="dieter"
+								style="background:none; border:none; box-shadow:none; height: 180px">
+						</div>
+					</div>
+				</div>
+				<div class="row_img">
+					<div class="column_img">
+						<div class="content_logo">
+							<table>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9993;</th>
+									<td style="border: 0; padding-right: 20px;"><a
+											href="mailto:a.weiner@tu-bs.de">Mail</a></th>
+									<td style="border: 0; padding-right: 5px;">&#9741;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://www.linkedin.com/in/andre-weiner-a79752133/">LinkedIn</a></td>
+									<td style="border: 0; padding-right: 5px;">&#9997;</td>
+									<td style="border: 0; padding-right: 20px;"><a
+											href="https://myheutagogy.com/">Blog</a></td>
+									<td style="border: 0; padding-right: 5px;">&#10026;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://github.com/AndreWeiner">Github</a></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</section>
+
+		</div>
+
+	</div>
+
+	<script src="js/reveal.js"></script>
+
+	<script>
+
+		// More info https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			center: true,
+			hash: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// More info https://github.com/hakimel/reveal.js#dependencies
+			dependencies: [
+				{ src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/highlight/highlight.js', async: true },
+				{ src: 'plugin/search/search.js', async: true },
+				{ src: 'plugin/zoom-js/zoom.js', async: true },
+				{ src: 'plugin/notes/notes.js', async: true },
+				{ src: 'plugin/math/math.js', async: true }]
+		});
+		Reveal.configure({ slideNumber: true });
+
+	</script>
+
+
+</body>
+
+</html>
