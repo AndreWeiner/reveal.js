@@ -166,6 +166,7 @@
 						<li>Detecting coherent structures in transonic buffets</li>
 						<li>Active control of the flow past a cylinder</li>
 					</ol>
+					<li>(Random) lessons learned</li>
 				</ol>
 			</section>
 
@@ -413,9 +414,31 @@ Unlimited Tmin 280.90821
 					</ol>
 				</section>
 				<section>
+					<pre class="python"><code>
+class RadiusModel(pt.nn.Module):
+	def __init__(self, model_dict, model_path, axes_model, scaler_tt, scaler_rad):
+		# snip
+
+	def _inverse_scale(self, y):
+		return y * self._range_rad + self._min_rad
+	
+	def _ellipsoidal_radius(self, X):
+		axes = self._axes_model(X[:, 0].unsqueeze(-1))
+		# snip
+		return re
+	
+	def forward(self, X):
+		rad_ell = self._ellipsoidal_radius(X).squeeze()
+		X = self._scale(X)
+		X = self._inverse_scale(self._model(X)).squeeze()
+		return X * rad_ell
+					</code></pre>
+					<p><small>Hide feature normalization and model assembly using a new module.</small></p>
+				</section>
+				<section>
 					<img src="images/ofw_ssd/two_vs_hybrid_flow.png" alt="flow"
 						style="background:none; border:none; box-shadow:none; width: 900px">
-					<p><small>Two-phase velocity field (left half) versus single-phase velocity field (right half).</small></p>
+					<p><small>Two-phase velocity field (left half) versus single-phase velocity field (right half); speed-up of <b>20-40x</b> with <b>120x</b> finer mesh at surface.</small></p>
 				</section>
 				<section>
 					<video height="500" controls muted loop>
@@ -533,7 +556,7 @@ jupyter lab
 						</tr>
 						<tr>
 							<td>4.</td>
-							<td>$\mathbf{AW} = \mathbf{W\lambda}$</td>
+							<td>$\mathbf{AW} = \mathbf{W\Lambda}$</td>
 							<td>eigen value problem</td>
 						</tr>
 						<tr>
@@ -582,6 +605,29 @@ jupyter lab
 					<img src="images/ofw_ssd/dmd_modes_surface.png" alt="dmd_modes"
 						style="background:none; border:none; box-shadow:none; width: 900px">
 					<p><small>DMD modes associated with the buffet frequency and steady mode (top).</small></p>
+				</section>
+				<section>
+					<pre class="python"><code>
+import torch as pt
+from flowtorch.data import FOAMDataloader, mask_box
+
+loader = FOAMDataloader("run/flow_past_cylinder/")
+
+# select a subset of the available snapshots
+times = loader.write_times()
+window_times = [time for time in times if float(time) >= 4.0]
+
+# load vertices, discard z-coordinate, and create a mask
+vertices = loader.get_vertices()[:, :2]
+mask = mask_box(vertices, lower=[0.1, -1], upper=[0.75, 1])
+
+# assemble the data matrix
+data_matrix = pt.zeros((mask.sum().item(), len(window_times)), dtype=pt.float32)
+for i, time in enumerate(window_times):
+  # load the vorticity vector field, take the z-component [:, 2], and apply the mask
+  data_matrix[:, i] = pt.masked_select(loader.load_snapshot("vorticity", time)[:, 2], mask)
+						</code></pre>
+					<p><small>Easy access to OpenFOAM simulation data.</small></p>
 				</section>
 			</section>
 
@@ -651,6 +697,30 @@ jupyter lab
 					</ol>
 				</section>
 				<section>
+					<p>Boundary condition defined in <b>0/U</b></p>
+					<pre class="c++"><code>
+cylinder
+{
+	type            agentRotatingWallVelocity;
+	// center of cylinder
+	origin          (0.2 0.2 0.0);
+	// axis of rotation; normal to 2D domain
+	axis            (0 0 1);
+	// name of the policy network; must be a torchscript file
+	policy          "policy.pt";
+	// when to start controlling
+	startTime       0.01;
+	// how often to evaluate policy
+	interval        20;
+	// if true, the angular velocity is sampled from a Gaussian distribution
+	// if false, the mean value predicted by the policy is used
+	train           true;
+	// currently ignored
+	absOmegaMax     0.05;
+}
+					</code></pre>
+				</section>
+				<section>
 					<img src="images/ofw_ssd/rewards_mean.png" alt="rewards"
 						style="background:none; border:none; box-shadow:none; width: 800px">
 					<p><small>Cumulative rewards plotted against PPO iterations.</small></p>
@@ -669,6 +739,104 @@ jupyter lab
 					<img src="images/ofw_ssd/omega_integral.png" alt="theta"
 						style="background:none; border:none; box-shadow:none; width: 800px">
 					<p><small>Temporal evolution of polar angle.</small></p>
+				</section>
+			</section>
+			
+			<section>
+				<section>
+					<h2>(Random) lessons learned</h2>
+				</section>
+				<section>
+					<p><b>1. Finding good features of often hard</b></p>
+					<ul>
+						<li>use physical relations/intuition</li>
+						<li>extract as many features as possible</li>
+						<li>use automated feature selection</li>
+						<li><b>make sure that the features are available in your target application!</b></li>
+					</ul>
+				</section>
+				<section>
+					<p><b>2. Learn the mapping that you really need</b></p>
+					<p>classical wall function</p>
+					<small>
+						<ol>
+							<li>take suitable function $y^+ = y^+(u^+)$ (e.g. Spalding)</li>
+							<li>iteratively find $u_\tau$ given $y_p$ and $u_p$</li>
+							<li>use $u_\tau$ to correct $\tau_w$ ($\nu_t$ in OpenFOAM)</li>
+						</ol>
+					</small>
+					<p>data-driven wall function</p>
+					<small>
+						<ol>
+							<li>collet boundary layer data</li>
+							<li><s>learn $\hat{y}^+\approx y^+(u^+)$ to replace analytical function</s></li>
+							<li>learn $\hat{\tau}_w \approx \tau_w(y_p, u_p)$ (apply typical normalization)</li>
+						</ol>
+					</small>
+				</section>
+				<section>
+					<p><b>3. Remove as much variance from the data as possible before the training</b></p>
+					<ul>
+						<li>use physical relations, e.g, learn the deviation from an analytical solution rather than replacing it</li>
+						<li>combine multiple models rather than creating a "master model"</li>
+					</ul>
+				</section>
+				<section>
+					<p><b>4. (Most often) the exact ML algorithm is not all that important</b></p>
+					<ul>
+						<li>keep it as simple, e.g., use polynomial regression if you have few features and low nonlinearity</li>
+						<li>create an automated pipeline to test a variety of models and hyper-parameters</li>
+						<li>use what it easily available to you</li>
+						<li>if you have no clue how hard the problem is, start with simple neural networks</li>
+					</ul>
+				</section>
+				<section>
+					<p><b>5. (Most often) the network architecture is not all that important</b></p>
+					<ul>
+						<li>establish a suitable base line model</li>
+						<li>use automated hyperparameter optimization</li>
+						<li>build mathematical constraints into the architecture (e.g., boundedness and symmetries)</li>
+					</ul>
+					<img src="images/ofw_ssd/arch_heatmap.png" alt="arch_heatmap"
+						style="background:none; border:none; box-shadow:none; width: 400px">
+						<br>
+					<small><a href="https://tuprints.ulb.tu-darmstadt.de/11405/">Image source</a></small>
+				</section>
+				<section>
+					<p><b>6. Check multiple metrics during training</b></p>
+					<ul>
+						<li>$L_2$ or $R^2$ values often aren't meaningful</li>
+						<li>check (at least) $L_\infty$</li>
+						<li>examine the error distribution</li>
+						<li>examine which features lead to large errors</li>
+					</ul>
+				</section>
+				<section>
+					<div class="row_logo">
+						<div class="column_logo">
+							<div class="content_logo">
+								<img src="images/ofw_ssd/error_histogram.png" alt="error_hist"
+									style="background:none; border:none; box-shadow:none;">
+							</div>
+						</div>
+						<div class="column_logo">
+							<div class="content_logo">
+								<img src="images/ofw_ssd/error_heatmap.png" alt="error_map"
+									style="background:none; border:none; box-shadow:none;">
+							</div>
+						</div>
+					</div>
+					<small><a href="https://tuprints.ulb.tu-darmstadt.de/11405/">Image source</a></small>
+				</section>
+				<section>
+					<p><b>7. Treat nonlinear optimization as an experiment!</b></p>
+					<img src="images/ofw_ssd/box_plots.png" alt="arch_heatmap"
+						style="background:none; border:none; box-shadow:none; width: 800px">
+						<p><small><a href="https://en.wikipedia.org/wiki/Box_plot">Box plots</a> are a great tool to visualize a repeated experiment; <a href="https://tuprints.ulb.tu-darmstadt.de/11405/">image source.</a></small></p>
+
+				</section>
+				<section>
+					<p><b>8. Use classical solution approaches rather than ML if available</b></p>
 				</section>
 			</section>
 
