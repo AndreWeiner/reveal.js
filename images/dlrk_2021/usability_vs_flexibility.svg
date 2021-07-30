@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="128.45241mm"
+   height="50.419624mm"
+   viewBox="0 0 128.45241 50.419624"
+   version="1.1"
+   id="svg8078"
+   inkscape:version="1.1 (ce6663b3b7, 2021-05-25)"
+   sodipodi:docname="usability_vs_flexibility.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview8080"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="true"
+     inkscape:snap-global="true"
+     inkscape:zoom="1.5518659"
+     inkscape:cx="220.05768"
+     inkscape:cy="86.347668"
+     inkscape:window-width="1920"
+     inkscape:window-height="1043"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid8139"
+       originx="-17.319606"
+       originy="-13.262851" />
+  </sodipodi:namedview>
+  <defs
+     id="defs8075">
+    <rect
+       x="-100"
+       y="40"
+       width="230"
+       height="60"
+       id="rect95815" />
+    <inkscape:path-effect
+       effect="powerclip"
+       id="path-effect9493"
+       is_visible="true"
+       lpeversion="1"
+       inverse="true"
+       flatten="false"
+       hide_clip="false"
+       message="Use fill-rule evenodd on &lt;b&gt;fill and stroke&lt;/b&gt; dialog if no flatten result after convert clip to paths." />
+    <inkscape:path-effect
+       effect="powerclip"
+       id="path-effect9489"
+       is_visible="true"
+       lpeversion="1"
+       inverse="true"
+       flatten="false"
+       hide_clip="false"
+       message="Use fill-rule evenodd on &lt;b&gt;fill and stroke&lt;/b&gt; dialog if no flatten result after convert clip to paths." />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath9481">
+      <path
+         style="display:none;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 76.729167,17.197916 h 7.9375 c -5.322515,11.313737 5.747065,26.959571 0,39.687501 h -7.9375 c 5.044336,-15.713086 -5.849549,-25.732023 0,-39.687501"
+         id="path9483"
+         sodipodi:nodetypes="ccccc" />
+      <path
+         id="lpe_path-effect9489"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         class="powerclip"
+         d="M 23.604167,15.666672 H 137.79119 v 30.84374 H 23.604167 Z m 53.125,1.531244 c -5.849549,13.955478 5.044336,23.974415 0,39.687501 h 7.9375 c 5.747065,-12.72793 -5.322515,-28.373764 0,-39.687501 h -7.9375" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath9485">
+      <path
+         style="display:none;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 76.729167,17.197916 h 7.9375 c -5.322515,11.313737 5.747065,26.959571 0,39.687501 h -7.9375 c 5.044336,-15.713086 -5.849549,-25.732023 0,-39.687501"
+         id="path9487"
+         sodipodi:nodetypes="ccccc" />
+      <path
+         id="lpe_path-effect9493"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         class="powerclip"
+         d="M 23.604167,27.572922 H 137.79119 v 30.84374 H 23.604167 Z m 53.125,-10.375006 c -5.849549,13.955478 5.044336,23.974415 0,39.687501 h 7.9375 c 5.747065,-12.72793 -5.322515,-28.373764 0,-39.687501 h -7.9375" />
+    </clipPath>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-17.319605,-13.262851)">
+    <path
+       style="fill:none;fill-opacity:0.699317;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 29.104167,33.072917 v 19.84375 L 132.29166,43.656249 Z"
+       id="path8174"
+       sodipodi:nodetypes="cccc"
+       clip-path="url(#clipPath9485)"
+       inkscape:path-effect="#path-effect9493"
+       inkscape:original-d="m 29.104167,33.072917 v 19.84375 L 132.29166,43.656249 Z" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 132.29119,41.010417 V 21.166667 L 29.103697,30.427085 Z"
+       id="path8645"
+       sodipodi:nodetypes="cccc"
+       clip-path="url(#clipPath9481)"
+       inkscape:path-effect="#path-effect9489"
+       inkscape:original-d="M 132.29119,41.010417 V 21.166667 L 29.103697,30.427085 Z" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 84.666666,17.197916 c -5.322513,11.313738 5.747065,26.95957 0,39.6875 m -7.937499,10e-7 c 5.044337,-15.713087 -5.849548,-25.732023 -10e-7,-39.687501"
+       id="path8680"
+       sodipodi:nodetypes="cccc" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:8.11389px;line-height:1.25;font-family:sans-serif;fill:#53ae54;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       id="text12930"
+       transform="translate(-0.18008532)"><textPath
+         xlink:href="#path16811"
+         id="textPath17307"
+         style="font-size:8.11389px;fill:#53ae54;fill-opacity:1">flowTorch</textPath></text>
+    <path
+       style="fill:none;stroke:#ff0000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0"
+       d="m 77.769073,17.270921 c -5.291666,14.552084 5.291667,25.135417 10e-7,39.687501"
+       id="path16811"
+       sodipodi:nodetypes="cc" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:7.05556px;line-height:1.25;font-family:sans-serif;fill:#e10b4f;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="33.037857"
+       y="45.048283"
+       id="text22029"><tspan
+         sodipodi:role="line"
+         id="tspan22027"
+         style="font-size:7.05556px;fill:#e10b4f;fill-opacity:1;stroke-width:0.264583"
+         x="33.037857"
+         y="45.048283">flexibility</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:7.05556px;line-height:1.25;font-family:sans-serif;fill:#1d87b2;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="98.562981"
+       y="33.051647"
+       id="text23981"><tspan
+         sodipodi:role="line"
+         id="tspan23979"
+         style="font-size:7.05556px;fill:#1d87b2;fill-opacity:1;stroke-width:0.264583"
+         x="98.562981"
+         y="33.051647">usability</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="scale(0.26458333)"
+       id="text95813"
+       style="font-style:normal;font-weight:normal;font-size:10.6667px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect95815);fill:#000000;fill-opacity:1;stroke:none" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;fill:#e3004f;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="-63.654915"
+       y="19.463831"
+       id="text104115"
+       transform="rotate(-90)"><tspan
+         sodipodi:role="line"
+         style="font-size:2.82222px;fill:#666666;fill-opacity:1;stroke-width:0.264583"
+         x="-63.654915"
+         y="19.463831"
+         id="tspan104121">template &lt;typename scalar_t&gt;</tspan><tspan
+         sodipodi:role="line"
+         style="font-size:2.82222px;fill:#666666;fill-opacity:1;stroke-width:0.264583"
+         x="-63.654915"
+         y="22.991606"
+         id="tspan120350">__global__ void lltm_cuda_forward(</tspan><tspan
+         sodipodi:role="line"
+         style="font-size:2.82222px;fill:#666666;fill-opacity:1;stroke-width:0.264583"
+         x="-63.654915"
+         y="26.519381"
+         id="tspan120352">    const scalar_t* __restrict__ gates,</tspan></text>
+    <g
+       id="g212789"
+       transform="translate(3.3333333e-6,-18.570857)"
+       style="fill:#53ae54;fill-opacity:0.750185">
+      <path
+         style="fill:#dfdc23;fill-opacity:1;stroke:#000000;stroke-width:0.502363;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 145.52083,33.110439 h -10.63335 v 2.658335 h 10.63335 z"
+         id="path212198" />
+      <path
+         style="fill:#dfdc23;fill-opacity:1;stroke:#000000;stroke-width:0.502363;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 145.52083,37.079179 h -10.63335 v 2.658345 h 10.63335 z"
+         id="path212200" />
+      <path
+         style="fill:#53ae54;fill-opacity:1;stroke:#000000;stroke-width:0.502363;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 145.52083,42.395859 -5.31667,6.645842 -5.31668,-6.645842 h 10.63335"
+         id="path212202" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:7.05556px;line-height:1.25;font-family:sans-serif;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="33.985317"
+       y="-138.14519"
+       id="text215035"
+       transform="rotate(90)"><tspan
+         sodipodi:role="line"
+         id="tspan215033"
+         style="font-size:7.05556px;fill:#808080;stroke-width:0.264583"
+         x="33.985317"
+         y="-138.14519">analyze</tspan></text>
+  </g>
+</svg>

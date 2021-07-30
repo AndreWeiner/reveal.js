@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+
+	<title>flowTorch - A platform for analysis and reduced-order modeling of high speed stall flow phenomena</title>
+
+	<meta name="description" content="DLRK_2021">
+	<meta name="author" content="Andre Weiner">
+
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/white.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+
+	<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+</head>
+
+<style>
+	.row_img {
+		display: table;
+	}
+
+	.column_img {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 50%;
+	}
+
+	.column_five {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 20%;
+	}
+
+	.content_img {
+		display: inline-block;
+	}
+
+	.reveal .slide-number {
+		position: absolute;
+		display: block;
+		left: 8px;
+		bottom: 8px;
+		height: 48px;
+		width: 50px;
+		z-index: 31;
+		font-family: Helvetica, sans-serif;
+		font-size: 32px;
+		line-height: 1;
+		color: #000000;
+		background-color: rgba(0, 0, 0, 0);
+		padding: 5px;
+	}
+	.reveal .slides section .fragment.step-fade-in-then-out {
+	opacity: 0;
+	display: none; }
+	.reveal .slides section .fragment.step-fade-in-then-out.current-fragment {
+	opacity: 1;
+	display: inline; }
+</style>
+
+<body>
+
+	<div class="reveal" data-video="small top-right">
+
+		<!-- Any section element inside of this container is displayed as a slide -->
+		<div class="slides">
+			<!-- title slide -->
+			<section data-video="small top-right">
+				<h3><span style="color: red">flowTorch</span> - analysis and ROM of high speed stall flow phenomena</h3>
+				<p>
+					Andre Weiner, Richard Semaan<br>
+					<small>TU Braunschweig, <a
+							href="https://www.tu-braunschweig.de/en/ism">Institut für Strömungsmechanik</a></small>
+				<p><small>
+					slides: <a href=">https://andreweiner.github.io/reveal.js/DLRK_2021.html">https://andreweiner.github.io/reveal.js/DLRK_2021.html</a>
+				</small></p>
+				</p>
+
+				<style>
+					.row_logo {
+						display: table;
+					}
+
+					.column_logo {
+						display: table-cell;
+						vertical-align: middle;
+						text-align: center;
+						width: 50%;
+					}
+
+					.content_logo {
+						display: inline-block;
+					}
+				</style>
+				<div class="row_logo">
+					<div class="column_logo">
+						<div class="content_logo">
+							<img src="images/tubs_logo.png" alt="tubs_logo"
+								style="background:none; border:none; box-shadow:none;">
+						</div>
+					</div>
+					<div class="column_logo">
+						<div class="content_logo">
+							<img src="images/of_conf_2020/for2895_logo.png" alt="for_logo"
+								style="background:none; border:none; box-shadow:none;">
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<section>
+					<img src="images/dlrk_2021/dataformats.svg" alt="lense"
+								style="background:none; border:none; box-shadow:none; width: 80%;">
+					<p>simple and unified access to data</p>
+				</section>
+				<section>
+					<img src="images/dlrk_2021/usability_vs_flexibility.svg" alt="usability"
+								style="background:none; border:none; box-shadow:none; width: 80%;">
+					<p>balance between flexibility and usability</p>
+				</section>
+				<section>
+					<img src="images/dlrk_2021/notebook_lense.svg" alt="transparency"
+								style="background:none; border:none; box-shadow:none; width: 80%;">
+					<p>full transparency - no need to reinvent the wheel</p>
+				</section>
+			</section>
+
+			<!-- outline -->
+			<section>
+				<h2>Today's program</h2>
+				<ol>
+					<li>flowTorch overview</li>
+					<li>Analysis 1 - flow past a cylinder</li>
+					<li>Analysis 2 - NACA 0012 transonic buffet</li>
+					<li>What's next?</li>
+				</ol>
+			</section>
+
+			<!-- flowTorch overview -->
+			<section>
+				<section>
+					<h2>flowTorch overview</h2>
+				</section>
+				<section>
+					<ul>
+						<li>development since July 2020</li>
+						<li>Python, open-source (GPL-v3)</li>
+						<li>uses <a href="https://pytorch.org/">PyTorch</a> for data structures,<br>linear algebra, machine learning, ...</li>
+						<li>interface to common data formats<br>TAU, OpenFOAM, VTK, CSV, iPSP,...</li>
+					</ul>
+					<p><a href="https://github.com/AndreWeiner/flowtorch">https://github.com/AndreWeiner/flowtorch</a></p>
+				</section>
+				<section>
+					<p>flowTorch packages</p>
+					<img src="images/dlrk_2021/flowtorch_packages.png" alt="packages"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+					<p>other content of the development repository</p>
+					<ul>
+						<li>simulation setups</li>
+						<li>documentation</li>
+						<li>tutorials</li>
+					</ul>
+				</section>
+				<section>
+					<p>Jupyter labs</p>
+					<img src="images/dlrk_2021/jupyter.png" alt="jupyter"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+				</section>
+			</section>
+
+			<!-- flow past a cylinder -->
+			<section>
+				<section>
+					<h2>Analysis 1 - flow past a circular cylinder</h2>
+				</section>
+				<section>
+					<video height="500px" controls autoplay muted loop>
+						<source src="videos/cylinder_short.mp4">
+					</video>
+					<p><small>2D OpenFOAM simulation; $Re=\bar{U}_{in}d/\nu = 100$; cylinder placed $0.1d$ off-center.</small></p>
+				</section>
+				<section>
+					<h2>The goal</h2>
+					<h4>get a feeling for the flowTorch <span style="color: red;">workflow</span></h4>
+				</section>
+				<section>
+					<p>0. Importing modules</p>
+					<pre class="python"><code>
+import torch as pt
+from flowtorch import DATASETS
+from flowtorch.data import FOAMDataloader, mask_box
+from flowtorch.analysis import SVD
+					</code></pre>
+				</section>
+				<section>
+					<p>1. Create access, inspect available data</p>
+					<pre class="python"><code>
+path = DATASETS["of_cylinder2D_binary"]
+loader = FOAMDataloader(path)
+times = loader.write_times
+fields = loader.field_names
+					</code></pre>
+					<p align="left">
+Number of available snapshots: 401<br>
+First five write times:  ['0', '0.025', '0.05', '0.075', '0.1']<br>
+Fields available at t=10:  ['p', 'vorticity', 'phi', 'U']
+					</p>
+				</section>
+				<section>
+					<p>2. Create a mask</p>
+					<pre class="python"><code>
+# load vertices and discard z-coordinate
+vertices = loader.vertices[:, :2]
+mask = mask_box(vertices, lower=[0.1, -1], upper=[0.75, 1])
+					</code></pre>
+					<p align="left">
+Selected vertices: 7190/13678
+					</p>
+					<img src="images/dlrk_2021/mask_selection.svg" alt="mask"
+						style="background:none; border:none; box-shadow:none; width: 80%">
+				</section>
+				<section>
+					<p>3. Load the data and apply the mask</p>
+					<pre class="python"><code>
+# select time window
+window_times = [time for time in times if float(time) >= 4.0]
+# allocate data matrix
+data_matrix = pt.zeros((mask.sum().item(), len(window_times)))
+# fill the data matrix
+for i, time in enumerate(window_times):
+    # load the vorticity vector field, take the z-component [:, 2]
+    vorticity = loader.load_snapshot("vorticity", time)[:, 2]
+    # apply mask
+    data_matrix[:, i] = pt.masked_select(vorticity, mask)
+    
+# subtract the temporal mean from each snapshot
+data_matrix -= pt.mean(data_matrix, dim=1).unsqueeze(-1)
+					</code></pre>
+				</section>
+				<section>
+					<p>4. Perform analysis - singular value decomposition (SVD/POD)</p>
+					<pre class="python"><code>
+svd = SVD(data_matrix, rank=400)
+print(svd)
+					</code></pre>
+					<p align="left">
+						SVD of a 7190x241 data matrix<br>
+						Selected/optimal rank: 241/97<br>
+						data type: torch.float32 (4b)<br>
+						truncated SVD size: 6.8326Mb
+					</p>
+				</section>
+				<section>
+					<p>5.1 Visualization - singular values</p>
+					<img src="images/dlrk_2021/cylinder_sigma.svg" alt="sigma"
+						style="background:none; border:none; box-shadow:none; width: 80%">
+				</section>
+				<section>
+					<p>5.2  Visualization - POD modes (left singular vectors)</p>
+					<img src="images/dlrk_2021/cylinder_U.svg" alt="sigma"
+						style="background:none; border:none; box-shadow:none; width: 80%">
+				</section>
+				<section>
+					<p>5.3  Visualization - POD mode coefficients</p>
+					<img src="images/dlrk_2021/cylinder_V.svg" alt="sigma"
+						style="background:none; border:none; box-shadow:none; width: 80%">
+				</section>
+			</section>
+
+			<!-- transonic shock buffet -->
+			<section>
+				<section>
+					<h2>Analysis 2 - NACA 0012 transonic shock buffet</h2>
+				</section>
+				<section>
+					<video height="500" controls muted loop>
+						<source src="videos/buffet_10fps.mp4">
+					</video>
+					<p><small>Transonic buffet on a NACA 0012 airfoil at Reynolds number $Re=10^7$, Mach number $Ma=0.75$, and angle of attack $\alpha=4^\circ$.</small></p>
+				</section>
+				<section>
+					<p><b>free</b> buffet test data and setup</p>
+					<ul>
+						<li>experimental data by <a href="https://ntrs.nasa.gov/citations/19850019511">McDevitt & Okuno</a></li>
+						<li>Naca 0012 airfoil, $Ma=0.75$, $Re=10^7$, $\alpha = 4^\circ$</li>
+						<li>OpenFOAM, rhoPimpleFoam, 3D, SA-IDDES</li>
+						<li>$f_{sim} = 28Hz$ (based on $c_L$),<br> $f_{exp} = 31Hz$ (based on $c_p$)</li>
+						<li>github.com/AndreWeiner/naca0012_shock_buffet</li>
+					</ul>
+				</section>
+				<section>
+					<h2>The goal</h2>
+					<h4>identify <span style="color: red;">coherent structures</span> associated with the <span style="color: red;">buffet frequency</span></h4>
+				</section>
+				<section>
+					<h2>The tool</h2>
+					<p><b>Dynamic Mode Decomposition</b> (DMD)<br>typical <b>goals</b> of a DMD analysis include:</p>
+					<ol>
+						<li>spectral analysis</li>
+						<li>stability analysis</li>
+						<li>reduced-order modeling</li>
+					</ol>
+				</section>
+				<section>
+					<p>...<br>4. Perform analysis - dynamic mode decomposition</p>
+					<pre class="python"><code>
+from flowtorch.analysis import DMD
+# snip
+dt = times_num[1] - times_num[0]
+dmd = DMD(data_matrix, dt, rank=200)
+print(dmd)
+					</code></pre>
+					<p align="left">
+SVD of a 13950x149 data matrix<br>
+Selected/optimal rank: 149/51<br>
+...
+LSQ:<br>
+Overall DMD size: 24.0429Mb
+					</p>
+				</section>
+				<section>
+					<p>5.1 Visualization - DMD spectrum</p>
+					<img src="images/dlrk_2021/dmd_spectrum.svg" alt="spectrum"
+						style="background:none; border:none; box-shadow:none; width: 80%">
+				</section>
+				<section>
+					<p>5.2 Visualization - DMD modes</p>
+					<img src="images/dlrk_2021/dmd_modes.svg" alt="modes"
+						style="background:none; border:none; box-shadow:none; width: 90%">
+				</section>
+			</section>
+			</section>
+			<section>
+				<section>
+					<h2>What's next?</h2>
+				</section>
+				<section>
+					<img src="images/dlrk_2021/cnm.gif" alt="cnm"
+					style="background:none; border:none; box-shadow:none; width: 50%">
+					<p><b>D. Fernex, B. R. Noack, R. Semaan:</b><br> <a href="https://advances.sciencemag.org/content/7/25/eabf5006">Cluster-based network modeling - from snapshots to complex dynamical systems</a></p>
+				</section>
+				<section>
+					<img src="images/dlrk_2021/scube_20_cells.png" alt="scube"
+						style="background:none; border:none; box-shadow:none; width: 80%">
+					<p><b>D. Fernex, A.Weiner, B. R. Noack, R. Semaan:</b><br> <a href="https://arc.aiaa.org/doi/abs/10.2514/6.2021-1484">Sparse Spatial Sampling: a mesh sampling algorithm for efficient processing of big simulation data</a></p>
+				</section>
+			</section>
+
+			<!-- end -->
+			<section>
+				<section>
+					<h3>Thank you for your attention!</h3>
+					<img src="images/of_conf_2020/for2895_logo.png" alt="for2895"
+						style="background:none; border:none; box-shadow:none; width: 70%">
+					<p>
+						Interested? <a href="https://github.com/AndreWeiner/flowtorch">github.com/AndreWeiner/flowtorch</a>
+					</p>
+					<p>
+						<span style="color: red;">{a.weiner|r.semaan}</span>@tu-braunschweig.de
+					</p>
+				</section>
+			</section>
+
+		</div>
+
+	</div>
+
+	<script src="js/reveal.js"></script>
+
+	<script>
+
+		// More info https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			center: true,
+			hash: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// More info https://github.com/hakimel/reveal.js#dependencies
+			dependencies: [
+				{ src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/highlight/highlight.js', async: true },
+				{ src: 'plugin/search/search.js', async: true },
+				{ src: 'plugin/zoom-js/zoom.js', async: true },
+				{ src: 'plugin/notes/notes.js', async: true },
+				{ src: 'plugin/math/math.js', async: true }]
+		});
+		Reveal.configure({ slideNumber: true });
+
+	</script>
+
+
+</body>
+
+</html>
