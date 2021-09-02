@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+
+	<title>Make your research efforts last</title>
+
+	<meta name="description" content="ism_seminar_2021>
+	<meta name="author" content="Andre Weiner">
+
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/white.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+
+	<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+</head>
+
+<style>
+	.row_img {
+		display: table;
+	}
+
+	.column_img {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 50%;
+	}
+
+	.column_five {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 20%;
+	}
+
+	.content_img {
+		display: inline-block;
+	}
+
+	.reveal .slide-number {
+		position: absolute;
+		display: block;
+		left: 8px;
+		bottom: 8px;
+		height: 48px;
+		width: 50px;
+		z-index: 31;
+		font-family: Helvetica, sans-serif;
+		font-size: 32px;
+		line-height: 1;
+		color: #000000;
+		background-color: rgba(0, 0, 0, 0);
+		padding: 5px;
+	}
+	.reveal .slides section .fragment.step-fade-in-then-out {
+	opacity: 0;
+	display: none; }
+	.reveal .slides section .fragment.step-fade-in-then-out.current-fragment {
+	opacity: 1;
+	display: inline; }
+</style>
+
+<body>
+
+	<div class="reveal" data-video="small top-right">
+
+		<!-- Any section element inside of this container is displayed as a slide -->
+		<div class="slides">
+			<!-- title slide -->
+			<section>
+				<h3>Make your research efforts last</h3>
+				<p>
+					Andre Weiner<br>
+					<small>TU Braunschweig, <a
+							href="https://www.tu-braunschweig.de/en/ism">ISM</a>, Flow Modeling and Control Group</small>
+				<p><small>
+					<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />These slides and most of the linked resources are licensed under a<br /> <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+				</small></p>
+				</p>
+
+				<style>
+					.row_logo {
+						display: table;
+					}
+
+					.column_logo {
+						display: table-cell;
+						vertical-align: middle;
+						text-align: center;
+						width: 50%;
+					}
+
+					.content_logo {
+						display: inline-block;
+					}
+				</style>
+				<div class="row_logo">
+					<div class="column_logo">
+						<div class="content_logo">
+							<img src="images/tubs_logo.png" alt="tubs_logo"
+								style="background:none; border:none; box-shadow:none;">
+						</div>
+					</div>
+					<div class="column_logo">
+						<div class="content_logo">
+							<table>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9993;</th>
+									<td style="border: 0; padding-right: 20px;"><a
+											href="mailto:a.weiner@tu-bs.de">Mail</a></th>
+									<td style="border: 0; padding-right: 5px;">&#9741;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://www.linkedin.com/in/andre-weiner-a79752133/">LinkedIn</a></td>
+								</tr>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9997;</td>
+									<td style="border: 0; padding-right: 20px;"><a
+											href="https://myheutagogy.com/">Blog</a></td>
+									<td style="border: 0; padding-right: 5px;">&#10026;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://github.com/AndreWeiner">Github</a></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- outline -->
+			<section>
+				<h2>Outline</h2>
+				<ol>
+					<li>Why should you care?</li>
+					<li>Problems and tools</li>
+					<ol>
+						<li>Really, I haven't changed anything ...</li>
+						<li>It only works on the Windows XP PC in the lab ...</li>
+						<li>It must be somewhere on one of the hard drives ...</li>
+						<li>We have done that years ago ...</li>
+					</ol>
+					<li>A practical example</li>
+				</ol>
+			</section>
+
+			<!-- some comments -->
+			<section>
+				<h2>Before we start ...</h2>
+				<ul>
+					<li>only software and data related part of research</li>
+					<li>no in-depth introduction to specific tools</li>
+				</ul>
+			</section>
+
+			<!-- why should you care -->
+			<section>
+				<section>
+					<h2>Why should you care about the <span style="color: red;">documentation</span> and <span style="color: red;">reproducibility</span> of your work?</h2>
+				</section>
+				<section>
+					<h2>sustainability</h2>
+					<p>we have to preserve what we learn</p>
+				</section>
+				<section>
+					<h2>productivity</h2>
+					<p>small initial overhead - great long term benefits</p>
+				</section>
+				<section>
+					<h2>quality</h2>
+					<blockquote cite="https://en.wikipedia.org/wiki/Feynman_Technique">
+						[...] <b>a person explains the concept they're learning [to themselves] in a simple way to find gaps in their knowledge.</b> Feynman technique, <a href="https://en.wikipedia.org/wiki/Feynman_Technique">source</a>
+					</blockquote>
+				</section>
+				<section>
+					<h2>visibility</h2>
+					<p>for your group, your field, and yourself</p>
+				</section>
+				<section>
+					<h2>Legal requirements</h2>
+					<p>research proposals expect a management plan</p>
+				</section>
+				<section>
+					<h2>Moral aspects</h2>
+					<p>public money - public data/code/results</p>
+				</section>
+				<section>
+					<h2>Helping others makes you happy!</h2>
+					<blockquote>
+						<b>If you want happiness for an hour, take a nap.
+							If you want happiness for a day, go fishing.
+							If you want happiness for a year, inherit a fortune.
+							If you want happiness for a lifetime, help somebody.</b> - 
+							chinese saying, <a href="https://time.com/collection/guide-to-happiness/4070299/secret-to-happiness/">source</a>
+					</blockquote>
+				</section>
+			</section>
+
+			<!-- problems and tools -->
+			<section>
+				<section>
+					<h2>Problems and tools</h2>
+				</section>
+				<section>
+					<blockquote>
+						<b>Really, I haven't changed anything ...</b><br>me trying to justify why the simulation results look different now
+					</blockquote>
+				</section>
+				<section>
+					<p>What is the topic of this section?</p>
+					<ol>
+						<li style="list-style-type: upper-latin;">isolating dependencies</li>
+						<li style="list-style-type: upper-latin;">publishing research</li>
+						<li style="list-style-type: upper-latin;">version control</li>
+						<li style="list-style-type: upper-latin;">archiving data</li>
+					</ol>
+				</section>
+				<section>
+					<h2>Version control - keeping track of changes</h2>
+				</section>
+				<section>
+					<blockquote>
+						Git is a software for tracking changes in any set of files [...] - <a href="https://en.wikipedia.org/wiki/Git">source</a>
+					</blockquote>
+				</section>
+				<section>
+					<p>What files should be version-controlled with Git?</p>
+					<ol>
+						<li style="list-style-type: upper-latin;">any kind of file</li>
+						<li style="list-style-type: upper-latin;">only source code</li>
+						<li style="list-style-type: upper-latin;">any human-readable file</li>
+						<li style="list-style-type: upper-latin;">mostly binaries</li>
+					</ol>
+				</section>
+				<section>
+					<p>main Git commands</p>
+					<ul>
+						<li><b>git init</b> - create new repo</li>
+						<li><b>git add</b> - stage changes</li>
+						<li><b>git commit</b> - finalize changes</li>
+						<li><b>git reset --hard</b>  - undo all changes</li>
+						<li><b>git checkout -b try_crazy_idea</b> - branching</li>
+						<li><b>git diff</b> - compare two commits</li>
+					</ul>
+				</section>
+				<section>
+					<p>Github/Bitbucket/Gitlab for collaboration</p>
+					<img src="images/ism_research/git_diff.png" alt="blog"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+				</section>
+				<section>
+					<blockquote>
+						<b>It only works on the Windows XP PC in the lab ...</b><br>admin explaining why we have to use a 15 years old version of software XYZ
+					</blockquote>
+				</section>
+				<section>
+					<p>What is the topic of this section?</p>
+					<ol>
+						<li style="list-style-type: upper-latin;">isolating dependencies</li>
+						<li style="list-style-type: upper-latin;">publishing research</li>
+						<li style="list-style-type: upper-latin;">version control</li>
+						<li style="list-style-type: upper-latin;">archiving data</li>
+					</ol>
+				</section>
+				<section>
+					<h2>isolating dependencies</h2>
+				</section>
+				<section>
+					<p>What actually happens when you run a program?</p>
+					<ol>
+						<li>binary gets loaded into RAM</li>
+						<li>instructions get executed</li>
+						<li>other binaries get loaded into RAM - <b>shared object libraries</b> (.so files on Linux) or <b>dynamically linked libraries</b> (.dll files on Windows)</li>
+					</ol>
+				</section>
+				<section>
+					<p>Potential problems</p>
+					<ul>
+						<li>binary changes</li>
+						<li>libraries change (name, location, version)</li>
+						<li>dependency conflicts</li>
+						<li>discontinued support for programs/libraries</li>
+					</ul>
+				</section>
+				<section>
+					<p>If you open <b>gedit</b>, how many .so files are involved?</p>
+					<ol>
+						<li style="list-style-type: upper-latin;">0</li>
+						<li style="list-style-type: upper-latin;">10</li>
+						<li style="list-style-type: upper-latin;">40</li>
+						<li style="list-style-type: upper-latin;">80</li>
+					</ol>
+				</section>
+				<section>
+					<pre data-id="code-animation"><code class="shell">
+ldd $(which gedit)
+...
+libgedit-3.36.so => /usr/lib/x86_64-linux-gnu/gedit/libgedit-3.36.so (0x00007f5bbb47f000)
+libgobject-2.0.so.0 => /lib/x86_64-linux-gnu/libgobject-2.0.so.0 (0x00007f5bbb3ec000)
+libgio-2.0.so.0 => /lib/x86_64-linux-gnu/libgio-2.0.so.0 (0x00007f5bbb20b000)
+libtepl-4.so.0 => /lib/x86_64-linux-gnu/libtepl-4.so.0 (0x00007f5bbb1d1000)
+libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f5bbafdf000)
+libglib-2.0.so.0 => /lib/x86_64-linux-gnu/libglib-2.0.so.0 (0x00007f5bbaeb4000)
+libgtk-3.so.0 => /lib/x86_64-linux-gnu/libgtk-3.so.0 (0x00007f5bba703000)
+libgdk-3.so.0 => /lib/x86_64-linux-gnu/libgdk-3.so.0 (0x00007f5bba5fe000)
+...
+				</code></pre>
+				</section>
+				<section>
+					<p>Solution: software containers - <a href="https://www.docker.com/">Docker</a> and <a href="https://sylabs.io/guides/3.0/user-guide/quick_start.html">Singularity</a></p>
+					<pre data-id="code-animation"><code class="shell" data-trim data-line-numbers="|1|2-9|9-15">
+FROM ubuntu:20.04
+# avoid time zone configuration by tzdata
+ARG DEBIAN_FRONTEND=noninteractive
+# install basic utilities
+RUN apt-get update && apt-get install --no-install-recommends -y \
+    cmake           \
+    g++             \
+    make            \
+    ...
+# add openfoam-plus repository
+RUN wget -q -O - https://dl.openfoam.com/add-debian-repo.sh | bash
+# install OpenFOAM via Debian package
+ARG FOAM_PATH=/usr/lib/openfoam/openfoam2106
+RUN apt-get update && apt-get install --no-install-recommends -y \
+	openfoam2106-default
+					</code></pre>
+					<p>Example: OpenFOAM Dockerfile.</p>
+				</section>
+				<section>
+					<p>Working with containers</p>
+					<pre data-id="code-animation"><code class="shell" data-trim data-line-numbers="|1-2|3-4|5-6|7-8">
+# build Docker container
+docker build -t of2106 -f Dockerfile .
+# build Singularity container from Docker image
+sudo singularity build of2106.sif docker://of2106
+# start interactive shell
+singularity shell of2106
+# now from inside the container
+simpleFoam -help
+					</code></pre>
+				</section>
+				<section>
+					<p>miscellaneous details</p>
+					<ul>
+						<li>containers are no virtual machines</li>
+						<li>practically no computational overhead</li>
+						<li>for HPC: use Singularity</li>
+						<li>no dependency conflicts</li>
+						<li>sharing containers is easy</li>
+						<li>images for Matlab & co available</li>
+					</ul>
+				</section>
+				<section>
+					<blockquote>
+						<b>It must be somewhere on one of the hard drives ...</b><br>your supervisor when asked for the data of former students
+					</blockquote>
+				</section>
+				<section>
+					<p>What is the topic of this section?</p>
+					<ol>
+						<li style="list-style-type: upper-latin;">isolating dependencies</li>
+						<li style="list-style-type: upper-latin;">publishing research</li>
+						<li style="list-style-type: upper-latin;">version control</li>
+						<li style="list-style-type: upper-latin;">archiving data</li>
+					</ol>
+				</section>
+				<section>
+					<h2>Archiving data</h2>
+				</section>
+				<section>
+					<p>If possible, archive important data online because ...</p>
+					<ul>
+						<li>it is easier to share</li>
+						<li>it is usually backed up</li>
+						<li>you are forced to think carefully which data to archive</li>
+						<li>(usually) you are forced to describe the data</li>
+					</ul>
+				</section>
+				<section>
+					<p>blob store - before the data is final</p>
+					<ul>
+						<li>think Dropbox, Google Drive</li>
+						<li>~100GB - TUBS Powerfolder</li>
+						<li>~20GB - <a href="https://www.eudat.eu/services/b2drop">B2DROP</a></li>
+					</ul>
+				</section>
+				<section>
+					<p>long term storage - once the data is final</p>
+					<ul>
+						<li>datasets get a DOI (unique identifier)</li>
+						<li><a href="https://b2share.eudat.eu/">B2SHARE</a> ~20GB per record</li>
+						<li>TUBS library ???</li>
+					</ul>
+				</section>
+				<section>
+					<blockquote>
+						<b>We have done that years ago ...</b><br>senior researcher at project meeting
+					</blockquote>
+				</section>
+				<section>
+					<p>Where are data/code/results/documents? Why have I never heard about it?</p>
+					<ol>
+						<li style="list-style-type: upper-latin;">ahh</li>
+						<li style="list-style-type: upper-latin;">ughh</li>
+						<li style="list-style-type: upper-latin;">mhhm</li>
+						<li style="list-style-type: upper-latin;">uff</li>
+					</ol>
+				</section>
+				<section>
+					<h2>Publishing research</h2>
+				</section>
+				<section>
+					<h2>research articles</h2>
+					<p>are the currency of academia but ...</p>
+					<p>... usefulness - time investment - ratio<br> is vanishingly small</p>
+					<p>$\rightarrow$ it should be only the final step</p>
+				</section>
+				<section>
+					<p>Blog posts</p>
+					<img src="images/ism_research/blog_post.png" alt="blog"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+				</section>
+				<section>
+					<p>Jupyter labs</p>
+					<img src="images/dlrk_2021/jupyter.png" alt="jupyter"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+				</section>
+				<section>
+					<p>Github/Bitbucket/Gitlab repositories</p>
+					<img src="images/ism_research/github_readme.png" alt="github"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+				</section>
+			</section>
+
+			<!-- example -->
+			<section>
+				<section>
+					<h2>A practical example</h2>
+				</section>
+				<section>
+					<p><a href="https://www.overleaf.com/">Overleaf</a> = Git+Docker+online storage for collaborative writing of Latex documents</p>
+				</section>
+				<section data-background-iframe="https://github.com/AndreWeiner/sgs_model_test_transient" data-background-interactive>
+				</section>
+			</section>
+
+
+			<!-- useful links -->
+			<section>
+				<h2>Where to go from here?</h2>
+				<ul>
+					<li><a href="https://www.udacity.com/course/version-control-with-git--ud123">free course on version control with Git</a></li>
+					<li><a href="https://ml-cfd.com/2020/12/20/of-docker-intro/">OpenFOAM Docker workflow</a></li>
+					<li><a href="https://github.com/AndreWeiner/sgs_model_test_transient">example research project</a></li>
+					<li><a href="https://eudat.eu/">EUDAT data infrastructure</a></li>
+					<li><a href="https://www.overleaf.com">collaborative writing - Overleaf</a></li>
+				</ul>
+			</section>
+
+			<!-- end -->
+			<section>
+				<section>
+					<h1>THE END</h1>
+					<h3>Thank you for you attention!</h3>
+					<div class="row_img">
+						<div class="column_img">
+							<div class="content_logo">
+								<table>
+									<tr>
+										<td style="border: 0; padding-right: 5px;">&#9993;</th>
+										<td style="border: 0; padding-right: 20px;"><a
+												href="mailto:a.weiner@tu-bs.de">Mail</a></th>
+										<td style="border: 0; padding-right: 5px;">&#9741;</td>
+										<td style="border: 0; padding-right: 0px;"><a
+												href="https://www.linkedin.com/in/andre-weiner-a79752133/">LinkedIn</a></td>
+										<td style="border: 0; padding-right: 5px;">&#9997;</td>
+										<td style="border: 0; padding-right: 20px;"><a
+												href="https://myheutagogy.com/">Blog</a></td>
+										<td style="border: 0; padding-right: 5px;">&#10026;</td>
+										<td style="border: 0; padding-right: 0px;"><a
+												href="https://github.com/AndreWeiner">Github</a></td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+				</section>
+			</section>
+
+		</div>
+
+	</div>
+
+	<script src="js/reveal.js"></script>
+
+	<script>
+
+		// More info https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			center: true,
+			hash: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// More info https://github.com/hakimel/reveal.js#dependencies
+			dependencies: [
+				{ src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/highlight/highlight.js', async: true },
+				{ src: 'plugin/search/search.js', async: true },
+				{ src: 'plugin/zoom-js/zoom.js', async: true },
+				{ src: 'plugin/notes/notes.js', async: true },
+				{ src: 'plugin/math/math.js', async: true }]
+		});
+		Reveal.configure({ slideNumber: true });
+
+	</script>
+
+
+</body>
+
+</html>
