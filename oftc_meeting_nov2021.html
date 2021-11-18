@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+
+	<title>OpenFOAM joint technical committee meeting</title>
+
+	<meta name="description" content="ism_seminar_2021>
+	<meta name=" author" content="Andre Weiner">
+
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/white.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+
+	<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+</head>
+
+<style>
+	.row_img {
+		display: table;
+	}
+
+	.column_img {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 50%;
+	}
+
+	.column_five {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 20%;
+	}
+
+	.content_img {
+		display: inline-block;
+	}
+
+	.reveal .slide-number {
+		position: absolute;
+		display: block;
+		left: 8px;
+		bottom: 8px;
+		height: 48px;
+		width: 50px;
+		z-index: 31;
+		font-family: Helvetica, sans-serif;
+		font-size: 32px;
+		line-height: 1;
+		color: #000000;
+		background-color: rgba(0, 0, 0, 0);
+		padding: 5px;
+	}
+
+	.reveal .slides section .fragment.step-fade-in-then-out {
+		opacity: 0;
+		display: none;
+	}
+
+	.reveal .slides section .fragment.step-fade-in-then-out.current-fragment {
+		opacity: 1;
+		display: inline;
+	}
+</style>
+
+<body>
+
+	<div class="reveal" data-video="small top-right">
+
+		<!-- Any section element inside of this container is displayed as a slide -->
+		<div class="slides">
+			<!-- title slide -->
+			<section>
+				<h3>OpenFOAM joint technical committee meeting</h3>
+				<p>
+					Andre Weiner<br>
+					<small>TU Braunschweig, <a href="https://www.tu-braunschweig.de/en/ism">ISM</a>, Flow Modeling and
+						Control Group</small>
+				<p>SIG Data-driven modeling</p>
+				</p>
+
+				<style>
+					.row_logo {
+						display: table;
+					}
+
+					.column_logo {
+						display: table-cell;
+						vertical-align: middle;
+						text-align: center;
+						width: 50%;
+					}
+
+					.content_logo {
+						display: inline-block;
+					}
+				</style>
+				<div class="row_logo">
+					<div class="column_logo">
+						<div class="content_logo">
+							<img src="images/tubs_logo.png" alt="tubs_logo"
+								style="background:none; border:none; box-shadow:none;">
+						</div>
+					</div>
+					<div class="column_logo">
+						<div class="content_logo">
+							<table>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9993;</th>
+									<td style="border: 0; padding-right: 20px;"><a
+											href="mailto:a.weiner@tu-bs.de">Mail</a></th>
+									<td style="border: 0; padding-right: 5px;">&#9741;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://www.linkedin.com/in/andre-weiner-a79752133/">LinkedIn</a></td>
+								</tr>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9997;</td>
+									<td style="border: 0; padding-right: 20px;"><a
+											href="https://ml-cfd.com/">Blog</a></td>
+									<td style="border: 0; padding-right: 5px;">&#10026;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://github.com/AndreWeiner">Github</a></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<h3>Data-driven?</h3>
+				<ul>
+					<li>combining ML and CFD</li>
+					<li>data analysis as guidance</li>
+					<li>see <a
+							href="https://www.tu-braunschweig.de/en/ism/teaching/courses/fluid-mechanics/translate-to-english-maschinelles-lernen-in-der-numerischen-stroemungsmechanik">lecture
+							overview</a></li>
+				</ul>
+			</section>
+
+			<!-- Goals -->
+			<section>
+				<section>
+					<h3>Short term goals</h3>
+					<ul>
+						<li>lower technical barrier to get started with data-driven modeling with OF</li>
+						<li>promote data-driven modeling available in OF (e.g., dynamic mode decomposition)</li>
+					</ul>
+					<p>More details available in the <a href="https://github.com/AndreWeiner/mlfoam">write-up</a>.</p>
+				</section>
+				<section>
+					<h3>Long term goals</h3>
+					<ul>
+						<li>when/how to combine ML and CFD?</li>
+						<li>accelerate developments (best practices)</li>
+						<li>ML as natural element of CFD workflow</li>
+					</ul>
+					<p>More details available in the <a href="https://github.com/AndreWeiner/mlfoam">write-up</a>.</p>
+				</section>
+			</section>
+
+			<!-- Roadmap -->
+			<section>
+				<h3>Roadmap (excerpt)</h3>
+				<ul>
+					<li>automated integration of libTorch in OF</li>
+					<li>OF-Python interface</li>
+					<li>tutorials and <a href="https://github.com/AndreWeiner/ml-cfd-lecture">lecture material</a></li>
+					<li>ML+OF hackathon</li>
+				</ul>
+				<p>More details available in the <a href="https://github.com/AndreWeiner/mlfoam">write-up</a>.</p>
+			</section>
+
+			<!-- Members -->
+			<section>
+				<h3>Current members, alphabetical</h3>
+				<ul>
+					<li>Andre Weiner, TU Braunschweig, <b>chair</b></li>
+					<li>Dirk Gründing, TU Darmstadt</li>
+					<li>Holger Marschall, TU Darmstadt</li>
+					<li>Karthik Kashinath, Nvidia</li>
+					<li>Neil Ashton, AWS</li>
+					<li>Tomislav Marić, TU Darmstadt, <b>co-chair</b></li>
+				</ul>
+			</section>
+
+			<section>
+				<h3>Next up</h3>
+				<ul>
+					<li>set up infrastructure, central point of contact</li>
+					<li>organize first meeting</li>
+					<li>complete lecture material</li>
+					<li>organize with other TCs and SIGs</li>
+					<li>plan hackathon (summer 2022)</li>
+				</ul>
+			</section>
+
+		</div>
+
+	</div>
+
+	<script src="js/reveal.js"></script>
+
+	<script>
+
+		// More info https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			center: true,
+			hash: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// More info https://github.com/hakimel/reveal.js#dependencies
+			dependencies: [
+				{ src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/highlight/highlight.js', async: true },
+				{ src: 'plugin/search/search.js', async: true },
+				{ src: 'plugin/zoom-js/zoom.js', async: true },
+				{ src: 'plugin/notes/notes.js', async: true },
+				{ src: 'plugin/math/math.js', async: true }]
+		});
+		Reveal.configure({ slideNumber: true });
+
+	</script>
+
+
+</body>
+
+</html>
