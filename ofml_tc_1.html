@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+
+	<title>OpenFOAM TC data-driven modeling</title>
+
+	<meta name="description" content="ism_seminar_2021>
+	<meta name=" author" content="Andre Weiner">
+
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/white.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+
+	<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+</head>
+
+<style>
+	.row_img {
+		display: table;
+	}
+
+	.column_img {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 50%;
+	}
+
+	.column_five {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 20%;
+	}
+
+	.content_img {
+		display: inline-block;
+	}
+
+	.reveal .slide-number {
+		position: absolute;
+		display: block;
+		left: 8px;
+		bottom: 8px;
+		height: 48px;
+		width: 50px;
+		z-index: 31;
+		font-family: Helvetica, sans-serif;
+		font-size: 32px;
+		line-height: 1;
+		color: #000000;
+		background-color: rgba(0, 0, 0, 0);
+		padding: 5px;
+	}
+
+	.reveal .slides section .fragment.step-fade-in-then-out {
+		opacity: 0;
+		display: none;
+	}
+
+	.reveal .slides section .fragment.step-fade-in-then-out.current-fragment {
+		opacity: 1;
+		display: inline;
+	}
+</style>
+
+<body>
+
+	<div class="reveal" data-video="small top-right">
+
+		<!-- Any section element inside of this container is displayed as a slide -->
+		<div class="slides">
+			<!-- title slide -->
+			<section>
+				<h3>Data-driven modeling</h3>
+				<p>OpenFOAM technical committee</p>
+				<p><b>1st</b> meeting</p>
+			</section>
+
+			<!-- agenda-->
+			<section>
+				<p>Plan for today</p>
+				<ul>
+					<li>introduction</li>
+					<li>committee overview</li>
+					<li>ongoing/upcoming activities
+						<ul>
+							<li>Github repository</li>
+							<li>OpenFOAM workshop</li>
+							<li>OpenFOAM+ML hackathon</li>
+						</ul>
+					</li>
+				</ul>
+			</section>
+
+			<!-- introduction -->
+			<section>
+				<h3>Hi, my name is ...</h3>
+				<ul>
+					<li>affiliation</li>
+					<li>experience with OpenFOAM</li>
+					<li>experience with ML (and OF/CFD)</li>
+					<li>...</li>
+				</ul>
+				<p>We have scheduled only 1h for the meeting :)</p>
+			</section>
+
+			<!-- committee overview -->
+			<section>
+				<section>
+					<h3>Committee overview</h3>
+				</section>
+				<section>
+					<h3>Current members, alphabetical</h3>
+					<ul>
+						<li>Andre Weiner, TU Braunschweig, <b>chair</b></li>
+						<li>Dirk Gründing, Carl Zeiss</li>
+						<li>Holger Marschall, TU Darmstadt</li>
+						<li>Karthik Kashinath, Nvidia</li>
+						<li>Neil Ashton, AWS</li>
+						<li>Tomislav Marić, TU Darmstadt, <b>co-chair</b></li>
+					</ul>
+				</section>
+				<section>
+					<p>Want to get involved?</p>
+					<ul>
+						<li>a.weiner@tu-braunschweig.de</li>
+						<li>maric@mma.tu-darmstadt.de</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Short term goals</h3>
+					<ul>
+						<li>lower technical barrier to get started with data-driven modeling and OF</li>
+						<li>promote data-driven modeling available in OF (e.g., dynamic mode decomposition)</li>
+					</ul>
+					<p>More details available in the <a href="https://github.com/AndreWeiner/mlfoam">write-up</a>.</p>
+				</section>
+				<section>
+					<h3>Long term goals</h3>
+					<ul>
+						<li>when/how to combine ML and CFD?</li>
+						<li>accelerate developments (best practices)</li>
+						<li>ML as natural element of CFD workflow</li>
+					</ul>
+					<p>More details available in the <a href="https://github.com/AndreWeiner/mlfoam">write-up</a>.</p>
+				</section>
+				<section>
+					<h3>Roadmap (excerpt)</h3>
+					<ul>
+						<li>automated integration of libTorch in OF</li>
+						<li>OF-Python interface</li>
+						<li>tutorials and <a href="https://github.com/AndreWeiner/ml-cfd-lecture">lecture material</a></li>
+						<li>ML+OF hackathon</li>
+					</ul>
+					<p>More details available in the <a href="https://github.com/AndreWeiner/mlfoam">write-up</a>.</p>
+				</section>
+			</section>
+
+			<section>
+				<section>
+					<h3>ongoing/upcoming activities</h3>
+				</section>
+				<section>
+					<h3>Github repository</h3>
+					<p><a href="https://github.com/AndreWeiner/mlfoam">https://github.com/AndreWeiner/mlfoam</a></p>
+					<ul>
+						<li>point of contact</li>
+						<li>committee overview</li>
+						<li>aggregation of links</li>
+					</ul>
+					<p>For access to the repo, send your Github username to Tomsilav or Andre (only committee members).</p>
+				</section>
+				<section>
+					<h3>OpenFOAM workshop</h3>
+					<ul>
+						<li><a href="https://openfoamworkshop.org/">https://openfoamworkshop.org/</a></li>
+						<li>11 to 14 July 2022, Cambridge</li>
+						<li>submission deadline 14 Feb 2022</li>
+						<li>abstract training ~1 page</li>
+						<li>hands-on experience with technology/research</li>
+						<li>~90min</li>
+					</ul>
+				</section>
+				<section>
+					<ul>
+						<li>dynamic mode decomposition</li>
+						<li>physics-based DL with OpenFOAM</li>
+						<li>?</li>
+					</ul>
+					<p>Any planned contributions on data-driven methods and OpenFOAM?</p>
+				</section>
+				<section>
+					<h3>OF-ML-Hackathon</h3>
+					<p>Hackathon: intensive get-together for creative problem solving (hacking) in groups.</p>
+				</section>
+				<section>
+					<p>Elements of a hackathon:</p>
+					<ol>
+						<li>central objective/problem/theme</li>
+						<li>limited time, less than 3 days</li>
+						<li>team work, 2-5 people</li>
+						<li>parallel workshops, mentor support</li>
+						<li>final project presentation</li>
+						<li>evaluation by jury</li>
+						<li>prices for winner(s)</li>
+					</ol>
+				</section>
+				<section>
+					<p>Why this format?</p>
+					<ul>
+						<li>kick-off (research) projects</li>
+						<li>initiate collaborations</li>
+						<li>get hands-on experience</li>
+						<li>bring together divers backgrounds</li>
+						<li>create demonstrators for community</li>
+						<li>...</li>
+					</ul>
+				</section>
+				<section>
+					<p>Some ideas:</p>
+					<ul>
+						<li>2-3 days, July, after workshop</li>
+						<li>online, <a href="https://www.gather.town/">Gather</a></li>
+						<li>workshops, mentorship by TC</li>
+						<li>renowned community members for jury</li>
+					</ul>
+					<p>Formulating a good objective is hard ...</p>
+				</section>
+				<section>
+					<p>Maybe too <span style="color: red;">fuzzy</span>:</p>
+					<p>"Combine ML and OpenFOAM"</p>
+					<p>Maybe too <span style="color: red;">specialized</span>:</p>
+					<p>"Implement a data-driven turbulence model"</p>
+					<p>Maybe too <span style="color: red;">individual</span>:</p>
+					<p>"Bring your research project and enhance it with ML"</p>
+				</section>
+			</section>
+
+			<section>
+				<h3>Closing words</h3>
+				<ul>
+					<li>next meeting: April, Doodle follows</li>
+					<li>protocol will be passed around</li>
+					<li>get people involved!</li>
+				</ul>
+			</section>
+
+		</div>
+
+	</div>
+
+	<script src="js/reveal.js"></script>
+
+	<script>
+
+		// More info https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			center: true,
+			hash: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// More info https://github.com/hakimel/reveal.js#dependencies
+			dependencies: [
+				{ src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/highlight/highlight.js', async: true },
+				{ src: 'plugin/search/search.js', async: true },
+				{ src: 'plugin/zoom-js/zoom.js', async: true },
+				{ src: 'plugin/notes/notes.js', async: true },
+				{ src: 'plugin/math/math.js', async: true }]
+		});
+		Reveal.configure({ slideNumber: true });
+
+	</script>
+
+
+</body>
+
+</html>
