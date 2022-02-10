@@ -1,0 +1,794 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+
+	<title>Active control of the flow past a cylinder using deep reinforcement learning</title>
+
+	<meta name="description" content="openfoam_conference_2021">
+	<meta name="author" content="Andre Weiner">
+
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/white.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+
+	<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+</head>
+
+<style>
+	.row_img {
+		display: table;
+	}
+
+	.column_img {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 50%;
+	}
+
+	.column_five {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 20%;
+	}
+
+	.content_img {
+		display: inline-block;
+	}
+
+	.reveal .slide-number {
+		position: absolute;
+		display: block;
+		left: 8px;
+		bottom: 8px;
+		height: 48px;
+		width: 50px;
+		z-index: 31;
+		font-family: Helvetica, sans-serif;
+		font-size: 32px;
+		line-height: 1;
+		color: #000000;
+		background-color: rgba(0, 0, 0, 0);
+		padding: 5px;
+	}
+</style>
+
+<body>
+
+	<div class="reveal" data-video="small top-right">
+
+		<!-- Any section element inside of this container is displayed as a slide -->
+		<div class="slides">
+			<!-- title slide -->
+			<section data-video="small top-right">
+				<h3>Machine learning in computational fluid dynamics - an overview</h3>
+				<p>
+					<small><u>Andre Weiner,</u> Fabian Gabriel, Darshan Thummar, Richard Semaan</small><br>
+					<small>TU Braunschweig, <a href="https://www.tu-braunschweig.de/en/ism">Institute of Fluid
+							Mechanics</a></small>
+					<style>
+						.row_logo {
+							display: table;
+						}
+
+						.column_logo {
+							display: table-cell;
+							vertical-align: middle;
+							text-align: center;
+							width: 50%;
+						}
+
+						.content_logo {
+							display: inline-block;
+						}
+					</style>
+				<div class="row_logo">
+					<div class="column_logo">
+						<div class="content_logo">
+							<img src="images/tubs_logo.png" alt="tubs_logo"
+								style="background:none; border:none; box-shadow:none;">
+						</div>
+					</div>
+					<div class="column_logo">
+						<div class="content_logo">
+							<table>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9993;</th>
+									<td style="border: 0; padding-right: 20px;"><a
+											href="mailto:a.weiner@tu-bs.de">Mail</a></th>
+									<td style="border: 0; padding-right: 5px;">&#9741;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://www.linkedin.com/in/andre-weiner-a79752133/">LinkedIn</a></td>
+								</tr>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9997;</td>
+									<td style="border: 0; padding-right: 20px;"><a href="https://ml-cfd.com/">Blog</a>
+									</td>
+									<td style="border: 0; padding-right: 5px;">&#10026;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://github.com/AndreWeiner">Github</a></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- outline -->
+			<section>
+				<h2>Outline</h2>
+				<ol>
+					<li>Combining ML and CFD</li>
+					<li>Examples
+						<ul>
+							<li>Accelerating simulations</li>
+							<li>Finding coherent structures</li>
+							<li>Learning control laws</li>
+						</ul>
+					</li>
+					<li>Topics (not) covered in this talk</li>
+				</ol>
+			</section>
+
+			<!-- ml-cfd overview -->
+			<section>
+				<section>
+					<h2>Combining ML and CFD <br><span style="color:red;">why</span> and <span style="color: red;">how</span></h2>
+				</section>
+				<section>
+					<h3>Why combine CFD and ML?</h3>
+					<p>CFD</p>
+					<ul>
+						<li>produces large amounts of complex data</li>
+						<li>requires data or representations thereof</li>
+					</ul>
+					<p>ML</p>
+					<ul>
+						<li>finds patterns in data</li>
+						<li>creates useful representations of data</li>
+					</ul>
+				</section>
+				<section>
+					<h3>What is data?</h3>
+					<div style="position:relative; width:800px; height: 350px; margin:0 auto;">
+						<img src="images/of_conf_2020/mag_vel_snapshot_crop.png" alt="cylinder_vel"
+							style="background:none; border:none; box-shadow:none; width: 800px; position: absolute; top: 0; left: 0">
+						<img src="images/of_conf_2020/cylinder_drag_over_time.svg" alt="cylinder_drag"
+							style="background:none; border:none; box-shadow:none; width: 800px; position: absolute; top: 0; left: 0"
+							class="fragment">
+					</div>
+					<p><small>primary data: scalar/vector fields, boundary fields, integral values</small></p>
+				</section>
+				<section>
+					<div style="position:relative; width:800px; height: 400px; margin:0 auto;">
+						<pre class="raw"><code data-trim data-line-numbers="1-20">
+# log.rhoPimpleFoam
+Courant Number mean: 0.020065182 max: 0.77497916
+deltaT = 6.4813615e-07
+Time = 1.22219e-06
+
+PIMPLE: iteration 1
+diagonal:  Solving for rho, Initial residual = 0, Final residual = 0, No Iterations 0
+DILUPBiCGStab:  Solving for Ux, Initial residual = 0.0034181127, Final residual = 6.0056507e-05, No Iterations 1
+DILUPBiCGStab:  Solving for Uy, Initial residual = 0.0052004883, Final residual = 0.00012352706, No Iterations 1
+DILUPBiCGStab:  Solving for e, Initial residual = 0.06200185, Final residual = 0.0014223046, No Iterations 1
+limitTemperature limitT Lower limited 0 (0%) of cells
+limitTemperature limitT Upper limited 0 (0%) of cells
+limitTemperature limitT Unlimited Tmax 329.54945
+Unlimited Tmin 280.90821
+					</code>
+					<code class="fragment fade-in" data-trim data-line-numbers="5-20">
+						Checking geometry...
+						...
+						Mesh has 2 solution (non-empty) directions (1 1 0)
+						All edges aligned with or perpendicular to non-empty directions.
+						Boundary openness (1.4469362e-19 3.3639901e-21 -2.058499e-13) OK.
+						Max cell openness = 2.4668495e-16 OK.
+						Max aspect ratio = 3.0216602 OK.
+						Minimum face area = 7.0705331e-08. Maximum face area = 0.00033983685.  Face area magnitudes OK.
+						Min volume = 1.2975842e-10. Max volume = 6.2366859e-07.  Total volume = 0.0017254212.  Cell volumes OK.
+						Mesh non-orthogonality Max: 60.489216 average: 4.0292071
+						Non-orthogonality check OK.
+						Face pyramids OK.
+						Max skewness = 1.1453509 OK.
+						Coupled point location match (average 0) OK.
+						</code>
+				</pre>
+					</div>
+					<p><small>secondary data: log files, input dictionaries, mesh quality metrics, ...</small></p>
+				</section>
+				<section>
+					<h3>Examples for data-driven workflows</h3>
+					<img src="images/of_conf_2020/data_workflows_2.svg" alt="workflow_2"
+						style="background:none; border:none; box-shadow:none; width: 800px">
+					<p>Example: creating a <b>surrogate</b> or <b>reduced-order</b> model based on numerical
+							data.</p>
+				</section>
+				<section>
+					<img src="images/of_conf_2020/data_workflows_1.svg" alt="workflow_1"
+						style="background:none; border:none; box-shadow:none; width: 800px">
+					<p>Example: creating a space and time dependent <b>boundary</b> condition based on numerical
+							or experimental data.</p>
+				</section>
+				<section>
+					<img src="images/of_conf_2020/data_workflows_3.svg" alt="workflow_3"
+						style="background:none; border:none; box-shadow:none; width: 800px">
+					<p>Example: creating <b>closure models</b> based on numerical data.</p>
+				</section>
+				<section>
+					<img src="images/of_conf_2020/data_workflows_4.svg" alt="workflow_4"
+						style="background:none; border:none; box-shadow:none; width: 500px">
+					<p>Example: <b>active flow control</b> or <b>shape optimization</b>.</p>
+				</section>
+				<section>
+					<h3>But how exactly does it work?</h3>
+				</section>
+				<section>
+					<h3>ML is not a generic problem solver ...</h3>
+				</section>
+				<section>
+					<h3>Supervised learning</h3>
+					<img src="images/regression_classification_web.svg" alt="supervised_learning"
+						style="background:none; border:none; box-shadow:none; width: 800px">
+					<p>Creating a mapping from <b>features</b> to <b>labels</b> based on examples.</p>
+				</section>
+				<section>
+					<h3>Unsupervised learning</h3>
+					<div style="position:relative; width:800px; height: 350px; margin:0 auto;">
+						<img src="images/of_conf_2020/unsupervised_1.svg" alt="unsupervised_1"
+							style="background:none; border:none; box-shadow:none; width: 800px; position: absolute; top: 0; left: 0">
+						<img src="images/of_conf_2020/unsupervised_2.svg" alt="unsupervised_2"
+							style="background:none; border:none; box-shadow:none; width: 800px; position: absolute; top: 0; left: 0"
+							class="fragment">
+						<img src="images/of_conf_2020/unsupervised_3.svg" alt="unsupervised_3"
+							style="background:none; border:none; box-shadow:none; width: 800px; position: absolute; top: 0; left: 0"
+							class="fragment">
+					</div>
+					<p>Finding patterns in <b>unlabeled</b> data.</p>
+				</section>
+				<section>
+					<h3>(Deep) Reinforcement learning</h3>
+					<img src="images/reinforcement_web.svg" alt="rl_overview"
+									style="background:none; border:none; box-shadow:none; width: 600px">
+					<p>Create an intelligent agent that learns to map <b>states</b> to <b>actions</b> such that cumulative rewards are maximized.</p>
+				</section>
+				<section>
+					<h3>What if my problem does not fit into these categories?</h3>
+					<p>$\rightarrow$ mathematical, physical, numerical modeling</p>
+				</section>
+			</section>
+
+			<!-- example 1 -->
+			<section>
+				<section>
+					<h2>Accelerating simulations</h2>
+					<p>
+						A single-phase simulation approach to compute the mass transfer at rising bubbles
+					</p>
+					<p>
+						<a href="https://github.com/AndreWeiner/sgs_model_test_transient">https://github.com/AndreWeiner/sgs_model_test_transient</a>
+					</p>
+				</section>
+				<section>
+					<h3>Gas-liquid reactors</h3>
+					<div class=row_img>
+						<div class=column_img style="width:20%">
+							<div class=content_img>
+								<img src="videos/taylor_bubble_copper.gif" alt="taylor_bubble" height="400" style="background:none; border:none; box-shadow:none;">
+								<p>
+									<small>
+											<b>micro reactor</b><br>
+											size: millimeter<br>
+											source: <a href="http://www.dfg-spp1740.de/">SPP 1740</a>
+									</small>
+								</p>
+							</div>
+						</div>
+						<div class=column_img style="width:35%">
+							<p>
+								<b>prediction</b> of
+							</p>
+								<ul>
+									<li>mass transfer</li>
+									<li>enhancement</li>
+									<li>mixing</li>
+									<li>conversion</li>
+									<li>selectivity</li>
+									<li>yield</li>
+									<li>...</li>
+								</ul>
+						</div>
+						<div class=column_img style="width:25%">
+							<div class=content_img>
+								<img src="images/phd_defence/eni_fischer_tropsch.png" alt="bubble_column" height="400" style="background:none; border:none; box-shadow:none;">
+								<p>
+									<small>
+										<b>bubble column reactor</b><br>
+										size: meter<br>
+										source: <a href="https://tel.archives-ouvertes.fr/tel-01267349/document">R. M. Raimundo, ENI</a>
+									</small>
+								</p>
+							</div>
+						</div>
+					</div>
+				</section>
+				<section>
+					<h3>Specimen calculation</h3>
+					<p>
+						$d_b=1~mm$ water/oxygen at room temperature
+					</p>
+					<ul>
+						<li>
+							$Pe = Sc\ Re = \nu_l / D_{O_2} \cdot U_b d_b/\nu_l \approx 10^5 $
+						</li>
+						<li>
+							$$ Re\approx 250;\quad \delta_h/d_b \propto Re^{-1/2};\quad\delta_h\approx 45~\mu m $$
+						</li>
+						<li>
+							$$ Sc\approx 500;\quad \delta_c/\delta_h \propto Sc^{-1/2};\quad\delta_c\approx 2.5~\mu m $$
+						</li>
+					</ul>
+					<p>
+						$\delta_h/\delta_c$ typically <b style="color:red;">10 ... 100</b>
+					</p>
+					<p>
+						feasible simulations up to $Pe\approx 10000$ (3D, HPC)
+					</p>
+				</section>
+				<section>
+					<p>Why we might be interested in a simplified simulation approach:</p>
+					<ul>
+						<li>perform parameter studies</li>
+						<li>validate boundary layer models</li>
+						<li>generate data for ML-based models</li>
+						<li>...</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Idea: decoupling of two-phase flow and species transport</h3>
+				</section>
+				<section>
+					<div class=row_img style="width:100%">
+						<div class=column_img style="width:33%;padding-right:5px;padding-left:5px">
+							<img src="images/snap_shot_vof.png" alt="vof_sol" height="400px" style="background:none; border:none; box-shadow:none;">
+							<p>
+								<small>1. Two-phase flow simulation (Volume-of-Fluid)</small>
+							</p>
+						</div>
+						<div class=column_img style="width:33%;padding-right:5px;padding-left:5px">
+							<img src="images/snap_shot_shape.png" alt="shape" height="400px" style="background:none; border:none; box-shadow:none;">
+							<p>
+								<small>2. Parametrization of shape and interfacial velocity</small>
+							</p>
+						</div>
+						<div class=column_img style="width:33%;padding-right:5px;padding-left:5px">
+							<img src="images/snap_shot_stl_clean.png" alt="stl" height="400px" style="background:none; border:none; box-shadow:none;">
+							<p>
+								<small>3. Geometry generation and export (STL format)</small>
+							</p>
+						</div>
+					</div>
+				</section>
+				<section>
+					<div class=row_img style="width:100%">
+						<div class=column_img style="width:33%;padding-right:5px;padding-left:5px">
+							<img src="images/snap_shot_mesh_clean.png" alt="mesh" height="400px" style="background:none; border:none; box-shadow:none;">
+							<p>
+								<small>4. Single phase mesh</small>
+							</p>
+						</div>
+						<div class=column_img style="width:33%;padding-right:5px;padding-left:5px">
+							<img src="images/snap_shot_hydro.png" alt="flow" height="400px" style="background:none; border:none; box-shadow:none;">
+							<p>
+								<small>5. Flow solution</small>
+							</p>
+						</div>
+						<div class=column_img style="width:33%;padding-right:5px;padding-left:5px">
+							<img src="images/snap_shot_transport.png" alt="species" height="400px" style="background:none; border:none; box-shadow:none;">
+							<p>
+								<small>6. Species transport</small>
+							</p>
+						</div>
+					</div>
+				</section>
+				<section>
+					<img src="images/hybrid_approach.png" alt="two-phase" width="80%" style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<img src="images/ofw_ssd/two_vs_hybrid_flow.png" alt="flow"
+						style="background:none; border:none; box-shadow:none; width: 600px">
+					<p>Two-phase velocity field (left half) versus single-phase velocity field (right half); speed-up of <b>20-40x</b> with <b>120x</b> finer mesh at surface.</p>
+				</section>
+				<section>
+					<video height="500" controls muted loop>
+						<source src="videos/mesh_zoom_bl.ogv">
+					</video>
+					<p>Mesh motion and zoom view of concentration boundary layer for $Re=569$ and
+							$Sc=100$.</p>
+				</section>
+				<section>
+					<img src="images/of_conf_2020/sh_glob_mesh_dependency.svg" alt="sh_mesh_dep"
+						style="background:none; border:none; box-shadow:none; width: 900px">
+					<p>Global Sherwood number $Sh$ for two different mesh resolutions (3250 and 6500
+							cells/diameter). ~7h, serial, 2.4 GHz.</p>
+				</section>
+				
+			</section>
+
+			<!-- example 2 -->
+			<section>
+				<section>
+					<h2>Finding coherent structures</h2>
+					<p>
+						Modal analysis of transonic shock buffets on a NACA0012 airfoil
+					</p>
+					<p>
+						<a href="https://github.com/AndreWeiner/naca0012_shock_buffet">https://github.com/AndreWeiner/naca0012_shock_buffet</a>
+					</p>
+				</section>
+				<section>
+					<video height="500" controls muted loop>
+						<source src="videos/naca0012_ma_3D.mp4">
+					</video>
+					<p>Slice of local Mach number $Ma$, <b>3D</b>, $\alpha=4^\circ$.</p>
+				</section>
+				<section>
+					<p>Things we might be interested in:</p>
+					<ul>
+						<li>dominant frequencies and where they come from</li>
+						<li>interaction between different phenomena</li>
+						<li>simplified buffet model</li>
+						<li>...</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Tool: Dynamic mode decomposition (DMD)</h3>
+				</section>
+				<section>
+					<p>Definition of data matrices:</p>
+					<p><small>
+						$$
+						\mathbf{X} = \left[
+\begin{array}{cccc}
+|            & |            &     & | \\
+\mathbf{x}_1 & \mathbf{x}_2 & ... & \mathbf{x}_{N-1} \\
+|            & |            &     & | \\
+\end{array}\right],\quad
+\mathbf{X}^\prime = \left[
+\begin{array}{cccc}
+|            & |            &     & | \\
+\mathbf{x}_2 & \mathbf{x}_3 & ... & \mathbf{x}_{N} \\
+|            & |            &     & | \\
+\end{array}\right]
+						$$
+					</small></p>
+					<p>$\mathbf{x}_n$ - state vector snapshot at timestep $n$</p>
+				</section>
+				<section>
+					<h3>DMD Core idea</h3>
+					<p>
+						$$
+						  \mathbf{x}_{n+1} = \mathbf{Ax}_n
+						$$
+					</p>
+					<p>$\mathbf{A}\in \mathbb{C}^{M\times M}$ - best-fit linear operator</p>
+				</section>
+				<section>
+					<p>How to compute $\mathbf{A}$?</p>
+					<p>
+						$$
+						  \underbrace{[\mathbf{x}_2, ..., \mathbf{x}_N]}_{\mathbf{X}^\prime} = A \underbrace{[\mathbf{x}_1, ..., \mathbf{x}_{N-1}]}_{\mathbf{X}}
+						$$
+					</p>
+					<p>
+						$$
+						  \mathbf{X}^\prime = \mathbf{AX} \rightarrow A\approx \mathbf{X}^\prime\mathbf{X}^{-1} = \mathbf{X}^\prime\mathbf{V\Sigma}^{-1}\mathbf{U}^T
+						$$
+					</p>
+					<p>best-fit (least squares) linear operator</p>
+				</section>
+				<section>
+					<p>Use of eigen-decomposition $\mathbf{A} = \mathbf{\Phi\Lambda\Phi}^{-1}$:</p>
+					<p>
+						$$
+							\mathbf{x}_N = \mathbf{\Phi\Lambda}^{N-1}\mathbf{\Phi}^{-1} \mathbf{x}_1
+						$$
+					</p>
+					<ul>
+						<li>DMD modes - column vectors $\mathbf{\Phi}$</li>
+						<li>mode amplitudes - $\mathbf{b} = \mathbf{\Phi}^{-1}\mathbf{x}_1$</li>
+						<li>eigenvalues $\mathbf{\Lambda}$ describe time dynamics</li>
+					</ul>
+				</section>
+				<section>
+					<img src="images/aiaa2022/dmd_freq_2D_3D.svg" alt="sigma"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+					<p>DMD spectrum for 2D and 3D datasets/simulations; $\bar{f}=2\pi c f/U_\infty$.</p>
+				</section>
+				<section>
+					<img src="images/aiaa2022/dmd_modes_3D_pres_1.png" alt="sigma"
+						style="background:none; border:none; box-shadow:none; width: 75%">
+					<p>Real parts of DMD buffet mode and first harmonic; $u$ and $v$ are the velocity components.</p>
+				</section>
+				<section>
+					<video height="500" controls muted loop>
+						<source src="videos/dmd_3D_mode_10_u.mp4">
+					</video>
+					<p>DMD mode at approx. $20f_{buffet}$, $u$-component.</p>
+				</section>
+			</section>
+
+			<!-- example 3 -->
+			<section>
+				<section>
+					<h2>Learning control laws</h2>
+					<p>
+						Active control of the flow past a cylinder
+					</p>
+					<p>
+						<a href="https://github.com/darshan315/flow_past_cylinder_by_DRL">https://github.com/darshan315/flow_past_cylinder_by_DRL</a>
+					</p>
+					<p>
+						<a href="https://github.com/FabianGabriel/Active_flow_control_past_cylinder_using_DRL">https://github.com/FabianGabriel/Active_flow_control_past_cylinder_using_DRL</a>
+					</p>
+				</section>
+				<section>
+					<video height="500" controls muted loop>
+						<source src="videos/cylinder_short.mp4">
+					</video>
+					<p>Flow past a circular cylinder at $Re=100$.</p>
+				</section>
+				<section>
+					<p>Things we might be interested in:</p>
+					<ul>
+						<li>reducing drag and lift forces</li>
+						<li>mitigate extreme events</li>
+						<li>...</li>
+					</ul>
+				</section>
+				<section>
+					<p>Can we reduce drag and lift forces?</p>
+					<img src="images/of_conf_2021/state_action.png" alt="state_action"
+						style="background:none; border:none; box-shadow:none; width: 500px">
+				</section>
+				<section>
+					<img src="images/ofw_ssd/ppo_overview.png" alt="ppo_overview"
+						style="background:none; border:none; box-shadow:none; width: 400px">
+					<p>Proximal policy optimization (PPO) workflow (GAE - generalized advantage estimate).</p>
+				</section>
+				<section>
+					<img src="images/ofw_ssd/policy_network.png" alt="ppo_overview"
+						style="background:none; border:none; box-shadow:none; width: 500px">
+					<p>Policy networks outputs parameters of probability density function.</p>
+				</section>
+				<section>
+					<p>reward at time $t$</p>
+					<p>
+						$$
+						R_t = r_0 - \left( r_1 c_D + r_2 |c_L| + r_3 |\dot{\theta}| + r_4 |\ddot{\theta}| \right)
+						$$
+					</p>
+					<ul>
+						<li>$c_D$ - drag coefficient</li>
+						<li>$c_L$ - lift coefficient</li>
+						<li>$\dot{\theta}$ - angular velocity</li>
+						<li>$\ddot{\theta}$ - angular acceleration</li>
+						<li>$r_i$ - constants</li>
+					</ul>
+				</section>
+				<section>
+					<p>long-term consequences</p>
+					<p>
+						$$
+							G_t = \sum\limits_{l=0}^{N_t-t} \gamma^l R_{t+l}
+						$$
+					</p>
+					<ul>
+						<li>$t$ - control time step</li>
+						<li>$G_t$ - discounted return</li>
+						<li>$\gamma$ - discount factor, typically $\gamma=0.99$</li>
+						<li>$N_t$ - number of control steps</li>
+					</ul>
+				</section>
+				<section>
+					<p>learning what to expect in a given state - value function loss</p>
+					<p>
+						$$
+						  L_V = \frac{1}{N_\tau N_t} \sum\limits_{\tau = 1}^{N_\tau}\sum\limits_{t = 1}^{N_t} \left( V(s_t^\tau) - G_t^\tau \right)^2
+						$$
+					</p>
+					<ul>
+						<li>$\tau$ - trajectory (single simulation)</li>
+						<li>$s_t$ - state/observation (pressure)</li>
+						<li>$V$ - parametrized value function</li>
+						<li>clipping not included</li>
+					</ul>
+				</section>
+				<section>
+					<p>Was the selected action a good one?</p>
+					<p>
+						$$\delta_t = R_t + \gamma V(s_{t+1}) - V(s_t) $$
+						$$
+						  A_t^{GAE} = \sum\limits_{l=0}^{N_t-t} (\gamma \lambda)^l \delta_{t+l}
+						$$
+					</p>
+					<ul>
+						<li>$\delta_t$ - one-step advantage estimate</li>
+						<li>$A_t^{GAE}$ - generalized advantage estimate</li>
+						<li>$\lambda$ - smoothing parameter</li>
+					</ul>
+				</section>
+				<section>
+					<p>make good actions more likely - policy objective function</p>
+					<p>
+						$$
+						  J_\pi = \frac{1}{N_\tau N_t} \sum\limits_{\tau = 1}^{N_\tau}\sum\limits_{t = 1}^{N_t} \left( \frac{\pi(a_t|s_t)}{\pi^{old}(a_t|s_t)} A^{GAE,\tau}_t\right)
+						$$
+					</p>
+					<ul>
+						<li>$\pi$ - current policy</li>
+						<li>$\pi^{old}$ - old policy (previous episode)</li>
+						<li>clipping and entropy not included</li>
+						<li>$J_\pi$ is <b>maximized</b></li>
+					</ul>
+				</section>
+				<section>
+					<p>
+						Python/PyTorch
+					</p>
+					<ol>
+						<li>create policy and value networks</li>
+						<li>fill trajectory buffer (run simulations)</li>
+						<li>update policy and value networks</li>
+						<li>go back to 1. until converged</li>
+					</ol>
+					<p>Implementation follows closely chapter 12 of Miguel Morales's <a href="https://www.manning.com/books/grokking-deep-reinforcement-learning">Grokking Deep Reinforcement Learning</a></p>
+				</section>
+				<section>
+					<p>C++/OpenFOAM/PyTorch</p>
+					<ol>
+						<li>read policy network</li>
+						<li>sample and apply action</li>
+						<li>write trajectory (state-action pairs)</li>
+					</ol>
+				</section>
+				<section>
+					<img src="images/ofw_ssd/drag_controlled.png" alt="open_closed_loop"
+						style="background:none; border:none; box-shadow:none; width: 850px">
+					<p>Comparison of <span style="color: royalblue;">uncontrolled</span>, <span style="color: darkorange;">open-loop</span> controlled, and <span style="color: green;">closed-loop</span> controlled drag.</p>
+				</section>
+				<section>
+					<img src="images/ofw_ssd/omegas.png" alt="omega"
+						style="background:none; border:none; box-shadow:none; width: 1000px">
+					<p>Angular velocity for open and closed-loop control.</p>
+				</section>
+				<section>
+					<h3>How robust is the controller?</h3>
+					<ol>
+						<li>training with <b>steady</b> inlet velocity<br> $Re=\{100, 200, 400 \}$</li>
+						<li>test with <b>unsteady</b> inlet velocity<br> $Re(t)= 250 + 150\mathrm{sin}(\pi t)$</li>
+					</ol>
+				</section>
+				<section>
+					<video width="100%" controls autoplay loop>
+						<source src="images/of_conf_2021/variable_inflow_2x.mp4" type="video/mp4">
+					</video>
+					<p>Variable inlet velocity/Reynolds number $Re(t) = 250 + 150\mathrm{sin}(\pi t)$</p>
+				</section>
+				<section>
+					<img src="images/of_conf_2021/trasient_drag.png" alt="transient_drag"
+						style="background:none; border:none; box-shadow:none; width: 850px">
+					<p>Drag coefficient for transient inlet velocity: <span style="color: blue;">uncontrolled</span> and <span style="color: orange;">controlled</span>.</p>
+				</section>
+			</section>
+
+			<!-- not covered during presentation-->
+			<section>
+				<section>
+					<h2>Topic (not) covered in this talk</h2>
+					<ul>
+						<li>parametrized reduced-order models</li>
+						<li>surrogate model-based optimization</li>
+						<li>ML models with physical constraints</li>
+						<li>...</li>
+					</ul>
+				</section>
+			</section>
+
+			<!-- end -->
+			<section>
+				<section>
+					<p>Where to go from here:</p>
+					<ul>
+						<li>lecture resources: <a href="https://github.com/AndreWeiner/ml-cfd-lecture">ML in CFD</a></li>
+						<li>OpenFOAM SIG <a href="https://github.com/AndreWeiner/mlfoam">data-driven modeling</a></li>
+						<li>flowTorch <a href="https://flowmodelingcontrol.github.io/flowtorch-docs/1.0/index.html">documentation</a></li>
+					</ul>
+				</section>
+				<section>
+					<h1>THE END</h1>
+					<h3>Thank you for you attention!</h3>
+					<img src="images/of_conf_2020/for2895_logo.png" alt="for2895"
+						style="background:none; border:none; box-shadow:none; width: 70%">
+					<div class="row_img">
+						<div class="column_img">
+							<div class="content_logo">
+								<table>
+									<tr>
+										<td style="border: 0; padding-right: 5px;">&#9993;</th>
+										<td style="border: 0; padding-right: 20px;"><a
+												href="mailto:a.weiner@tu-bs.de">Mail</a></th>
+										<td style="border: 0; padding-right: 5px;">&#9741;</td>
+										<td style="border: 0; padding-right: 0px;"><a
+												href="https://www.linkedin.com/in/andre-weiner-a79752133/">LinkedIn</a></td>
+										<td style="border: 0; padding-right: 5px;">&#9997;</td>
+										<td style="border: 0; padding-right: 20px;"><a
+												href="https://myheutagogy.com/">Blog</a></td>
+										<td style="border: 0; padding-right: 5px;">&#10026;</td>
+										<td style="border: 0; padding-right: 0px;"><a
+												href="https://github.com/AndreWeiner">Github</a></td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+				</section>
+			</section>
+
+		</div>
+
+	</div>
+
+	<script src="js/reveal.js"></script>
+
+	<script>
+
+		// More info https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			center: true,
+			hash: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// More info https://github.com/hakimel/reveal.js#dependencies
+			dependencies: [
+				{ src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/highlight/highlight.js', async: true },
+				{ src: 'plugin/search/search.js', async: true },
+				{ src: 'plugin/zoom-js/zoom.js', async: true },
+				{ src: 'plugin/notes/notes.js', async: true },
+				{ src: 'plugin/math/math.js', async: true }]
+		});
+		Reveal.configure({ slideNumber: true });
+
+	</script>
+
+
+</body>
+
+</html>
