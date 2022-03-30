@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+
+	<title>Simulation and modal analysis of transonic shock buffets on a NACA-0012 airfoil</title>
+
+	<meta name="description" content="euromech_2022">
+	<meta name="author" content="Andre Weiner">
+
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/white.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+
+	<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+</head>
+
+<style>
+	.row_img {
+		display: table;
+	}
+
+	.column_img {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 50%;
+	}
+
+	.column_five {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 20%;
+	}
+
+	.content_img {
+		display: inline-block;
+	}
+
+	.reveal .slide-number {
+		position: absolute;
+		display: block;
+		left: 8px;
+		bottom: 8px;
+		height: 48px;
+		width: 50px;
+		z-index: 31;
+		font-family: Helvetica, sans-serif;
+		font-size: 32px;
+		line-height: 1;
+		color: #000000;
+		background-color: rgba(0, 0, 0, 0);
+		padding: 5px;
+	}
+
+	.reveal .slides section .fragment.step-fade-in-then-out {
+		opacity: 0;
+		display: none;
+	}
+
+	.reveal .slides section .fragment.step-fade-in-then-out.current-fragment {
+		opacity: 1;
+		display: inline;
+	}
+</style>
+
+<body>
+
+	<div class="reveal" data-video="small top-right">
+
+		<!-- Any section element inside of this container is displayed as a slide -->
+		<div class="slides">
+			<!-- title slide -->
+			<section>
+				<h3>Simulation and modal analysis of transonic shock buffets on a NACA-0012 airfoil</h3>
+				<p>
+					Andre Weiner, Richard Semaan<br>
+					<small>TU Braunschweig, <a href="https://www.tu-braunschweig.de/en/ism">ISM</a>, Flow Modeling and
+						Control Group</small>
+				<p>Euromech Colloquium 612, March 30, 2022</p>
+				</p>
+
+				<style>
+					.row_logo {
+						display: table;
+					}
+
+					.column_logo {
+						display: table-cell;
+						vertical-align: middle;
+						text-align: center;
+						width: 50%;
+					}
+
+					.content_logo {
+						display: inline-block;
+					}
+				</style>
+				<div class="row_logo">
+					<div class="column_logo">
+						<div class="content_logo">
+							<img src="images/tubs_logo.png" alt="tubs_logo"
+								style="background:none; border:none; box-shadow:none;">
+						</div>
+					</div>
+					<div class="column_logo">
+						<div class="content_logo">
+							<table>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9993;</th>
+									<td style="border: 0; padding-right: 20px;"><a
+											href="mailto:a.weiner@tu-bs.de">Mail</a></th>
+									<td style="border: 0; padding-right: 5px;">&#9741;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://www.linkedin.com/in/andre-weiner-a79752133/">LinkedIn</a></td>
+								</tr>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9997;</td>
+									<td style="border: 0; padding-right: 20px;"><a
+											href="https://ml-cfd.com/">Blog</a></td>
+									<td style="border: 0; padding-right: 5px;">&#10026;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://github.com/AndreWeiner">Github</a></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- literature -->
+			<section>
+				<section>
+					<video height="500" controls muted loop>
+						<source src="videos/naca0012_ma_3D.mp4">
+					</video>
+					<p>Slice of local Mach number $Ma$; $Re_\infty=10^7$, $Ma_\infty=0.75$, $\alpha=4^\circ$.</p>
+				</section>
+				<section>
+					<p><a href="https://www.for2895.uni-stuttgart.de/">FOR 2895</a></p>
+					<p>Unsteady flow and interaction phenomena at high speed stall conditions</p>
+					<img src="images/of_conf_2020/for2895_logo.png" alt="for2895"
+						style="background:none; border:none; box-shadow:none; width: 70%">
+				</section>
+				<section>
+					<p>Improved understanding and prediction of flight envelop via:</p>
+					<ul>
+						<li>experiments: iPSP, PIV, Schlieren, ...</li>
+						<li>simulations: LES, RANS, hybrid RANS/LES</li>
+						<li>analysis and modeling: modal decomposition, ROMs</li>
+					</ul>
+				</section>
+				<section>
+					<p>Modal decomp. = spatial structures + temp. behavior</p>
+					<div class="row_logo">
+						<div class="column_logo">
+							<div class="content_logo">
+								<img src="images/euromech2022/naca_svd_slice_buffet_mode.svg" alt="tubs_logo"
+									style="background:none; border:none; box-shadow:none; width: 100%">
+									<p>spatial mode</p>
+							</div>
+						</div>
+						<div class="column_logo">
+							<div class="content_logo">
+								<img src="images/euromech2022/naca_svd_slice_buffet_coeff.svg" alt="tubs_logo"
+									style="background:none; border:none; box-shadow:none; width: 100%">
+								<p>temporal coefficient</p>
+							</div>
+						</div>
+					</div>
+				</section>
+				<section>
+					<img src="images/euromech2022/naca_dmd_slice_freq_def_nof.svg" alt="tubs_logo"
+									style="background:none; border:none; box-shadow:none; width: 90%">
+					<p>Spectra resulting from standard dynamic mode decomposition (DMD); influence of rank parameter.</p>
+				</section>
+				<section>
+					<img src="images/euromech2022/naca_dmd_slice_freq_def.svg" alt="tubs_logo"
+									style="background:none; border:none; box-shadow:none; width: 90%">
+					<p>Spectra resulting from standard dynamic mode decomposition (DMD); influence of rank parameter.</p>
+				</section>
+				<section>
+					<p><b>Problem</b> - determining hyperparameters manually is not always an option:</p>
+					<ul>
+						<li>large number of datasets</li>
+						<li>large datasets</li>
+						<li>different data sources</li>
+						<li>prior knowledge needed</li>
+					</ul>
+					<p>$\rightarrow$ <b>need for robust automated workflow</b></p>
+				</section>
+			</section>
+
+
+			<section>
+				<h3>Outline</h3>
+				<ul>
+					<li>SVD and DMD variants</li>
+					<li>Simulation approach</li>
+					<li>Results</li>
+					<li>Summary and outlook</li>
+				</ul>
+			</section>
+
+			<!-- modal decomposition -->
+			<section>
+				<section>
+					<h3>SVD and DMD variants</h3>
+				</section>
+				<section>
+					<p>The state vector $\mathbf{x}_n$:</p>
+					<div class="row_logo">
+						<div class="column_logo">
+							<div class="content_logo">
+								<video height="200" controls muted loop autoplay>
+									<source src="videos/naca0012_ma_3D.mp4">
+								</video>
+							</div>
+						</div>
+						<div class="column_logo">
+							<div class="content_logo">
+								<p>$\rightarrow$ $\mathbf{x}_1$, $\mathbf{x}_2$, ..., $\mathbf{x}_N$</p>
+								<p>$N$ - number of snapshots</p>
+							</div>
+						</div>
+					</div>
+					<p><b>Important:</b> non-uniformly sampled fields should be weighted with square-root of volume/area!</p>
+					
+				</section>
+				<section>
+					<p>Definition of data matrices:</p>
+					<p><small>
+						$$
+						\mathbf{X} = \left[
+\begin{array}{cccc}
+|            & |            &     & | \\
+\mathbf{x}_1 & \mathbf{x}_2 & ... & \mathbf{x}_{N-1} \\
+|            & |            &     & | \\
+\end{array}\right],\quad
+\mathbf{X}^\prime = \left[
+\begin{array}{cccc}
+|            & |            &     & | \\
+\mathbf{x}_2 & \mathbf{x}_3 & ... & \mathbf{x}_{N} \\
+|            & |            &     & | \\
+\end{array}\right]
+						$$
+					</small></p>
+					<p>$\mathbf{x}_n$ - state vector snapshot at timestep $n$</p>
+				</section>
+				<section>
+					<p>Singular value decomposition (SVD):</p>
+					<p>
+						$$
+						\underset{\tilde{\mathbf{X}}, rank(\tilde{\mathbf{X}})=r}{\mathrm{argmin}} ||\mathbf{X}-\tilde{\mathbf{X}}||_2 = \mathbf{U}_r\mathbf{\Sigma}_r\mathbf{V}_r^\ast
+						$$
+					</p>
+					<ul>
+						<li>$\mathbf{U}$ - left-singular vectors (spatial structures)</li>
+						<li>$\mathbf{\Sigma}$ - singular values (explained variance)</li>
+						<li>$\mathbf{V}$ - right-singular vectors (temporal behavior)</li>
+					</ul>
+				</section>
+				<section>
+					<p>Dynamic mode decomposition (DMD):</p>
+					<p>
+						$$
+						\underset{\mathbf{A}}{\mathrm{argmin}} ||\mathbf{X}^\prime-\mathbf{AX}||_2 = \mathbf{X}^\prime\mathbf{V}\mathbf{\Sigma}^{-1}\mathbf{U}^\ast
+						$$
+					</p>
+					<ul>
+						<li>$\mathbf{A}$ - linear operator</li>
+						<li>$\mathbf{A}=\mathbf{\Phi\Lambda\Phi}^{-1}$ - modes and dynamics</li>
+						<li>$\mathbf{X} \approx \mathbf{U}_r\mathbf{\Sigma}_r \mathbf{V}_r^\ast$</li>
+					</ul>
+					<p>$\rightarrow r$ is a DMD hyperparameter!</p>
+				</section>
+				<section>
+					<p>How to choose $r$?</p>
+					<section>
+						<img src="images/euromech2022/naca_dmd_slice_htsvd.svg" alt="sigma"
+							style="background:none; border:none; box-shadow:none; width: 70%">
+						<p><a href="https://ieeexplore.ieee.org/document/6846297">Optimal hard threshold for singular values</a></p>
+					</section>
+
+				</section>
+				<section>
+					<p>Optimizing mode amplitudes:</p>
+					<p>
+						$$
+						\underset{\mathbf{b}}{\mathrm{argmin}} ||\mathbf{X}-\mathbf{\Phi D}_\mathbf{b}\mathbf{V}_\lambda||_2
+						$$
+					</p>
+					<ul>
+						<li>$\mathbf{D}_\mathbf{b} = \mathrm{diag}(\mathbf{b})$</li>
+						<li>$\mathbf{V}_\mathbf{\lambda}$ - Vandermode matrix</li>
+						<li>$\mathbf{b} = \mathbf{\Phi}^{-1}\mathbf{x}_0$ - default</li>
+						<li>idea: distribute approx. error over time</li>
+					</ul>
+					<p>More details: <a href="https://arxiv.org/abs/1309.4165">Sparsity-promoting DMD</a></p>
+				</section>
+				<section>
+					<p>How to select important modes?</p>
+					<p>
+						$$
+						I_i = |\mathbf{\phi}_i|^2 \sum\limits_{j=1}^N b_i \lambda_i^{j-1}
+						$$
+					</p>
+					<ul>
+						<li>$I_i$ - importance of mode $\mathbf{\phi}_i$</li>
+						<li>combination of spatial and temporal variation</li>
+					</ul>
+					<p>More details: <a href="https://www.sciencedirect.com/science/article/abs/pii/S0997754616302990">K. Kou and W. Zhang</a></p>
+				</section>
+				<section>
+					<p>Other tested DMD variants:</p>
+					<ul>
+						<li>total least squares DMD</li>
+						<li>forward-backward DMD</li>
+						<li>sparsity-promoting DMD</li>
+						<li>...</li>
+					</ul>
+					<p>See also: <a href="https://mathlab.github.io/PyDMD/">pyDMD</a></p>
+				</section>
+				<section>
+					<p>Final recipe:</p>
+					<ol>
+						<li>select $r$ using SV-HT</li>
+						<li>optimize mode amplitudes</li>
+						<li>sort by "integral" importance</li>
+					</ol>
+					<p>Implementation details: <a href="https://joss.theoj.org/papers/10.21105/joss.03860.pdf">flowTorch - a Python library for the analysis and modeling of fluid flows</a></p>
+				</section>
+			</section>
+
+			<!-- simulation -->
+			<section>
+				<section>
+					<h3>Numerical simulations</h3>
+				</section>
+				<section>
+					<p>Setup motivated by exp. investigations of <a href="https://ntrs.nasa.gov/citations/19850019511">McDevitt and Okuno 1985</a>:</p>
+					<ul>
+						<li>NACA-0012 airfoil</li>
+						<li>$Re_\infty = 10^7$</li>
+						<li>$Ma_\infty = 0.75$</li>
+						<li>pre-onset: $\alpha = 2^\circ$</li>
+						<li>post-onset: $\alpha = 4^\circ$</li>
+					</ul>
+					<p><a href="https://doi.org/10.2514/6.2022-2591">https://doi.org/10.2514/6.2022-2591</a></p>
+				</section>
+				<section>
+					<p>Simulation approach in a nutshell:</p>
+					<ul>
+						<li>OpenFOAM-v2012</li>
+						<li>rhoCentralFoam</li>
+						<li>IDDES turbulence modeling</li>
+						<li>Spalart-Allmaras closure</li>
+						<li>2D and 3D simulations</li>
+					</ul>
+					<p><a href="https://github.com/AndreWeiner/naca0012_shock_buffet">github.com/AndreWeiner/naca0012_shock_buffet</a></p>
+				</section>
+				<section>
+					<img src="images/aiaa2022/naca_mesh.png" alt="sigma"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+					<p>Various views of the computational mesh.</p>
+				</section>
+				<section>
+					<img src="images/aiaa2022/set1_cp_a2_iddes_refinement.svg" alt="sigma"
+						style="background:none; border:none; box-shadow:none; width: 75%">
+					<p>Pressure coefficient $c_p$ at pre-onset conditions, 2D, $\alpha = 2^\circ$.</p>
+				</section>
+				<section>
+					<img src="images/aiaa2022/set1_cp_a4_iddes_refinement.svg" alt="sigma"
+						style="background:none; border:none; box-shadow:none; width: 75%">
+					<p>Pressure coefficient $c_p$ at post-onset conditions, 2D, $\alpha = 4^\circ$.</p>
+				</section>
+			</section>
+
+			<!-- results -->
+			<section>
+				<section>
+					<h3>Results</h3>
+				</section>
+				<section>
+					<img src="images/euromech2022/naca_svd_slice_coeffs.svg" alt="sigma"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+					<p>Influence of volume-weighting on left-singular vectors.</p>
+				</section>
+				<section>
+					<img src="images/euromech2022/naca_slice_n_snap.svg" alt="sigma"
+						style="background:none; border:none; box-shadow:none; width: 80%">
+					<p>Influence of snapshots/cycle on dominant $\bar{f}$.</p>
+				</section>
+				<section>
+					<video height="500" controls muted loop>
+						<source src="videos/naca_dmd_surface_buffet.mp4">
+					</video>
+					<p>DMD buffet mode recon. based on surface $c_p$.</p>
+				</section>
+				<section>
+					<video height="500" controls muted loop>
+						<source src="videos/naca_dmd_slice_ux_buffet.mp4">
+					</video>
+					<p>DMD buffet mode recon. based on slice of $u_x$.</p>
+				</section>
+				<section>
+					<video height="500" controls muted loop>
+						<source src="videos/naca_dmd_slice_ux_246.mp4">
+					</video>
+					<p>Reconstruction of another dominant DMD mode; based on slice of $u_x$.</p>
+				</section>
+				<section>
+					<img src="images/euromech2022/dmd_modes_buffet_3D.png" alt="sigma"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+					<p>Iso-contours of reconstructed $|\mathbf{u}|$ for two dominant DMD modes.</p>
+				</section>
+			</section>
+
+			<!-- summary -->
+			<section>
+				<section>
+					<h3>Summary and outlook</h3>
+				</section>
+				<section>
+					<h4>Summary</h4>
+					<ul>
+						<li>robust workflow based on SVD and/or DMD</li>
+						<li>volume-weighting of state vector</li>
+						<li>comparable spectra for different data sources</li>
+						<li>tools, workflow, and data publicly available</li>
+						<li>(works also for exp. data)</li>
+					</ul>
+					<p>github.com/AndreWeiner/naca0012_shock_buffet</p>
+				</section>
+				<section>
+					<h4>Outlook</h4>
+					<ul>
+						<li>dealing with large data (<a href="https://doi.org/10.2514/6.2021-1484">S-cube</a>)</li>
+						<li>additional data sources</li>
+						<li>parametrized ROMs for buffeting flows</li>
+						<li>models for buffet intensity</li>
+					</ul>
+				</section>
+
+			</section>
+
+						<!-- end -->
+			<section>
+				<section>
+					<h1>THE END</h1>
+					<h3>Thank you for you attention!</h3>
+					<img src="images/of_conf_2020/for2895_logo.png" alt="for2895"
+						style="background:none; border:none; box-shadow:none; width: 70%">
+					<p>
+						<span style="color: red;">{a.weiner|r.semaan}</span>@tu-braunschweig.de
+					</p>
+				</section>
+
+		</div>
+
+	</div>
+
+	<script src="js/reveal.js"></script>
+
+	<script>
+
+		// More info https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			center: true,
+			hash: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// More info https://github.com/hakimel/reveal.js#dependencies
+			dependencies: [
+				{ src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/highlight/highlight.js', async: true },
+				{ src: 'plugin/search/search.js', async: true },
+				{ src: 'plugin/zoom-js/zoom.js', async: true },
+				{ src: 'plugin/notes/notes.js', async: true },
+				{ src: 'plugin/math/math.js', async: true }]
+		});
+		Reveal.configure({ slideNumber: true });
+
+	</script>
+
+
+</body>
+
+</html>
