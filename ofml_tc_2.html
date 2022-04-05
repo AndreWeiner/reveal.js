@@ -95,7 +95,7 @@
 			<section>
 				<h3>Data-driven modeling</h3>
 				<p>OpenFOAM special interest group</p>
-				<p><b>1st</b> meeting</p>
+				<p><b>2nd</b> meeting</p>
 			</section>
 
 			<!-- agenda-->
@@ -103,14 +103,14 @@
 				<p>Plan for today</p>
 				<ul>
 					<li>introduction</li>
-					<li>committee overview</li>
-					<li>ongoing/upcoming activities
+					<li>past/ongoing/upcoming activities
 						<ul>
-							<li>Github repository</li>
-							<li>OpenFOAM workshop</li>
+							<li>SIG wiki and Github</li>
+							<li>OF workshop contributions</li>
 							<li>OpenFOAM+ML hackathon</li>
 						</ul>
 					</li>
+					<li>OF-Python interface news</li>
 				</ul>
 			</section>
 
@@ -126,90 +126,37 @@
 				<p>We have scheduled only 1h for the meeting :)</p>
 			</section>
 
-			<!-- committee overview -->
-			<section>
-				<section>
-					<h3>Committee overview</h3>
-				</section>
-				<section>
-					<h3>Current members, alphabetical</h3>
-					<ul>
-						<li>Andre Weiner, TU Braunschweig, <b>chair</b></li>
-						<li>Dirk Gründing</li>
-						<li>Holger Marschall, TU Darmstadt</li>
-						<li>Karthik Kashinath, Nvidia</li>
-						<li>Neil Ashton, AWS</li>
-						<li>Tomislav Marić, TU Darmstadt, <b>co-chair</b></li>
-					</ul>
-				</section>
-				<section>
-					<p>Want to get involved?</p>
-					<ul>
-						<li>a.weiner@tu-braunschweig.de</li>
-						<li>maric@mma.tu-darmstadt.de</li>
-					</ul>
-				</section>
-				<section>
-					<h3>Short term goals</h3>
-					<ul>
-						<li>lower technical barrier to get started with data-driven modeling and OF</li>
-						<li>promote data-driven modeling available in OF (e.g., dynamic mode decomposition)</li>
-					</ul>
-					<p>More details available in the <a href="https://github.com/AndreWeiner/mlfoam">write-up</a>.</p>
-				</section>
-				<section>
-					<h3>Long term goals</h3>
-					<ul>
-						<li>when/how to combine ML and CFD?</li>
-						<li>accelerate developments (best practices)</li>
-						<li>ML as natural element of CFD workflow</li>
-					</ul>
-					<p>More details available in the <a href="https://github.com/AndreWeiner/mlfoam">write-up</a>.</p>
-				</section>
-				<section>
-					<h3>Roadmap (excerpt)</h3>
-					<ul>
-						<li>automated integration of libTorch in OF</li>
-						<li>OF-Python interface</li>
-						<li>tutorials and <a href="https://github.com/AndreWeiner/ml-cfd-lecture">lecture material</a></li>
-						<li>ML+OF hackathon</li>
-					</ul>
-					<p>More details available in the <a href="https://github.com/AndreWeiner/mlfoam">write-up</a>.</p>
-				</section>
-			</section>
-
 			<section>
 				<section>
 					<h3>ongoing/upcoming activities</h3>
 				</section>
 				<section>
+					<h3>OF-ML wiki page</h3>
+					<p><a href="https://wiki.openfoam.com/Data_Driven_Modelling_Special_Interest_Group">wiki.openfoam.com</a></p>
+					<ul>
+						<li>scope</li>
+						<li>meeting slides</li>
+						<li>committee members</li>
+						<li>contact information</li>
+					</ul>
+				</section>
+				<section>
 					<h3>Github repository</h3>
-					<p><a href="https://github.com/AndreWeiner/mlfoam">https://github.com/AndreWeiner/mlfoam</a></p>
+					<p><a href="https://github.com/OFDataCommittee/mlfoam">https://github.com/OFDataCommittee/mlfoam</a></p>
 					<ul>
 						<li>point of contact</li>
-						<li>committee overview</li>
-						<li>aggregation of links</li>
+						<li>aggregation of links and resources</li>
 					</ul>
 					<p>For access to the repo, send your Github username to Tomsilav or Andre (only committee members).</p>
 				</section>
 				<section>
-					<h3>OpenFOAM workshop</h3>
+					<h3>OpenFOAM workshop contributions</h3>
 					<ul>
-						<li><a href="https://openfoamworkshop.org/">https://openfoamworkshop.org/</a></li>
-						<li>11 to 14 July 2022, Cambridge</li>
-						<li>submission deadline 14 Feb 2022</li>
-						<li>abstract training ~1 page</li>
-						<li>hands-on experience with technology/research</li>
-						<li>~90min</li>
+						
+						<li>11 to 14 July 2022, Cambridge/virtual</li>
+						<li>dynamic mode decomposition (Andre)</li>
+						<li>PINNs in OF (Tomislav, Karthik, Andre)</li>
 					</ul>
-				</section>
-				<section>
-					<ul>
-						<li>dynamic mode decomposition</li>
-						<li>physics-based DL with OpenFOAM</li>
-						<li>?</li>
-					</ul>
-					<p>Any planned contributions on data-driven methods and OpenFOAM?</p>
 				</section>
 				<section>
 					<h3>OF-ML-Hackathon</h3>
@@ -228,40 +175,49 @@
 					</ol>
 				</section>
 				<section>
-					<p>Why this format?</p>
+					<p>Timeline</p>
 					<ul>
-						<li>kick-off (research) projects</li>
-						<li>initiate collaborations</li>
-						<li>get hands-on experience</li>
-						<li>bring together divers backgrounds</li>
-						<li>create demonstrators for community</li>
-						<li>...</li>
+						<li>April 15: application process starts (Google Docs)</li>
+						<li>May 31: application process ends</li>
+						<li><b>July 25-27</b> hackathon (virtual)</li>
 					</ul>
 				</section>
 				<section>
-					<p>Some ideas:</p>
+					<p>Workflow and projects</p>
 					<ul>
-						<li>2-3 days, July, after workshop</li>
-						<li>online, <a href="https://www.gather.town/">Gather</a></li>
-						<li>workshops, mentorship by TC</li>
-						<li>renowned community members for jury</li>
+						<li>20 participants, groups of max. 5 people</li>
+						<li>communication via WebEx, Slack, Gather</li>
+						<li>idea: participants advance starter code</li>
+						<li>project 1: DRL for active flow control</li>
+						<li>project 2: PINNs in OF</li>
+						<li>mentors: Andre, Tomislav</li>
+						<li>Jury: Fred</li>
 					</ul>
-					<p>Formulating a good objective is hard ...</p>
+
 				</section>
 				<section>
-					<p>Maybe too <span style="color: red;">fuzzy</span>:</p>
-					<p>"Combine ML and OpenFOAM"</p>
-					<p>Maybe too <span style="color: red;">specialized</span>:</p>
-					<p>"Implement a data-driven turbulence model"</p>
-					<p>Maybe too <span style="color: red;">individual</span>:</p>
-					<p>"Bring your research project and enhance it with ML"</p>
+					<p>Open questions</p>
+					<ul>
+						<li>additional projects</li>
+						<li>compute resources</li>
+						<li>more mentors</li>
+						<li>more jury members</li>
+						<li>gifts/gadgets/prices for participants</li>
+					</ul>
 				</section>
+			</section>
+
+			<section>
+				<h3>OF-Python interface</h3>
+				<p><a href="https://arxiv.org/pdf/2203.16394.pdf">A GENERAL APPROACH FOR RUNNING PYTHON CODES IN OPENFOAM USING
+					AN EMBEDDED PYBIND11 PYTHON INTERPRETER</a></p>
+				<p>S. Rodriguez, P. Cardiff</p>
 			</section>
 
 			<section>
 				<h3>Closing words</h3>
 				<ul>
-					<li>next meeting: April, Doodle follows</li>
+					<li>next meeting: June, Doodle follows</li>
 					<li>protocol will be passed around</li>
 					<li>get people involved!</li>
 				</ul>
