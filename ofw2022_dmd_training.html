@@ -140,18 +140,281 @@
 			<section>
 				<h2>Outline</h2>
 				<ol>
-					<li>Introduction to DMD</li>
 					<li>Simulation overview</li>
+					<li>Introduction to DMD</li>
 					<li>Preliminary flow analysis</li>
 					<li>DMD with Python</li>
 					<li>DMD with OpenFOAM</li>
 				</ol>
 			</section>
+
+			<section>
+				<p>Training material available at:</p>
+				<p><a href="https://github.com/AndreWeiner/ofw2022_dmd_training">github.com/AndreWeiner/ofw2022_dmd_training</a></p>
+				<p>(download the datasets if you want to work alongside)</p>
+			</section>
+
+			<section>
+				<section>
+					<h2>Simulation overview</h2>
+				</section>
+				<section>
+					<video height="500" controls muted loop>
+						<source src="images/ofw2022/vel_mag.mp4">
+					</video>
+					<p>Flow past a surface mounted cube at $Re=40000$.</p>
+				</section>
+				<section>
+					<p>Simulation details:</p>
+					<p><a href="https://www.openfoam.com/documentation/guides/latest/doc/verification-validation-turbulent-surface-mounted-cube.html">OpenFoam - surfaceMountedCube</a></p>
+				</section>
+			</section>
+
+			<section>
+				<section>
+					<h2>Introduction to DMD</h2>
+				</section>
+				<section>
+					<p>Modal decomp. = spatial structures + temp. behavior</p>
+					<div class="row_logo">
+						<div class="column_logo">
+							<div class="content_logo">
+								<img src="images/euromech2022/naca_svd_slice_buffet_mode.svg" alt="tubs_logo"
+									style="background:none; border:none; box-shadow:none; width: 100%">
+									<p>spatial mode</p>
+							</div>
+						</div>
+						<div class="column_logo">
+							<div class="content_logo">
+								<img src="images/euromech2022/naca_svd_slice_buffet_coeff.svg" alt="tubs_logo"
+									style="background:none; border:none; box-shadow:none; width: 100%">
+								<p>temporal coefficient</p>
+							</div>
+						</div>
+					</div>
+				</section>
+				<section>
+					<p>Preliminaries - state vector and data matrix:</p>
+					<p>$\mathbf{x}_n$ - state vector (e.g., pressure, velocity, ...)</p>
+					<p>
+						$$
+						\mathbf{X} = \left[
+						\begin{array}{cccc}
+					  |            & |            &     & | \\
+					  \mathbf{x}_1 & \mathbf{x}_2 & ... & \mathbf{x}_{N} \\
+					  |            & |            &     & | \\
+					  \end{array}\right]
+					    $$
+					</p>
+				</section>
+				
+				<section>
+					<p>Preliminaries - singular value decomposition (SVD):</p>
+					<p>
+						$$
+						  \mathbf{X} = \mathbf{U\Sigma V}^T
+						$$
+					</p>
+					<ul>
+						<li>$\mathbf{U}$ - left singular vectors</li>
+						<li>$\mathbf{\Sigma}$ - singular values</li>
+						<li>$\mathbf{V}$ - right singular vectors</li>
+						<li>$\mathbf{U}$ and $\mathbf{V}$ are orthonormal</li>
+						<li>non-zero $\sigma_{ij}$ on diagonal of $\mathbf{\Sigma}$</li>
+					</ul>
+				</section>
+				<section>
+					<p>DMD core idea:</p>
+					<p>
+						$$
+						  \mathbf{x}_{n+1} = \mathbf{Ax}_n
+						$$
+					</p>
+					<p>$\mathbf{A}\in \mathbb{C}^{M\times M}$ - (best-fit) linear operator</p>
+				</section>
+				<section>
+					<p>How to compute $\mathbf{A}$?</p>
+					<p>
+						$$
+						  \underbrace{[\mathbf{x}_2, ..., \mathbf{x}_N]}_{\mathbf{X}^\prime} = A \underbrace{[\mathbf{x}_1, ..., \mathbf{x}_{N-1}]}_{\mathbf{X}}
+						$$
+					</p>
+					<p>
+						$$
+						  \mathbf{X}^\prime = \mathbf{AX} \rightarrow A\approx \mathbf{X}^\prime\mathbf{X}^{-1} = \mathbf{X}^\prime\mathbf{V\Sigma}^{-1}\mathbf{U}^T
+						$$
+					</p>
+					<p>best-fit (least squares) linear operator</p>
+				</section>
+				<section>
+					<p>The <b>mode decomposition</b> part:</p>
+					<p>
+						$$
+						  \mathbf{A} = \mathbf{\Phi\Lambda\Phi}^{-1}
+						$$
+						$$
+						  \mathbf{x}_2 = \mathbf{Ax}_1 = \mathbf{\Phi\Lambda\Phi}^{-1} \mathbf{x}_1
+						$$
+						$$
+						  \mathbf{x}_3 = \mathbf{AAx}_1 = \mathbf{\Phi\Lambda\Phi}^{-1}\mathbf{\Phi\Lambda\Phi}^{-1} \mathbf{x}_1 = \mathbf{\Phi\Lambda}^{2}\mathbf{\Phi}^{-1} \mathbf{x}_1
+						$$
+						$$
+						  \mathbf{x}_N = \mathbf{\Phi\Lambda}^{N-1}\mathbf{\Phi}^{-1} \mathbf{x}_1
+						$$
+					</p>
+					<p>Only the $\mathbf{\Lambda}$ term changes!</p>
+				</section>
+				<section>
+					<p>Reconstruction and terminology:</p>
+					<p>
+						$$
+						\mathbf{x}_n = \sum\limits_{j=1}^{N}\mathbf{\phi}_j \lambda_j^{n-1} b_j
+						$$
+					</p>
+					<ul>
+						<li>DMD modes - column vectors $\mathbf{\phi}_j$</li>
+						<li>mode amplitudes - $\mathbf{b} = \mathbf{\Phi}^{-1}\mathbf{x}_1$</li>
+						<li>eigenvalues describe time dynamics</li>
+					</ul>
+				</section>
+				<section>
+					<p>What is the meaning of complex eigenvalues? Time-continuous formulation:</p>
+					<p>
+						$$
+						\frac{\mathrm{d}\mathbf{x}}{\mathrm{d}t} = \mathbf{\mathcal{A}x}
+						$$
+					</p>
+					<p>
+						Analytical solution by diagonalization of $\mathbf{\mathcal{A}}$:
+					</p>
+					<p>
+						$$
+						\frac{\mathrm{d}\mathbf{x}}{\mathrm{d}t} = \mathbf{\Phi}\tilde{\mathbf{\Lambda}}\mathbf{\Phi}^{-1}\mathbf{x}
+						$$
+					</p>
+				</section>
+				<section>
+					<p>
+						$$
+						\mathbf{\Phi}^{-1}\frac{\mathrm{d}\mathbf{x}}{\mathrm{d}t} = \tilde{\mathbf{\Lambda}}\mathbf{\Phi}^{-1}\mathbf{x}
+						$$
+					</p>
+					<p>substitution $\mathbf{y} = \mathbf{\Phi}^{-1}\mathbf{x}$</p>
+					<p>
+						$$
+						\frac{\mathrm{d}\mathbf{y}}{\mathrm{d}t} = \tilde{\mathbf{\Lambda}}\mathbf{y}
+						$$
+					</p>
+					<p>
+						$$
+						  y_1 = e^{\lambda_1 t} y_1(t=0),\ y_2=...
+						$$
+					</p>
+					<p>
+						$$
+						  \mathbf{y}(t) = \mathrm{exp}(\tilde{\mathbf{\Lambda}}t)\mathbf{y}_0
+						$$
+					</p>
+				</section>
+				<section>
+					<p>
+						$$
+						  \mathbf{y}(t) = \mathrm{exp}(\tilde{\mathbf{\Lambda}}t)\mathbf{y}_0
+						$$
+					</p>
+					<p>back-substitution $\mathbf{y} = \mathbf{\Phi}^{-1}\mathbf{x}$</p>
+					<p>
+						$$
+						  \mathbf{x}(t) = \mathbf{\Phi}\mathrm{exp}(\tilde{\mathbf{\Lambda}}t)\underbrace{\mathbf{\Phi}^{-1}\mathbf{x}_0}_{\mathbf{b}}
+						$$
+					</p>
+				</section>
+				<section>
+					<p>Back to the meaning of complex eigenvalues:</p>
+					<p>
+						$$
+						\begin{align}
+						\tilde{\lambda}_j &= a_i + b_i j \\
+						\mathrm{exp}\left(\tilde{\lambda}_i t\right) &= \mathrm{exp}\left((a_i+b_i j) t\right)\\
+						&= \mathrm{exp}\left(a_i t\right)\mathrm{exp}\left(b_i j t\right) \\
+						&= \mathrm{exp}\left(a_i t\right) \left(\mathrm{cos}\left(b_i t\right)+j\mathrm{sin}\left(b_i t\right)\right),
+					  \end{align}
+						$$
+					</p>
+					<ul>
+						<li>
+							$Re(\tilde{\lambda}_i)$ - growth/decay rate
+						</li>
+						<li> $Im(\tilde{\lambda}_i) = 2\pi f_i$ - frequency</li>
+					</ul>
+				</section>
+			</section>
+
+			<section>
+				<h2>Preliminary flow analysis</h2>
+				<p>$\rightarrow$ open <a href="https://github.com/AndreWeiner/ofw2022_dmd_training/blob/main/preliminary_flow_analysis.ipynb">preliminary_flow_analysis.ipynb</a></p>
+			</section>
+
+			<section>
+				<section>
+					<h2>DMD in Python</h2>
+					<p>$\rightarrow$ open <a href="https://github.com/AndreWeiner/ofw2022_dmd_training/blob/main/dmd_flowtorch.ipynb">dmd_flowtorch.ipynb</a></p>
+				</section>
+				<section>
+					<video height="500" controls muted loop>
+						<source src="images/ofw2022/vel_mag.mp4">
+					</video>
+					<p>Flow past a surface mounted cube at $Re=40000$.</p>
+				</section>
+				<section>
+					<video height="500" controls muted loop>
+						<source src="images/ofw2022/vel_mag_lowf.mp4">
+					</video>
+					<p>Reconstruction of main vortex shedding mode.</p>
+				</section>
+				<section>
+					<video height="500" controls muted loop>
+						<source src="images/ofw2022/vel_mag_highf.mp4">
+					</video>
+					<p>Reconstruction of high-frequency vortex shedding mode.</p>
+				</section>
+			</section>
+
+
+			<section>
+				<section>
+					<h2>DMD with OpenFOAM</h2>
+					<p>$\rightarrow$ open <a href="https://github.com/AndreWeiner/ofw2022_dmd_training/tree/main/surfaceMountedCube/fullCaseDMD">fullCaseDMD</a></p>
+				</section>
+				<section>
+					<p>Advantages of OpenFOAM-based DMD:</p>
+					<ul>
+						<li>runtime processing of snapshots</li>
+						<li>MPI-parallel</li>
+						<li>everything in OpenFOAM/ParaView</li>
+					</ul>
+				</section>
+				<section>
+					<p>Some possible improvements:</p>
+					<ul>
+						<li>stabilize eigen-decomposition</li>
+						<li>weighting with cell volumes/areas</li>
+						<li>application to cell sets/zones</li>
+						<li>application to sampled surfaces</li>
+						<li>optimization of mode amplitudes</li>
+						<li>additional state vector norms</li>
+					</ul>
+				</section>
+			</section>
 			
 			<!-- Summary and outlook-->
 			<section>
 				<section>
-					<h2>Summary and outlook</h2>
+					<h2>What's next?</h2>
+				</section>
+				<section>
+					<p>Analysis of transonic shock buffets using DMD</p>
+					<p>$\rightarrow$ Aerodynamics I, 10:00 am (Tuesday), Sixties</p>
 				</section>
 				<section>
 					<h3>Data-driven modeling SIG</h3>
@@ -160,6 +423,7 @@
 						<li><a href="https://github.com/OFDataCommittee/mlfoam">Github</a> (resource aggregation)</li>
 						<li>Upcoming meeting: Sep 2022</li>
 					</ul>
+					<p><b>SIG workshop meeting today at 4:45 pm</b></p>
 				</section>
 			</section>
 
