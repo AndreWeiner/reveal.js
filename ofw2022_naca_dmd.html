@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+
+	<title>Modal analysis of transonic shock buffets on a NACA-0012 airfoil</title>
+
+	<meta name="description" content="openfoam_conference_2022">
+	<meta name="author" content="Andre Weiner">
+
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/white.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+
+	<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+</head>
+
+<style>
+	.row_img {
+		display: table;
+	}
+
+	.column_img {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 50%;
+	}
+
+	.column_five {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 20%;
+	}
+
+	.content_img {
+		display: inline-block;
+	}
+
+	.reveal .slide-number {
+		position: absolute;
+		display: block;
+		left: 8px;
+		bottom: 8px;
+		height: 48px;
+		width: 50px;
+		z-index: 31;
+		font-family: Helvetica, sans-serif;
+		font-size: 32px;
+		line-height: 1;
+		color: #000000;
+		background-color: rgba(0, 0, 0, 0);
+		padding: 5px;
+	}
+</style>
+
+<body>
+
+	<div class="reveal" data-video="small top-right">
+
+		<!-- Any section element inside of this container is displayed as a slide -->
+		<div class="slides">
+			<!-- title slide -->
+			<section data-video="small top-right">
+				<h3>Modal analysis of transonic shock buffets on a NACA-0012 airfoil</h3>
+				<p>
+					<u>Andre Weiner,</u> Richard Semaan<br>
+					TU Braunschweig, <a href="https://www.tu-braunschweig.de/en/ism">Institute of Fluid
+							Mechanics</a>
+					<style>
+						.row_logo {
+							display: table;
+						}
+
+						.column_logo {
+							display: table-cell;
+							vertical-align: middle;
+							text-align: center;
+							width: 50%;
+						}
+
+						.content_logo {
+							display: inline-block;
+						}
+					</style>
+				<div class="row_logo">
+					<div class="column_logo">
+						<div class="content_logo">
+							<img src="images/tubs_logo.png" alt="tubs_logo"
+								style="background:none; border:none; box-shadow:none;">
+						</div>
+					</div>
+					<div class="column_logo">
+						<div class="content_logo">
+							<table>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9993;</th>
+									<td style="border: 0; padding-right: 20px;"><a
+											href="mailto:a.weiner@tu-braunschweig.de">Mail</a></th>
+									<td style="border: 0; padding-right: 5px;">&#9741;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://www.linkedin.com/in/andre-weiner-a79752133/">LinkedIn</a></td>
+								</tr>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9997;</td>
+									<td style="border: 0; padding-right: 20px;"><a href="https://ml-cfd.com/">Blog</a>
+									</td>
+									<td style="border: 0; padding-right: 5px;">&#10026;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://github.com/AndreWeiner">Github</a></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- outline -->
+			<section>
+				<h2>Outline</h2>
+				<ol>
+					<li>Investigating shock buffets on airfoils</li>
+					<li>Simulation approach and sampling</li>
+					<li>Dynamic mode decomposition overview</li>
+					<li>Test of state vectors and DMD variants</li>
+					<li>Selected results</li>
+				</ol>
+			</section>
+
+			<!-- 2D shock buffets -->
+			<section>
+				<section>
+					<video height="500" controls muted loop>
+						<source src="videos/naca0012_ma_3D.mp4">
+					</video>
+					<p>Slice of local Mach number $Ma$; $Re_\infty=10^7$, $Ma_\infty=0.75$, $\alpha=4^\circ$.</p>
+				</section>
+				<section>
+					<p><a href="https://www.for2895.uni-stuttgart.de/">FOR 2895</a></p>
+					<p>Unsteady flow and interaction phenomena at high speed stall conditions</p>
+					<img src="images/of_conf_2020/for2895_logo.png" alt="for2895"
+						style="background:none; border:none; box-shadow:none; width: 70%">
+				</section>
+				<section>
+					<p>Improved understanding and prediction of flight envelop via:</p>
+					<ul>
+						<li>experiments: iPSP, PIV, Schlieren, ...</li>
+						<li>simulations: LES, RANS, hybrid RANS/LES</li>
+						<li>analysis and modeling: modal decomposition, ROMs</li>
+					</ul>
+				</section>
+				<section>
+					<p>Modal decomp. = spatial structures + temp. behavior</p>
+					<div class="row_logo">
+						<div class="column_logo">
+							<div class="content_logo">
+								<img src="images/euromech2022/naca_svd_slice_buffet_mode.svg" alt="tubs_logo"
+									style="background:none; border:none; box-shadow:none; width: 100%">
+									<p>spatial mode</p>
+							</div>
+						</div>
+						<div class="column_logo">
+							<div class="content_logo">
+								<img src="images/euromech2022/naca_svd_slice_buffet_coeff.svg" alt="tubs_logo"
+									style="background:none; border:none; box-shadow:none; width: 100%">
+								<p>temporal coefficient</p>
+							</div>
+						</div>
+					</div>
+				</section>
+				<section>
+					<p>Common issues/questions in DMD analyses:</p>
+					<ul>
+						<li>How to construct the state vector?</li>
+						<li>Which DMD variant to use?</li>
+						<li>How much data is needed?</li>
+						<li>How to set the <b>rank</b> parameter?</li>
+						<li>How sensitive to noise is the analysis?</li>
+					</ul>
+					<p>$\rightarrow$ (partial) answers in this presentation</p>
+				</section>
+			</section>
+
+			<!-- Simulation approach -->
+			<section>
+				<section>
+					<h2>Simulation approach</h2>
+				</section>
+				<section>
+					<p>Simulation approach in a nutshell:</p>
+					<ul>
+						<li>OpenFOAM-v2012</li>
+						<li>rhoCentralFoam</li>
+						<li>IDDES turbulence modeling</li>
+						<li>Spalart-Allmaras closure</li>
+						<li>2D and 3D simulations</li>
+					</ul>
+					<p><a href="https://github.com/FlowModelingControl/naca0012_shock_buffet">github.com/FlowModelingControl/naca0012_shock_buffet</a></p>
+				</section>
+				<section>
+					<img src="images/aiaa2022/naca_mesh.png" alt="sigma"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+					<p>Various views of the computational mesh.</p>
+				</section>
+			</section>
+
+			<!-- Dynamic mode decomposition -->
+			<section>
+				<section>
+					<h2>Dynamic mode decomposition</h2>
+				</section>
+				<section>
+					<p>Degrees of freedom in DMD analysis:</p>
+					<ol>
+						<li>State vector definition</li>
+						<li>Data pre-processing</li>
+						<li>Operator approximation</li>
+						<li>Mode amplitude computation</li>
+						<li>Mode selection</li>
+					</ol>
+					<p><a href="https://www.annualreviews.org/doi/abs/10.1146/annurev-fluid-030121-015835">Review of DMD variants by P. Schmid</a></p>
+				</section>
+				<section>
+					<img src="images/ofw2022/dmd_var_1.png" alt="sigma"
+						style="background:none; border:none; box-shadow:none; width: 70%">
+					<p>DMD as a five-step analysis - part I.</p>
+				</section>
+				<section>
+					<img src="images/ofw2022/dmd_var_2.png" alt="sigma"
+						style="background:none; border:none; box-shadow:none; width: 70%">
+					<p>DMD as a five-step analysis - part II.</p>
+				</section>
+				<section>
+					<p>Abbreviations:</p>
+					<ul>
+						<li>TDMD - total least squares DMD</li>
+						<li>UDMD - unitary DMD operator</li>
+						<li>opt. - optimal mode coefficients $\mathbf{b}$</li>
+						<li>int. - integral importance measure</li>
+						<li>amp. - classical DMD amplitude $|b_i|$</li>
+					</ul>
+					<p>opt. TDMD, int. $\rightarrow$ total least-squares DMD with optimal amplitudes and integral mode selection.</p>
+				</section>
+			</section>
+
+			<!-- Comparison of DMD variants -->
+			<section>
+				<section>
+					<h2>Test of state vectors and DMD variants</h2>
+				</section>
+				<section>
+					<p>Test 0: variance of state vector norms</p>
+				</section>
+				<section>
+					<img src="images/ofw2022/state_norm.svg" alt="dmd_sketch"
+						style="background:none; border:none; box-shadow:none; width: 80%">
+				</section>
+				<section>
+					<p>Test 1: rank sensitivity of buffet frequency</p>
+					<p>Assumption: <b>top mode = buffet mode</b></p>
+				</section>
+				<section>
+					<img src="images/ofw2022/eigvals_opt.png" alt="dmd_sketch"
+						style="background:none; border:none; box-shadow:none; width: 90%">
+				</section>
+				<section>
+					<img src="images/ofw2022/eigvals_def.png" alt="dmd_sketch"
+						style="background:none; border:none; box-shadow:none; width: 90%">
+				</section>
+				<section>
+					<img src="images/ofw2022/bf_over_rank.png" alt="dmd_sketch"
+						style="background:none; border:none; box-shadow:none; width: 80%">
+				</section>
+				<section>
+					<p>Test 2: sensitivity to the sampling rate</p>
+				</section>
+				<section>
+					<img src="images/ofw2022/freq_over_samplerate.png" alt="dmd_sketch"
+						style="background:none; border:none; box-shadow:none; width: 80%">
+				</section>
+				<section>
+					<p>Test 3: rank sensitivity of the full spectrum</p>
+				</section>
+				<section>
+					<img src="images/ofw2022/f_over_rank_rho.png" alt="dmd_sketch"
+						style="background:none; border:none; box-shadow:none; width: 80%">
+				</section>
+				<section>
+					<img src="images/ofw2022/f_over_rank_uxya.png" alt="dmd_sketch"
+						style="background:none; border:none; box-shadow:none; width: 80%">
+				</section>
+				<section>
+					<p><b>Winning configuration:</b></p>
+					<ul>
+						<li>physics-based, weighted state vector</li>
+						<li>no additional pre-processing</li>
+						<li>standard operator def.</li>
+						<li>optimized amplitudes</li>
+						<li>integral selection criterion</li>
+					</ul>
+				</section>
+			</section>
+
+			<!-- DMD analysis of shock buffets -->
+			<section>
+				<section>
+					<h2>Selected results</h2>
+				</section>
+				<section>
+					<img src="images/ofw2022/U_mean_std.png" alt="sigma"
+						style="background:none; border:none; box-shadow:none; width: 90%">
+						<p>Temporal mean, std., and probe locations.</p>
+				</section>
+				<section>
+					<img src="images/ofw2022/probe_spectra.svg" alt="sigma"
+						style="background:none; border:none; box-shadow:none; width: 70%">
+						<p>PSD based on speed at probe locations.</p>
+				</section>
+				<section>
+					<img src="images/ofw2022/dmd_freq_uxya.svg" alt="sigma"
+						style="background:none; border:none; box-shadow:none; width: 90%">
+					<p>DMD spectrum obtained from slice data.</p>
+				</section>
+				<section>
+					<img src="images/ofw2022/dmd_modes_uxya_article.png" alt="sigma"
+						style="background:none; border:none; box-shadow:none; width: 80%">
+					<p>Characteristic DMD modes: shock motion and vortex shedding/acoustic waves.</p>
+				</section>
+				<section>
+					<video height="500" controls muted loop>
+						<source src="images/ofw2022/dmd_vortex_mode_a_15fps.mp4">
+					</video>
+					<p>Mode with vortex shedding and acoustic waves.</p>
+				</section>
+				<section>
+					<img src="images/ofw2022/vortex_shedding_mode.png" alt="sigma"
+						style="background:none; border:none; box-shadow:none; width: 80%">
+					<p>Comparable modes and spectra for volume, slice, and surface data.</p>
+				</section>
+			</section>
+
+			<!-- Summary and outlook-->
+			<section>
+				<section>
+					<h3>Data-driven modeling SIG</h3>
+					<ul>
+						<li><a href="https://wiki.openfoam.com/Data_Driven_Modelling_Special_Interest_Group">OpenFOAM wiki</a> (overview)</li>
+						<li><a href="https://github.com/OFDataCommittee/mlfoam">Github</a> (resource aggregation)</li>
+						<li>Upcoming meeting: Sep 2022</li>
+					</ul>
+				</section>
+			</section>
+
+			<!-- end -->
+			<section>
+				<section>
+					<h1>THE END</h1>
+					<h3>Thank you for you attention!</h3>
+					<img src="images/of_conf_2020/for2895_logo.png" alt="for2895"
+						style="background:none; border:none; box-shadow:none; width: 70%">
+					<div class="row_img">
+						<div class="column_img">
+							<div class="content_logo">
+								<table>
+									<tr>
+										<td style="border: 0; padding-right: 5px;">&#9993;</th>
+										<td style="border: 0; padding-right: 20px;"><a
+												href="mailto:a.weiner@tu-braunschweig.de">Mail</a></th>
+										<td style="border: 0; padding-right: 5px;">&#9741;</td>
+										<td style="border: 0; padding-right: 0px;"><a
+												href="https://www.linkedin.com/in/andre-weiner-a79752133/">LinkedIn</a></td>
+										<td style="border: 0; padding-right: 5px;">&#9997;</td>
+										<td style="border: 0; padding-right: 20px;"><a
+												href="https://ml-cfd.com/">Blog</a></td>
+										<td style="border: 0; padding-right: 5px;">&#10026;</td>
+										<td style="border: 0; padding-right: 0px;"><a
+												href="https://github.com/AndreWeiner">Github</a></td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+				</section>
+			</section>
+
+		</div>
+
+	</div>
+
+	<script src="js/reveal.js"></script>
+
+	<script>
+
+		// More info https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			center: true,
+			hash: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// More info https://github.com/hakimel/reveal.js#dependencies
+			dependencies: [
+				{ src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/highlight/highlight.js', async: true },
+				{ src: 'plugin/search/search.js', async: true },
+				{ src: 'plugin/zoom-js/zoom.js', async: true },
+				{ src: 'plugin/notes/notes.js', async: true },
+				{ src: 'plugin/math/math.js', async: true }]
+		});
+		Reveal.configure({ slideNumber: true });
+
+	</script>
+
+
+</body>
+
+</html>
