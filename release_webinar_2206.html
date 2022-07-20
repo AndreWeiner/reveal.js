@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+
+	<title>OpenFOAM TC data-driven modeling</title>
+
+	<meta name="description" content="ism_seminar_2021>
+	<meta name=" author" content="Andre Weiner">
+
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/white.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+
+	<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+</head>
+
+<style>
+
+	.reveal .slide-number {
+		position: absolute;
+		display: block;
+		left: 8px;
+		bottom: 8px;
+		height: 48px;
+		width: 90px;
+		z-index: 31;
+		font-family: Helvetica, sans-serif;
+		font-size: 32px;
+		line-height: 1;
+		color: #000000;
+		background-color: rgba(0, 0, 0, 0);
+		padding: 5px;
+	}
+</style>
+
+<style>
+	.row_img {
+		display: table;
+	}
+
+	.column_img {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 50%;
+	}
+
+	.column_five {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 20%;
+	}
+
+	.content_img {
+		display: inline-block;
+	}
+
+	.reveal .slide-number {
+		position: absolute;
+		display: block;
+		left: 8px;
+		bottom: 8px;
+		height: 48px;
+		width: 50px;
+		z-index: 31;
+		font-family: Helvetica, sans-serif;
+		font-size: 32px;
+		line-height: 1;
+		color: #000000;
+		background-color: rgba(0, 0, 0, 0);
+		padding: 5px;
+	}
+
+	.reveal .slides section .fragment.step-fade-in-then-out {
+		opacity: 0;
+		display: none;
+	}
+
+	.reveal .slides section .fragment.step-fade-in-then-out.current-fragment {
+		opacity: 1;
+		display: inline;
+	}
+</style>
+
+<body>
+
+	<div class="reveal" data-video="small top-right">
+
+		<!-- Any section element inside of this container is displayed as a slide -->
+		<div class="slides">
+			<section>
+				<h3>Data-driven modeling SIG</h3>
+
+				<table style="border-collapse: collapse; border-spacing: 0;">
+					<tr>
+						<td style="border: none; text-align: center; margin: 0; padding: 0; line-height: 0.5"><img
+							src="images/of_conf_2020/andre_weiner.jpg" alt="andre"
+							style="height:150px; background:none; border:none; box-shadow:none; margin: 5px"></td>
+						<td style="border: none; text-align: center; margin: 0; padding: 0; line-height: 0.5"><img
+								src="images/of_conf_2020/maric_portrait.jpg" alt="tomislav"
+								style="height:150px; background:none; border:none; box-shadow:none; margin: 5px;"></td>
+					</tr>
+					<tr>
+						<td style="border: none; text-align: center; margin: 5px; padding: 5px; line-height: 0.5">
+							<small>Andre Weiner</small>
+						</td>
+						<td style="border: none; text-align: center; margin: 5px; padding: 5px; line-height: 0.5">
+							<small>Tomislav Marić</small>
+						</td>
+					</tr>
+					<tr>
+						<td style="border: none; text-align: center; margin: 5px; padding: 5px; line-height: 0.5"><a
+								href="mailto:a.weiner@tu-braunschweig.de"><small>a.weiner@tu-braunschweig.de</small></a>
+						</td>
+						<td style="border: none; text-align: center; margin: 5px; padding: 5px; line-height: 0.5"><a
+								href="mailto:maric@mma.tu-darmstadt.de"><small>maric@mma.tu-darmstadt.de</small></a>
+						</td>
+					</tr>
+				</table>
+				<p>
+						OpenFOAM-<b>v2206</b> release webinar<br>
+				</p>
+			</section>
+
+			<!-- SIG overview -->
+			<section>
+				<section>
+					<h2>SIG overview</h2>
+				</section>
+				<section>
+					<p><b>What data-driven entails:</b></p>
+					<ul>
+						<li>machine learning</li>
+						<li>data science</li>
+						<li>data engineering</li>
+					</ul>
+				</section>
+				<section>
+					<p><b>Short term goals:</b></p>
+					<ul>
+						<li>reduce technical barrier</li>
+						<li>promote available techniques</li>
+						<li>promote third-party work</li>
+					</ul>
+				</section>
+				<section>
+					<p><b>Long term goals:</b></p>
+					<ul>
+						<li>aid understanding</li>
+						<li>accelerate developments</li>
+						<li>natural inclusion in OF</li>
+					</ul>
+				</section>
+				<section>
+					<p><b>Current SIG structure (July 2022):</b></p>
+					<ul>
+						<li>11 members</li>
+						<li>academia - 5</li>
+						<li>industry - 6</li>
+					</ul>
+					<p>Refer to the <a href="https://wiki.openfoam.com/Data_Driven_Modelling_Special_Interest_Group">wiki</a> for a detailed list.</p>
+				</section>
+				<section>
+					<p><b>Communication channels:</b></p>
+					<ul>
+						<li><a href="https://wiki.openfoam.com/Data_Driven_Modelling_Special_Interest_Group">OpenFOAM wiki</a></li>
+						<li>SIG meeting, every 2nd month</li>
+						<li>Slack (for SIG members)</li>
+						<li><a href="https://github.com/OFDataCommittee/mlfoam">Github repository</a></li>
+					</ul>
+				</section>
+			</section>
+
+			<section>
+				<section>
+					<h2>past/ongoing/upcoming activities</h2>
+				</section>
+				<section>
+					<p><b>OF workshop training contributions:</b></p>
+					<ul>
+						<li>Tomislav: <a href="https://gitlab.com/tmaric/ofw17-training-physics-based-dl/-/tree/main/">Physics-based DL with OF and PyTorch</a></li>
+						<li>Andre: <a href="https://github.com/AndreWeiner/ofw2022_dmd_training">Analyzing coherent structures with DMD</a></li>
+					</ul>
+					<p>Recordings will be available on the Journal's<br> <a href="https://www.youtube.com/channel/UCk-itwThjkmN7H7j_4wzhpQ">Youtube channel</a>.</p>
+				</section>
+				<section>
+					<img src="images/sig/pinn-openfoam-libtorch-visualization.png" alt="levelset"
+							style="background:none; border:none; box-shadow:none; width: 70%">
+					<p>Idea: solve $||\nabla \psi|| = 1$ using a PINN.</p>
+				</section>
+				<section>
+					<video height="500" controls muted loop>
+						<source src="images/ofw2022/vel_mag.mp4">
+					</video>
+					<p>Idea: analyze coherent structures using DMD.</p>
+				</section>
+				<section>
+					<video height="500" controls muted loop>
+						<source src="images/ofw2022/vel_mag_lowf.mp4">
+					</video>
+					<p>Reconstruction of main vortex shedding mode.</p>
+				</section>
+				<section>
+					<video height="500" controls muted loop>
+						<source src="images/ofw2022/vel_mag_highf.mp4">
+					</video>
+					<p>Reconstruction of high-frequency vortex shedding mode.</p>
+				</section>
+				<section>
+					<p><b>OpenFOAM-ML hackathon:</b></p>
+					<ul>
+						<li>July 25-27</li>
+						<li>~20 participants</li>
+						<li><b>thanks</b> to ESI and AWS!</li>
+					</ul>
+					<p><a href="https://github.com/OFDataCommittee/OFMLHackathon">github.com/OFDataCommittee/OFMLHackathon</a></p>
+				</section>
+				<section>
+					<p><b>Lecture on ML in CFD at TU Braunschweig:</b></p>
+					<ul>
+						<li>available on <a href="https://github.com/AndreWeiner/ml-cfd-lecture">Github</a></li>
+						<li>work in progress</li>
+						<li>funded for 6 additional month</li>
+					</ul>
+					<p><a href="https://www.tu-braunschweig.de/en/teaching-and-media-education/our-services/international-teaching/prodigi">Foundation for Innovation in University Teaching</a></p>
+				</section>
+			</section>
+			<section>
+				<h2>Thanks!</h2>
+			</section>
+
+		</div>
+
+	</div>
+
+	<script src="js/reveal.js"></script>
+
+	<script>
+
+		// More info https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			center: true,
+			hash: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// More info https://github.com/hakimel/reveal.js#dependencies
+			dependencies: [
+				{ src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/highlight/highlight.js', async: true },
+				{ src: 'plugin/search/search.js', async: true },
+				{ src: 'plugin/zoom-js/zoom.js', async: true },
+				{ src: 'plugin/notes/notes.js', async: true },
+				{ src: 'plugin/math/math.js', async: true }]
+		});
+		Reveal.configure({ slideNumber: true });
+
+	</script>
+
+
+</body>
+
+</html>
