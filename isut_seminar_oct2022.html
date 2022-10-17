@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+
+	<title>Deep Reinforcement Learning for closed-loop flow control in simulations</title>
+
+	<meta name="description" content="openfoam_conference_2021">
+	<meta name="author" content="Andre Weiner">
+
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/white.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+
+	<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+</head>
+
+<style>
+	.row_img {
+		display: table;
+	}
+
+	.column_img {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 50%;
+	}
+
+	.column_five {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 20%;
+	}
+
+	.content_img {
+		display: inline-block;
+	}
+
+	.reveal .slide-number {
+		position: absolute;
+		display: block;
+		left: 8px;
+		bottom: 8px;
+		height: 48px;
+		width: 50px;
+		z-index: 31;
+		font-family: Helvetica, sans-serif;
+		font-size: 32px;
+		line-height: 1;
+		color: #000000;
+		background-color: rgba(0, 0, 0, 0);
+		padding: 5px;
+	}
+</style>
+
+<body>
+
+	<div class="reveal" data-video="small top-right">
+
+		<!-- Any section element inside of this container is displayed as a slide -->
+		<div class="slides">
+			<!-- title slide -->
+			<section data-video="small top-right">
+				<h3>Deep Reinforcement Learning for closed-loop flow control<br> (in simulations)</h3>
+				<p>
+					Andre Weiner<br>
+					TU Braunschweig, <a href="https://www.tu-braunschweig.de/en/ism">Institute of Fluid
+							Mechanics</a>
+					<style>
+						.row_logo {
+							display: table;
+						}
+
+						.column_logo {
+							display: table-cell;
+							vertical-align: middle;
+							text-align: center;
+							width: 50%;
+						}
+
+						.content_logo {
+							display: inline-block;
+						}
+					</style>
+				<div class="row_logo">
+					<div class="column_logo">
+						<div class="content_logo">
+							<img src="images/tubs_logo.png" alt="tubs_logo"
+								style="background:none; border:none; box-shadow:none;">
+						</div>
+					</div>
+					<div class="column_logo">
+						<div class="content_logo">
+							<table>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9993;</th>
+									<td style="border: 0; padding-right: 20px;"><a
+											href="mailto:a.weiner@tu-braunschweig.de">Mail</a></th>
+									<td style="border: 0; padding-right: 5px;">&#9741;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://www.linkedin.com/in/andre-weiner-a79752133/">LinkedIn</a></td>
+								</tr>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9997;</td>
+									<td style="border: 0; padding-right: 20px;"><a href="https://ml-cfd.com/">Blog</a>
+									</td>
+									<td style="border: 0; padding-right: 5px;">&#10026;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://github.com/AndreWeiner">Github</a></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- outline -->
+			<section>
+				<h2>Outline</h2>
+				<ol>
+					<li>Why deep reinforcement learning (DRL)?</li>
+					<li>Reinforcement learning basics</li>
+					<li>Proximal policy optimization (PPO)</li>
+					<li>DRL with OpenFOAM and PyTorch</li>
+				</ol>
+			</section>
+
+			<!-- ml-cfd overview -->
+			<section>
+				<section>
+					<h2>Why DRL for closed-loop flow control?</h2>
+				</section>
+				<section>
+					<p>The two ingredients:</p>
+					<ul>
+						<li><b>Reinforcement learning:</b> solution of control-problems by <span style="color: red;">trial and error</span> (sampling)</li>
+						<li>
+							<b>Deep learning:</b> <span style="color: red;">efficient</span> approximation of <span style="color: red;">high-dimensional</span> functions based on samples
+						</li>
+					</ul>
+					<p>$\rightarrow$ <b>DRL:</b> <span style="color: red;">sample-efficient</span> RL for <span style="color: red;">high-dimensional</span> control problems</p>
+				</section>
+				<section>
+					<h3>Why simulations?</h3>
+					<img src="images/DRL/sensor_placement.png" alt="rl_overview"
+									style="background:none; border:none; box-shadow:none; width: 800px">
+					<p>A priori design optimization (sensor placement, actuation strategies); image by <b>Tom Krogmann</b>.</p>
+				</section>
+			</section>
+
+			<!-- DRL basics -->
+			<section>
+				<section>
+					<h2>Reinforcement learning basics</h2>
+				</section>
+				<section>
+					<h3>Reinforcement learning</h3>
+					<img src="images/reinforcement_web.svg" alt="rl_overview"
+									style="background:none; border:none; box-shadow:none; width: 600px">
+					<p>Create an intelligent agent that learns to map <b>states</b> to <b>actions</b> such that cumulative rewards are maximized.</p>
+				</section>
+				
+				<section>
+					<p>Experience tuple:</p>
+					<p>
+						$$
+						\left\{ S_t, A_t, R_{t+1}, S_{t+1}\right\}
+						$$
+					</p>
+					<p>Trajectory:</p>
+					<p>
+						$ \left\{S_0, A_0, R_1, S_1\right\} $<br>
+						$ \left\{S_1, A_1, R_2, S_3\right\} $<br>
+						$\left\{ ...\right\} $
+					</p>
+				</section>
+				<section>
+					<p>Long-term consequences:</p>
+					<p>
+						$$
+							G_t = \sum\limits_{l=0}^{N_t-t} \gamma^l R_{t+l}
+						$$
+					</p>
+					<ul>
+						<li>$t$ - control time step</li>
+						<li>$G_t$ - discounted return</li>
+						<li>$\gamma$ - discount factor, typically $\gamma=0.99$</li>
+						<li>$N_t$ - number of control steps</li>
+					</ul>
+				</section>
+				<section>
+					<p>Dealing with uncertainty:</p>
+					<p>
+						$$
+						  v_\pi (s) = \mathbb{E}_\pi \left[ G_t | S_t=s \right]
+						$$
+					</p>
+					<ul>
+						<li>$v_\pi (s)$ - value function</li>
+						<li>$\pi$ - policy (control flow)</li>
+					</ul>
+				</section>
+			</section>
+
+			<!-- proximal policy optimization -->
+			<section>
+				<section>
+					<h2>Proximal policy optimization</h2>
+				</section>
+				<section>
+					<h3>Why PPO?</h3>
+					<ul>
+						<li>continuous and discrete actions spaces</li>
+						<li><b>relatively</b> simple implementation</li>
+						<li>restricted (robust) policy updates</li>
+						<li>sample efficient</li>
+						<li>...</li>
+					</ul>
+					<p>Refer to <a href="https://arxiv.org/abs/2006.11005">R. Paris et al. 2021</a> and the references therein for similar works employing PPO.</p>
+				</section>
+				<section>
+					<img src="images/ofw_ssd/ppo_overview.png" alt="ppo_overview"
+						style="background:none; border:none; box-shadow:none; width: 400px">
+					<p>Proximal policy optimization (PPO) workflow (GAE - generalized advantage estimate).</p>
+				</section>
+				<section>
+					<img src="images/ofw_ssd/policy_network.png" alt="ppo_overview"
+						style="background:none; border:none; box-shadow:none; width: 500px">
+					<p>Policy network predicts probability density function(s) for action(s).</p>
+				</section>
+				<section>
+					<img src="images/DRL/gauss_vs_beta_dist.svg" alt="probes" width="80%" style="background:none; border:none; box-shadow:none;">
+					<p>Comparison of Gauss and Beta distribution.</p>
+				</section>
+				<section>
+					<p>Learning what to expect in a given state:</p>
+					<p>
+						$$
+						  L_V = \frac{1}{N_\tau N_t} \sum\limits_{\tau = 1}^{N_\tau}\sum\limits_{t = 1}^{N_t} \left( V(s_t^\tau) - G_t^\tau \right)^2
+						$$
+					</p>
+					<ul>
+						<li>$\tau$ - trajectory (single simulation)</li>
+						<li>$s_t$ - state/observation (pressure)</li>
+						<li>$V$ - parametrized value function</li>
+						<li>clipping not included</li>
+					</ul>
+				</section>
+				<section>
+					<p>Was the selected action a good one?</p>
+					<p>
+						$$\delta_t = R_t + \gamma V(s_{t+1}) - V(s_t) $$
+						$$
+						  A_t^{GAE} = \sum\limits_{l=0}^{N_t-t} (\gamma \lambda)^l \delta_{t+l}
+						$$
+					</p>
+					<ul>
+						<li>$\delta_t$ - one-step advantage estimate</li>
+						<li>$A_t^{GAE}$ - generalized advantage estimate</li>
+						<li>$\lambda$ - smoothing parameter</li>
+					</ul>
+				</section>
+				<section>
+					<p>make good actions more likely - policy objective function</p>
+					<p>
+						$$
+						  J_\pi = \frac{1}{N_\tau N_t} \sum\limits_{\tau = 1}^{N_\tau}\sum\limits_{t = 1}^{N_t} \left( \frac{\pi(a_t|s_t)}{\pi^{old}(a_t|s_t)} A^{GAE,\tau}_t\right)
+						$$
+					</p>
+					<ul>
+						<li>$\pi$ - current policy</li>
+						<li>$\pi^{old}$ - old policy (previous episode)</li>
+						<li>clipping and entropy not included</li>
+						<li>$J_\pi$ is <b>maximized</b></li>
+					</ul>
+				</section>
+				
+			</section>
+
+			<!-- DRL with OpenFOAM and PyTorch -->
+			<section>
+				<section>
+					<h2>DRL with OpenFOAM and PyTorch</h2>
+					<p>
+						Active control of the flow past a cylinder
+					</p>
+					<p>
+						<a href="https://github.com/darshan315/flow_past_cylinder_by_DRL">https://github.com/darshan315/flow_past_cylinder_by_DRL</a>
+					</p>
+					<p>
+						<a href="https://github.com/FabianGabriel/Active_flow_control_past_cylinder_using_DRL">https://github.com/FabianGabriel/Active_flow_control_past_cylinder_using_DRL</a>
+					</p>
+				</section>
+				<section>
+					<video height="500" controls muted loop>
+						<source src="videos/cylinder_short.mp4">
+					</video>
+					<p>Flow past a circular cylinder at $Re=100$.</p>
+				</section>
+				<section>
+					<p>Things we might be interested in:</p>
+					<ul>
+						<li>reduce drag and lift forces</li>
+						<li>mitigate extreme events</li>
+						<li>maximize mixing in the wake</li>
+						<li>...</li>
+					</ul>
+				</section>
+				<section>
+					<p>Can we reduce drag and lift forces?</p>
+					<img src="images/of_conf_2021/state_action.png" alt="state_action"
+						style="background:none; border:none; box-shadow:none; width: 500px">
+				</section>
+				<section>
+					<p>rewards - expressing the goal</p>
+					<p>
+						$$
+						R_t = r_0 - \left( r_1 c_D + r_2 |c_L| \right)
+						$$
+					</p>
+					<ul>
+						<li>$c_D$ - drag coefficient</li>
+						<li>$c_L$ - lift coefficient</li>
+						<li>$r_i$ - constants</li>
+					</ul>
+				</section>
+				<section>
+					<p>
+						Python/PyTorch
+					</p>
+					<ol>
+						<li>create policy and value networks</li>
+						<li>fill trajectory buffer (run simulations)</li>
+						<li>update policy and value networks</li>
+						<li>go back to 1. until converged</li>
+					</ol>
+					<p>Implementation follows closely chapter 12 of Miguel Morales's <a href="https://www.manning.com/books/grokking-deep-reinforcement-learning">Grokking Deep Reinforcement Learning</a></p>
+				</section>
+				<section>
+					<p>C++/OpenFOAM/PyTorch</p>
+					<ol>
+						<li>read policy network</li>
+						<li>sample and apply action</li>
+						<li>write trajectory (experience tuples)</li>
+					</ol>
+				</section>
+				<section>
+					<p>Boundary condition defined in <b>0/U</b></p>
+					<pre class="c++"><code>
+cylinder
+{
+	type            agentRotatingWallVelocity;
+	// center of cylinder
+	origin          (0.2 0.2 0.0);
+	// axis of rotation; normal to 2D domain
+	axis            (0 0 1);
+	// name of the policy network; must be a torchscript file
+	policy          "policy.pt";
+	// when to start controlling
+	startTime       0.01;
+	// how often to evaluate policy
+	interval        20;
+	// if true, the angular velocity is sampled from a Gaussian distribution
+	// if false, the mean value predicted by the policy is used
+	train           true;
+	// maximum allowed angular velocity
+	absOmegaMax     0.05;
+}
+					</code></pre>
+				</section>
+				<section>
+					<img src="images/of_conf_2021/distributions.png" alt="open_closed_loop"
+						style="background:none; border:none; box-shadow:none; width: 850px">
+					<p>Cumulative rewards vs. episodes for various distributions.</p>
+				</section>
+				<section>
+					<img src="images/ofw_ssd/drag_controlled.png" alt="open_closed_loop"
+						style="background:none; border:none; box-shadow:none; width: 850px">
+					<p>Comparison of <span style="color: royalblue;">uncontrolled</span>, <span style="color: darkorange;">open-loop</span> controlled, and <span style="color: green;">closed-loop</span> controlled drag.</p>
+				</section>
+				<section>
+					<img src="images/ofw_ssd/omegas.png" alt="omega"
+						style="background:none; border:none; box-shadow:none; width: 1000px">
+					<p>Angular velocity for open and closed-loop control.</p>
+				</section>
+				<section>
+					<h3>How robust is the controller?</h3>
+					<ol>
+						<li>training with <b>steady</b> inlet velocity<br> $Re=\{100, 200, 400 \}$</li>
+						<li>test with <b>unsteady</b> inlet velocity<br> $Re(t)= 250 + 150\mathrm{sin}(\pi t)$</li>
+					</ol>
+				</section>
+				<section>
+					<video width="100%" controls autoplay loop>
+						<source src="images/of_conf_2021/variable_inflow_2x.mp4" type="video/mp4">
+					</video>
+					<p>Variable inlet velocity/Reynolds number $Re(t) = 250 + 150\mathrm{sin}(\pi t)$</p>
+				</section>
+				<section>
+					<img src="images/of_conf_2021/trasient_drag.png" alt="transient_drag"
+						style="background:none; border:none; box-shadow:none; width: 850px">
+					<p>Drag coefficient for transient inlet velocity: <span style="color: blue;">uncontrolled</span> and <span style="color: orange;">controlled</span>.</p>
+				</section>
+			</section>
+
+			<!-- where to go from here -->
+			<section>
+				<section>
+					<h2>Where to go from here?</h2>
+				</section>
+				<section>
+					<h3>drlFoam - DRL with OpenFOAM</h3>
+					<p><a href="https://github.com/OFDataCommittee/drlfoam">github.com/OFDataCommittee/drlfoam</a></p>
+				</section>
+				<section>
+					<h3>Data-driven modeling SIG</h3>
+					<ul>
+						<li><a href="https://wiki.openfoam.com/Data_Driven_Modelling_Special_Interest_Group">OpenFOAM wiki</a> (overview)</li>
+						<li><a href="https://github.com/OFDataCommittee/mlfoam">Github</a> (resource aggregation)</li>
+						<li>Upcoming meeting: Dec, 2022</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Lecture on ML in CFD</h3>
+					<ul>
+						<li>covers all types of ML</li>
+						<li>
+							freely available on <a href="https://github.com/AndreWeiner/ml-cfd-lecture">Github</a>
+						</li>
+						<li>
+							work in progress
+						</li>
+					</ul>
+				</section>
+			</section>
+
+			<!-- end -->
+			<section>
+				<section>
+					<h1>THE END</h1>
+					<h3>Thank you for you attention!</h3>
+					<img src="images/of_conf_2020/for2895_logo.png" alt="for2895"
+						style="background:none; border:none; box-shadow:none; width: 70%">
+					<div class="row_img">
+						<div class="column_img">
+							<div class="content_logo">
+								<table>
+									<tr>
+										<td style="border: 0; padding-right: 5px;">&#9993;</th>
+										<td style="border: 0; padding-right: 20px;"><a
+												href="mailto:a.weiner@tu-braunschweig.de">Mail</a></th>
+										<td style="border: 0; padding-right: 5px;">&#9741;</td>
+										<td style="border: 0; padding-right: 0px;"><a
+												href="https://www.linkedin.com/in/andre-weiner-a79752133/">LinkedIn</a></td>
+										<td style="border: 0; padding-right: 5px;">&#9997;</td>
+										<td style="border: 0; padding-right: 20px;"><a
+												href="https://ml-cfd.com/">Blog</a></td>
+										<td style="border: 0; padding-right: 5px;">&#10026;</td>
+										<td style="border: 0; padding-right: 0px;"><a
+												href="https://github.com/AndreWeiner">Github</a></td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+				</section>
+			</section>
+
+		</div>
+
+	</div>
+
+	<script src="js/reveal.js"></script>
+
+	<script>
+
+		// More info https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			center: true,
+			hash: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// More info https://github.com/hakimel/reveal.js#dependencies
+			dependencies: [
+				{ src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/highlight/highlight.js', async: true },
+				{ src: 'plugin/search/search.js', async: true },
+				{ src: 'plugin/zoom-js/zoom.js', async: true },
+				{ src: 'plugin/notes/notes.js', async: true },
+				{ src: 'plugin/math/math.js', async: true }]
+		});
+		Reveal.configure({ slideNumber: true });
+
+	</script>
+
+
+</body>
+
+</html>
