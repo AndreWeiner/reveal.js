@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Deep reinforcement learning for flow control</title>
+
+	<meta name="description" content="cfc2023">
+	<meta name="author" content="Andre Weiner">
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+
+	<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+</head>
+
+<style>
+	.row_img {
+		display: table;
+	}
+
+	.column_img {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 50%;
+	}
+
+	.column_five {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 20%;
+	}
+
+	.content_img {
+		display: inline-block;
+	}
+
+	.reveal .slide-number {
+		position: absolute;
+		display: block;
+		left: 8px;
+		bottom: 8px;
+		height: 48px;
+		width: 50px;
+		z-index: 31;
+		font-family: Helvetica, sans-serif;
+		font-size: 32px;
+		line-height: 1;
+		color: #fff;
+		background-color: rgba(0, 0, 0, 0);
+		padding: 5px;
+	}
+</style>
+
+<body>
+
+	<div class="reveal" data-video="small top-right">
+
+		<!-- Any section element inside of this container is displayed as a slide -->
+		<div class="slides">
+			<!-- title slide -->
+			<section data-video="small top-right">
+				<h3>Model-based deep reinforcement learning for flow control</h3>
+				<p>
+					<small><u>Andre Weiner,</u> Janis Geise</small><br>
+					<small>TU Braunschweig, <a href="https://www.tu-braunschweig.de/en/ism">Institute of Fluid
+							Mechanics</a></small>
+							<style>
+								.row_logo {
+									display: table;
+								}
+		
+								.column_logo {
+									display: table-cell;
+									vertical-align: middle;
+									text-align: center;
+									width: 50%;
+								}
+		
+								.content_logo {
+									display: inline-block;
+								}
+							</style>
+				<div class="row_logo">
+					<div class="column_logo">
+						<div class="content_logo">
+							<img src="images/tubs_logo.png" alt="tubs_logo"
+								style="background:none; border:none; box-shadow:none;">
+						</div>
+					</div>
+					<div class="column_logo">
+						<div class="content_logo">
+							<table>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9993;</th>
+									<td style="border: 0; padding-right: 20px;"><a
+											href="mailto:a.weiner@tu-braunschweig.de">Mail</a></th>
+									<td style="border: 0; padding-right: 5px;">&#9741;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://www.linkedin.com/in/andre-weiner-a79752133/">LinkedIn</a></td>
+								</tr>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9997;</td>
+									<td style="border: 0; padding-right: 20px;"><a href="https://ml-cfd.com/">Blog</a>
+									</td>
+									<td style="border: 0; padding-right: 5px;">&#10026;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://github.com/AndreWeiner">Github</a></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- outline -->
+			<section>
+				<h2>Outline</h2>
+				<ol>
+					<li>Closed-loop active flow control</li>
+					<li>Proximal policy optimization (PPO)</li>
+					<li>Model-based PPO</li>
+				</ol>
+			</section>
+
+			<!-- Closed-loop active flow control -->
+			<section>
+				<section>
+					<h2>Closed-loop active flow control</h2>
+				</section>
+				<section>
+					<p>Goals of flow control:</p>
+					<ul>
+						<li>drag reduction</li>
+						<li>load reduction</li>
+						<li>process intensification</li>
+						<li>noise reduction</li>
+						<li>...</li>
+					</ul>
+				</section>
+				<section>
+					<p>Categories of flow control:</p>
+					<ol>
+						<li><b>passive:</b> geometry, fluid properties, ...</li>
+						<li><b>active:</b> blowing/suction, heating/cooling, ...</li>
+					</ol>
+					<p><span style="color: red;">energy input vs. efficiency gain</span></p>
+				</section>
+				<section>
+					<p>Categories of active flow control:</p>
+					<ol>
+						<li><b>open-loop:</b> actuation predefined</li>
+						<li><b>closed-loop:</b> actuation based on sensor input</li>
+					</ol>
+					<p><span style="color: red;">How to find the control law?</span></p>
+				</section>
+				<section>
+					<video height="500" controls mute autoplay loop>
+						<source src="images/of_conf_2021/variable_inflow_2x.mp4">
+					</video>
+					<p>Closed-loop flow control with variable Reynolds number; source: <a href="https://doi.org/10.5281/zenodo.5634050">F. Gabriel 2021</a>.</p>
+				</section>
+				<section>
+					<p>Why CFD-based DRL?</p>
+					<ul>
+						<li>save virtual environment</li>
+						<li>prior optimization, e.g., sensor placement</li>
+					</ul>
+				</section>
+				<section>
+					<img src="images/drl_feb_2023/pinnball_attention.png" alt="rl_overview"
+									style="background:none; border:none; box-shadow:none; width: 100%">
+					<p>Time-averaged attention weights $\bar{\kappa}$<br>Tom Krogmann <a href="https://zenodo.org/record/7636959">10.5281/zenodo.7636959</a></p>
+				</section>
+				<section>
+					<p>Training cost <a href="https://www.cfd-online.com/Wiki/DrivAer_Model">DrivAer model</a></p>
+					<ul>
+						<li>$8$ hours/simulation (2000 MPI ranks)</li>
+						<li>$10$ parallel simulations</li>
+						<li>$3$ episodes/day</li>
+						<li>$60$ days/training (180 episodes)</li>
+						<li>$60\times 24\times 10\times 2000 \approx 30\times 10^6 $ core hours</li>
+					</ul>
+					<p><span style="color: red;">CFD environments are expensive!</span></p>
+				</section>
+
+
+			</section>
+
+			<!-- RL basics -->
+			<section>
+				<section>
+					<h2>Proximal policy optimization</h2>
+				</section>
+				<section>
+					<img src="images/reinforcement_web.svg" alt="rl_overview"
+									style="background-color: #fff; border:none; box-shadow:none; padding: 1em; width: 600px">
+					<p>Create an intelligent agent that learns to map <b>states</b> to <b>actions</b> such that expected returns are maximized.</p>
+				</section>
+				<section>
+					<img src="images/drl_feb_2023/cylinder_probes.png" alt="rl_overview"
+									style="background:none; border:none; box-shadow:none; width: 100%">
+					<p>Flow past a cylinder benchmark.</p>
+				</section>
+				<section>
+					<p>What is our goal?</p>
+					<p>$r=3-(c_d + 0.1 |c_l|)$</p>
+					<p>$c_d$, $c_l$ - drag and lift coeff.; see <a href="https://doi.org/10.1017/jfm.2019.62">J. Rabault et al.</a></p>
+				</section>
+				<section>
+					<p>Long-term consequences:</p>
+					<p>
+						$$
+							G_t = \sum\limits_{l=0}^{N_t-t} \gamma^l R_{t+l}
+						$$
+					</p>
+					<ul>
+						<li>$t$ - control time step</li>
+						<li>$G_t$ - discounted return</li>
+						<li>$\gamma$ - discount factor, typically $\gamma=0.99$</li>
+						<li>$N_t$ - number of control steps</li>
+					</ul>
+				</section>
+				<section>
+					<p>What to expect in a given state?</p>
+					<p>
+						$$
+						  L_V = \frac{1}{N_\tau N_t} \sum\limits_{\tau = 1}^{N_\tau}\sum\limits_{t = 1}^{N_t} \left( V(s_t^\tau) - G_t^\tau \right)^2
+						$$
+					</p>
+					<ul>
+						<li>$\tau$ - trajectory (single simulation)</li>
+						<li>$s_t$ - state/observation (pressure)</li>
+						<li>$V$ - parametrized value function</li>
+						<li>clipping not included</li>
+					</ul>
+				</section>
+				<section>
+					<p>Was the selected action a good one?</p>
+					<p>
+						$$\delta_t = R_t + \gamma V(s_{t+1}) - V(s_t) $$
+						$$
+						  A_t^{GAE} = \sum\limits_{l=0}^{N_t-t} (\gamma \lambda)^l \delta_{t+l}
+						$$
+					</p>
+					<ul>
+						<li>$\delta_t$ - one-step advantage estimate</li>
+						<li>$A_t^{GAE}$ - generalized advantage estimate</li>
+						<li>$\lambda$ - smoothing parameter</li>
+					</ul>
+				</section>
+				<section>
+					<p>Making good actions more likely:</p>
+					<p>
+						$$
+						  J_\pi = \frac{1}{N_\tau N_t} \sum\limits_{\tau = 1}^{N_\tau}\sum\limits_{t = 1}^{N_t} \left( \frac{\pi(a_t|s_t)}{\pi^{old}(a_t|s_t)} A^{GAE,\tau}_t\right)
+						$$
+					</p>
+					<ul>
+						<li>$\pi$ - current policy</li>
+						<li>$\pi^{old}$ - old policy (previous episode)</li>
+						<li>clipping and entropy not included</li>
+						<li>$J_\pi$ is <b>maximized</b></li>
+					</ul>
+				</section>
+			</section>
+
+			<!-- Accelerated learning with ROMs -->
+			<section>
+				<section>
+					<h2>Model-based PPO</h2>
+					<p>
+						Janis Geise, <a href="https://github.com/JanisGeise/drlfoam/tree/mb_drl/drlfoam">Github</a>,
+						<a href="https://zenodo.org/record/7642927">10.5281/zenodo.7642927</a>
+					</p>
+				</section>
+				<section>
+					<p><b>Idea:</b> replace CFD with model(s) in some episodes</p>
+					<pre class="python"><code>
+for e in episodes:
+    if models_reliable():
+        sample_trajectories_from_models()
+    else:
+        sample_trajectories_from_simulation()
+        update_models()
+    update_policy()
+					</code></pre>
+					<p>Based on <a href="https://arxiv.org/abs/1802.10592">Model Ensemble TRPO</a>.</p>
+				</section>
+				<section>
+					<p>When are the models reliable?</p>
+					<ol>
+						<li>evaluate policy for every model</li>
+						<li>compare to previous policy loss</li>
+						<li>switch if loss did not decrease for<br>at least $50\%$ of the models</li>
+					</ol>
+				</section>
+				<section>
+					<p>How to sample from the ensemble?</p>
+					<ol>
+						<li>pick initial sequence from CFD</li>
+						<li>fill buffer
+							<ol>
+								<li>select random model</li>
+								<li>sample action</li>
+								<li>predict next state</li>
+							</ol>
+						</li>
+					</ol>
+				</section>
+				<section>
+					<p>Recipe to create env. models:</p>
+					<ul>
+						<li>input/output normalization</li>
+						<li>fully-connected, feed-forward</li>
+						<li>time delays (~30)</li>
+						<li>layer normalization</li>
+						<li>batch training (size ~100)</li>
+						<li>learning rate decay (on plateau)</li>
+						<li>"early stopping"</li>
+					</ul>
+				</section>
+				<section>
+					<img src="images/cfc2023/rewards_vs_episode_models.png" alt="best_policy"
+									style="background:none; border:none; box-shadow:none; width: 100%">
+					<p>Influence on the number of models; average over trajectories and 3 seeds.</p>
+				</section>
+				<section>
+					<img src="images/cfc2023/coefficients_vs_episode_best.png" alt="best_policy"
+									style="background:none; border:none; box-shadow:none; width: 100%">
+					<p>Comparison of best policy over 3 seeds.</p>
+				</section>
+				<section>
+					<img src="images/cfc2023/coefficients_vs_episode_200.png" alt="av_policy"
+									style="background:none; border:none; box-shadow:none; width: 100%">
+					<p>Average performance over 3 seeds.</p>
+				</section>
+				<section>
+					<p>What are the savings?</p>
+					<p><span style="color: red;">$50-70\%$</span> in training time</p>
+				</section>
+			</section>
+
+			<!-- end -->
+			<section>
+				<section>
+					<h1>THE END</h1>
+					<h3>Thank you for you attention!</h3>
+					<img src="images/of_conf_2020/for2895_logo.png" alt="for2895"
+						style="background:none; border:none; box-shadow:none; width: 70%">
+					<div class="row_img">
+						<div class="column_img">
+							<div class="content_logo">
+								<table>
+									<tr>
+										<td style="border: 0; padding-right: 5px;">&#9993;</th>
+										<td style="border: 0; padding-right: 20px;"><a
+												href="mailto:a.weiner@tu-braunschweig.de">Mail</a></th>
+										<td style="border: 0; padding-right: 5px;">&#9741;</td>
+										<td style="border: 0; padding-right: 0px;"><a
+												href="https://www.linkedin.com/in/andre-weiner-a79752133/">LinkedIn</a></td>
+										<td style="border: 0; padding-right: 5px;">&#9997;</td>
+										<td style="border: 0; padding-right: 20px;"><a
+												href="https://ml-cfd.com/">Blog</a></td>
+										<td style="border: 0; padding-right: 5px;">&#10026;</td>
+										<td style="border: 0; padding-right: 0px;"><a
+												href="https://github.com/AndreWeiner">Github</a></td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+				</section>
+			</section>
+
+		</div>
+
+	</div>
+
+	<script src="js/reveal.js"></script>
+
+	<script>
+
+		// More info https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			center: true,
+			hash: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// More info https://github.com/hakimel/reveal.js#dependencies
+			dependencies: [
+				{ src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/highlight/highlight.js', async: true },
+				{ src: 'plugin/search/search.js', async: true },
+				{ src: 'plugin/zoom-js/zoom.js', async: true },
+				{ src: 'plugin/notes/notes.js', async: true },
+				{ src: 'plugin/math/math.js', async: true }]
+		});
+		Reveal.configure({ slideNumber: true });
+
+	</script>
+
+
+</body>
+
+</html>
