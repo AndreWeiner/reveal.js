@@ -1,0 +1,695 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Setting up a RL problem from scratch with drlfoam</title>
+
+	<meta name="description" content="cfc2023">
+	<meta name="author" content="Andre Weiner">
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+
+	<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+</head>
+
+<style>
+	.row_img {
+		display: table;
+	}
+
+	.column_img {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 50%;
+	}
+
+	.column_five {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 20%;
+	}
+
+	.content_img {
+		display: inline-block;
+	}
+
+	.reveal .slide-number {
+		position: absolute;
+		display: block;
+		left: 8px;
+		bottom: 8px;
+		height: 48px;
+		width: 50px;
+		z-index: 31;
+		font-family: Helvetica, sans-serif;
+		font-size: 32px;
+		line-height: 1;
+		color: #fff;
+		background-color: rgba(0, 0, 0, 0);
+		padding: 5px;
+	}
+</style>
+
+<body>
+
+	<div class="reveal" data-video="small top-right">
+
+		<!-- Any section element inside of this container is displayed as a slide -->
+		<div class="slides">
+			<!-- title slide -->
+			<section data-video="small top-right">
+				<h3>Setting up a RL problem from scratch with <span style="color: #bd1e3b;">drlfoam</span></h3>
+				<p>
+					<small><u>Andre Weiner,</u> Tomislav Maric</small><br>
+					<small>TU Braunschweig, <a href="https://www.tu-braunschweig.de/en/ism">Institute of Fluid
+							Mechanics</a></small>
+							<style>
+								.row_logo {
+									display: table;
+								}
+		
+								.column_logo {
+									display: table-cell;
+									vertical-align: middle;
+									text-align: center;
+									width: 50%;
+								}
+		
+								.content_logo {
+									display: inline-block;
+								}
+							</style>
+				<div class="row_logo">
+					<div class="column_logo">
+						<div class="content_logo">
+							<img src="images/tubs_logo.png" alt="tubs_logo"
+								style="background:none; border:none; box-shadow:none;">
+						</div>
+					</div>
+					<div class="column_logo">
+						<div class="content_logo">
+							<table>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9993;</th>
+									<td style="border: 0; padding-right: 20px;"><a
+											href="mailto:a.weiner@tu-braunschweig.de">Mail</a></th>
+									<td style="border: 0; padding-right: 5px;">&#9741;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://www.linkedin.com/in/andre-weiner-a79752133/">LinkedIn</a></td>
+								</tr>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9997;</td>
+									<td style="border: 0; padding-right: 20px;"><a href="https://ml-cfd.com/">Blog</a>
+									</td>
+									<td style="border: 0; padding-right: 5px;">&#10026;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://github.com/AndreWeiner">Github</a></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- outline -->
+			<section>
+				<h2>Outline</h2>
+				<ol>
+					<li>closed-loop active flow control</li>
+					<li>(deep) reinforcement learning</li>
+					<li>setting up a flow control problem
+						<ul>
+							<li>OF simulation</li>
+							<li>OF boundary condition</li>
+							<li>drlFoam environment</li>
+						</ul>
+					</li>
+					<li>running a training</li>
+					<li>what's next?</li>
+				</ol>
+			</section>
+
+			<!-- Closed-loop active flow control -->
+			<section>
+				<section>
+					<h2>Closed-loop active flow control</h2>
+				</section>
+				<section>
+					<p>Goals of flow control:</p>
+					<ul>
+						<li>drag reduction</li>
+						<li>load reduction</li>
+						<li>process intensification</li>
+						<li>noise reduction</li>
+						<li>...</li>
+					</ul>
+				</section>
+				<section>
+					<p>Categories of flow control:</p>
+					<ol>
+						<li><b>passive:</b> geometry, fluid properties, ...</li>
+						<li><b>active:</b> blowing/suction, heating/cooling, ...</li>
+					</ol>
+					<p><span style="color: red;">active: energy input vs. efficiency gain</span></p>
+				</section>
+				<section>
+					<p>Categories of active flow control:</p>
+					<ol>
+						<li><b>open-loop:</b> actuation predefined</li>
+						<li><b>closed-loop:</b> actuation based on sensor input</li>
+					</ol>
+					<p><span style="color: red;">How to find the control law?</span></p>
+				</section>
+				<section>
+					<video height="500" controls mute loop>
+						<source src="images/of_conf_2021/variable_inflow_2x.mp4">
+					</video>
+					<p>Closed-loop flow control with variable Reynolds number; source: <a href="https://doi.org/10.5281/zenodo.5634050">F. Gabriel 2021</a>.</p>
+				</section>
+				<section>
+					<p>Why CFD-based DRL?</p>
+					<ul>
+						<li>save virtual environment</li>
+						<li>prior optimization, e.g., sensor placement</li>
+					</ul>
+				</section>
+			</section>
+
+			<!-- RL basics -->
+			<section>
+				<section>
+					<h2>deep reinforcement learning</h2>
+				</section>
+				<section>
+					<img src="images/reinforcement_web.svg" alt="rl_overview"
+									style="background-color: #fff; border:none; box-shadow:none; padding: 1em; width: 600px">
+					<p>Create an intelligent agent that learns to map <b>states</b> to <b>actions</b> such that expected returns are maximized.</p>
+				</section>
+				<section>
+					<p> $s_t$ - state $s$ at time $t$ (observation) </p>
+					<ul>
+						<li>velocity probes</li>
+						<li>surface pressure probes</li>
+						<li>temperature probes</li>
+						<li>...</li>
+					</ul>
+					<p>$s$ should be low-dimensional</p>
+				</section>
+				<section>
+					<p> $a_t$ - action $a$ at time $t$</p>
+					<ul>
+						<li>angular velocity</li>
+						<li>mass flux</li>
+						<li>heat flux</li>
+						<li>...</li>
+					</ul>
+					<p>$a$ should be low-dimensional</p>
+				</section>
+				<section>
+					<p>reward and reward function</p>
+					<p>$r=-c_d - 0.1 |c_l|$</p>
+					<p>$r_t$ - reward at time $t$</p>
+					<p>$c_d$, $c_l$ - drag and lift coefficient</p>
+				</section>
+				<section>
+					<p>experience tuple</p>
+					<p>
+						$$
+						\left\{ s_t, a_t, r_{t+1}, s_{t+1}\right\}
+						$$
+					</p>
+					<p>trajectory</p>
+					<p>
+						$ \left\{s_0, a_0, r_1, s_1\right\} $<br>
+						$ \left\{s_1, a_1, r_2, s_3\right\} $<br>
+						$\left\{ ...\right\} $
+					</p>
+				</section>
+				<section>
+					<p>Long-term consequences:</p>
+					<p>
+						$$
+							G_t = \sum\limits_{l=0}^{N_t-t} \gamma^l r_{t+l}
+						$$
+					</p>
+					<ul>
+						<li>$t$ - control time step</li>
+						<li>$G_t$ - discounted return</li>
+						<li>$\gamma$ - discount factor, typically $\gamma=0.99$</li>
+						<li>$N_t$ - number of control steps</li>
+					</ul>
+				</section>
+				<section>
+					<p>What to expect in a given state?</p>
+					<p>
+						$$
+						  L_V = \frac{1}{N_\tau N_t} \sum\limits_{\tau = 1}^{N_\tau}\sum\limits_{t = 1}^{N_t} \left( V(s_t^\tau) - G_t^\tau \right)^2
+						$$
+					</p>
+					<ul>
+						<li>$\tau$ - trajectory (single simulation)</li>
+						<li>$s_t$ - state/observation (pressure)</li>
+						<li>$V$ - parametrized value function</li>
+						<li>clipping not included</li>
+					</ul>
+				</section>
+				<section>
+					<p>Was the selected action a good one?</p>
+					<p>
+						$$\delta_t = R_t + \gamma V(s_{t+1}) - V(s_t) $$
+						$$
+						  A_t^{GAE} = \sum\limits_{l=0}^{N_t-t} (\gamma \lambda)^l \delta_{t+l}
+						$$
+					</p>
+					<ul>
+						<li>$\delta_t$ - one-step advantage estimate</li>
+						<li>$A_t^{GAE}$ - generalized advantage estimate</li>
+						<li>$\lambda$ - smoothing parameter</li>
+					</ul>
+				</section>
+				<section>
+					<p>Making good actions more likely:</p>
+					<p>
+						$$
+						  J_\pi = \frac{1}{N_\tau N_t} \sum\limits_{\tau = 1}^{N_\tau}\sum\limits_{t = 1}^{N_t} \left( \frac{\pi(a_t|s_t)}{\pi^{old}(a_t|s_t)} A^{GAE,\tau}_t\right)
+						$$
+					</p>
+					<ul>
+						<li>$\pi$ - current policy</li>
+						<li>$\pi^{old}$ - old policy (previous episode)</li>
+						<li>clipping and entropy not included</li>
+						<li>$J_\pi$ is <b>maximized</b></li>
+					</ul>
+				</section>
+			</section>
+
+			<!-- setting up a flow control problem -->
+			<section>
+				<section>
+					<h2>setting up a flow control problem</h2>
+				</section>
+				<section>
+					<img src="images/drl_feb_2023/cylinder_probes.png" alt="rl_overview"
+							style="background:none; border:none; box-shadow:none; width: 100%">
+					<p>Cylinder benchmark case; $Re=100$.</p>
+				</section>
+				<section>
+					<img src="images/ofw_ssd/ppo_overview.png" alt="ppo_overview"
+						style="background:none; border:none; box-shadow:none; width: 400px">
+					<p>Proximal policy optimization (PPO) workflow (GAE - generalized advantage estimate).</p>
+				</section>
+				<section>
+					<img src="images/ofw2023/drlfoam_structure.png" alt="rl_overview"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+					<a href="https://github.com/OFDataCommittee/drlfoam/tree/main">github.com/OFDataCommittee/drlfoam</a>
+				</section>
+				<section>
+					<p>3 steps to solve a new control problem</p>
+					<ol>
+						<li>OpenFOAM simulation</li>
+						<li>boundary condition (C++)</li>
+						<li>drlfoam <span style="color: #bd1e3b;">Env</span> (Python)</li>
+					</ol>
+				</section>
+				<section>
+					<h3>1. OF simulation</h3>
+					<p>openfoam/test_cases/rotatingCylinder2D</p>
+				</section>
+				<section>
+					<p>inputs for control law</p>
+					<pre class="C++"><code>
+probes
+{
+    type            probes;
+    libs            (sampling);
+    executeControl  runTime;
+    executeInterval 0.01;
+    writeControl    runTime;
+    writeInterval   0.01;
+    timeStart       4.0;
+    fields          (p);
+    probeLocations
+    (
+        (0.3 0.15 0.005)
+        ...
+    );
+}
+					</code></pre>
+				</section>
+				<section>
+					<p>quantities defining control objective</p>
+					<pre class="C++"><code>
+forces
+{
+    type            forceCoeffs;
+    libs            (forces);
+    executeControl  runTime;
+    executeInterval 0.01;
+    writeControl    runTime;
+    writeInterval   0.01;
+    timeStart       4.0;
+    patches
+    (
+        cylinder
+    );
+    coefficients    (Cd Cl);
+    ...
+}
+					</code></pre>
+				</section>
+				<section>
+					<p>define how to run the simulation</p>
+					<ul>
+						<li>Allrun.pre</li>
+						<li>Allrun</li>
+						<li>Allclean</li>
+					</ul>
+				</section>
+				<section>
+					<h3>2. boundary condition</h3>
+					<p>openfoam/src/agentRotatingWallVelocity</p>
+				</section>
+				<section>
+					<p>getting the state</p>
+					<pre class="c++"><code>
+if (timeToControl && update_omega_)
+{
+    const volScalarField& p =
+        this-&gt;db().lookupObject&lt;volScalarField&gt;("p"); 
+    scalarField p_sample = probes_.sample(p);
+    ...
+}
+					</code></pre>
+				</section>
+				<section>
+					<img src="images/ofw_ssd/policy_network.png" alt="ppo_overview"
+						style="background:none; border:none; box-shadow:none; width: 500px">
+					<p>Policy network predicts probability density function(s) for action(s).</p>
+				</section>
+				<section>
+					<img src="images/DRL/gauss_vs_beta_dist.svg" alt="probes" width="80%" style="background:none; border:none; box-shadow:none;">
+					<p>Comparison of Gauss and Beta distribution.</p>
+				</section>
+				<section>
+					<p>getting the next action I</p>
+					<pre class="c++"><code>
+torch::Tensor features = torch::from_blob(
+    p_sample.data(), {1, p_sample.size()},
+    torch::TensorOptions().dtype(torch::kFloat64)
+);
+std::vector&lt;torch::jit::IValue&gt; policyFeatures{features};
+torch::Tensor dist_parameters = policy_.forward(policyFeatures).toTensor();
+scalar alpha = dist_parameters[0][0].item&lt;double&gt;();
+scalar beta = dist_parameters[0][1].item&lt;double&gt;();
+					</code></pre>
+				</section>
+				<section>
+					<p>getting the next action II</p>
+					<pre class="c++"><code>
+std::gamma_distribution&lt;double&gt; distribution_1(alpha, 1.0);
+std::gamma_distribution&lt;double&gt; distribution_2(beta, 1.0);
+scalar omega_pre_scale;
+if (train_)
+{
+    // sample from Beta distribution during training
+    double number_1 = distribution_1(gen_);
+    double number_2 = distribution_2(gen_);
+    omega_pre_scale = number_1 / (number_1 + number_2);
+}
+else
+{
+    // use expected (mean) angular velocity
+    omega_pre_scale = alpha / (alpha + beta);
+}
+// rescale to actionspace
+omega_ = (omega_pre_scale - 0.5) * 2 * abs_omega_max_;
+					</code></pre>
+				</section>
+				<section>
+					<p>using the boundary condition in <span style="color: #bd1e3b;">0.org/U</span></p>
+					<pre class="c++"><code>
+cylinder
+{
+    type            agentRotatingWallVelocity;
+    origin          (0.2 0.2 0.0);
+    axis            (0 0 1);
+    policy          "policy.pt";
+    probesDict      "probes";
+    train           true;
+    seed            0;
+    absOmegaMax     5.0;
+    value           uniform (0 0 0);
+}
+					</code></pre>
+				</section>
+				<section>
+					<h3>drlfoam <span style="color: #bd1e3b;">Env</span></h3>
+					<p>drlfoam/environment/rotating_cylinder.py</p>
+				</section>
+				<section>
+					<p>some convenience functions</span></p>
+					<pre class="python"><code>
+def _parse_forces(path: str) -> DataFrame:
+    forces = read_csv(path, sep="\t", comment="#",
+                      header=None, names=["t", "cd", "cl"])
+    return forces
+
+def _parse_probes(path: str, n_probes: int) -> DataFrame:
+    names = ["t"] + [f"p{i}" for i in range(n_probes)]
+    return read_csv(
+        path, header=None, names=names,
+        comment="#", delim_whitespace=True
+    )
+					</code></pre>
+				</section>
+				<section>
+					<p>derived class</p>
+					<pre class="python"><code>
+class RotatingCylinder2D(Environment):
+    def __init__(self, r1: float = 3.0,
+                 r2: float = 1.0, r3: float=0.1):
+        super(RotatingCylinder2D, self).__init__(
+            join(TESTCASE_PATH, "rotatingCylinder2D"),
+            "Allrun.pre", "Allrun", "Allclean", 2, 12, 1
+        )
+        ...
+
+    def _reward(self, cd: pt.Tensor, cl: pt.Tensor) -> pt.Tensor:
+        return self._r1 - (self._r2 * cd + self._r3 * cl.abs())
+	...
+					</code></pre>
+				</section>
+			</section>
+
+			<!-- running a training -->
+			<section>
+				<section>
+					<h2>running a training</h2>
+				</section>
+				<section>
+					<p>how to run a training</p>
+					<ul>
+						<li>go to <span style="color: #bd1e3b;">examples</span></li>
+						<li>modify <span style="color: #bd1e3b;">run_example.py</span></li>
+					</ul>
+				</section>
+				<section>
+					<pre class="python"><code>
+DEFAULT_CONFIG = {
+    "rotatingCylinder2D" : {
+    "policy_dict" : {
+        "n_layers": 2,
+        "n_neurons": 64,
+        "activation": pt.nn.functional.relu
+    },
+    "value_dict" : {
+        "n_layers": 2,
+        "n_neurons": 64,
+        "activation": pt.nn.functional.relu
+    }
+}
+...
+					</code></pre>
+				</section>
+				<section>
+					<pre class="python"><code>
+config = SlurmConfig(
+            n_tasks=env.mpi_ranks,
+            n_nodes=1,
+            partition="queue-1",
+            time="03:00:00",
+            constraint="c5a.24xlarge",
+            modules=["openmpi/4.1.5"],
+            commands_pre=[
+              "source /fsx/OpenFOAM/OpenFOAM-v2206/etc/bashrc",\
+              "source /fsx/drlfoam_main/setup-env"
+            ]
+        )
+buffer = SlurmBuffer(training_path, ...)
+					</code></pre>
+				</section>
+				<section>
+					<pre class="bash"><code>
+#!/bin/bash
+#SBATCH --job-name=train_cylinder
+#SBATCH --ntasks=6
+#SBATCH --output=%x_%j.out
+#SBATCH --partition=queue-1
+#SBATCH --constraint=c5a.24xlarge
+
+source /fsx/OpenFOAM/OpenFOAM-v2206/etc/bashrc
+source /fsx/drlfoam_main/setup-env
+source /fsx/drlfoam_main/pydrl/bin/activate
+
+python3 run_training.py -o first_training \
+  -i 100 -r 10 -b 10 -f 8 \ 
+  -e slurm &> log.first_training
+					</code></pre>
+				</section>
+				<section>
+					<p>evaluating a policy</p>
+					<ul>
+						<li>make a copy of <code style="color: #bd1e3b;">base</code> and clean up</li>
+						<li>copy <code style="color: #bd1e3b;">policy_trace_xxx.pt</code> <br>to the new folder; name it <code style="color: #bd1e3b;">policy.pt</code></li>
+						<li>set <code style="color: #bd1e3b;">train 0;</code> in 0.org/U</li>
+						<li>adjust <code style="color: #bd1e3b;">timeStart ...;</code> in system/</li>
+						<li>execute <code style="color: #bd1e3b;">Allrun.pre</code></li>
+					</ul>
+				</section>
+				<section>
+					<img src="images/ofw2023/cd_controlled.png" alt="rl_overview"
+							style="background:none; border:none; box-shadow:none; width: 100%">
+					<p>Comparison of controlled and uncontrolled drag coefficient.</p>
+				</section>
+				<section>
+					<video height="500" controls mute loop>
+						<source src="images/ofw2023/cylinder_MF_20fps_short.mp4">
+					</video>
+					<p>Evaluation of final policy.</p>
+				</section>
+			</section>
+
+			<!-- what's next -->
+			<section>
+				<section>
+					<h2>What's next?</h2>
+				</section>
+				<section>
+					<p>more control problems</p>
+					<ul>
+						<li>turbulence modeling</li>
+						<li>shape optimization</li>
+						<li>linear solvers</li>
+						<li>...</li>
+					</ul>
+				</section>
+				<section>
+					<p>more advanced DRL topics</p>
+					<p>$\rightarrow$ Advances in the application of reinforcement learning to flow control problems</p>
+					<p><span style="color: #bd1e3b;">Wed, 09:00-09:20, room 4H</span></p>
+				</section>
+				<section>
+					<p>data-driven modeling SIG meeting</p>
+					<p><span style="color: #bd1e3b;">Thu, 5:15-6:15 pm, room 4H</span></p>
+					<p>3rd OpenFOAM-ML hackathon (<a href="https://github.com/OFDataCommittee/OFMLHackathon">register</a>)</p>
+					<p><span style="color: #bd1e3b;">Jul 24-26</span></p>
+				</section>
+				<section>
+					<p>thanks to</p>
+					<hr>
+					<p>Darshan Thummar, Fabian Gabriel, Jan Erik Schulze, Tom Krogmann, Janis Geise</p>
+					<hr>
+					<p>Ajay Navilarekal Rajgopal, Guilherme Lindner, Julian Bissantz, Morgan Kerhouant, Mosayeb Shams, Tomislav Marić </p>
+					<hr>
+					<p>Neil Ashton</p>
+				</section>
+			</section>
+
+			<!-- end -->
+			<section>
+				<section>
+					<h1>THE END</h1>
+					<h3>Thank you for you attention!</h3>
+					<img src="images/of_conf_2020/for2895_logo.png" alt="for2895"
+						style="background:none; border:none; box-shadow:none; width: 70%">
+					<div class="row_img">
+						<div class="column_img">
+							<div class="content_logo">
+								<table>
+									<tr>
+										<td style="border: 0; padding-right: 5px;">&#9993;</th>
+										<td style="border: 0; padding-right: 20px;"><a
+												href="mailto:a.weiner@tu-braunschweig.de">Mail</a></th>
+										<td style="border: 0; padding-right: 5px;">&#9741;</td>
+										<td style="border: 0; padding-right: 0px;"><a
+												href="https://www.linkedin.com/in/andre-weiner-a79752133/">LinkedIn</a></td>
+										<td style="border: 0; padding-right: 5px;">&#9997;</td>
+										<td style="border: 0; padding-right: 20px;"><a
+												href="https://ml-cfd.com/">Blog</a></td>
+										<td style="border: 0; padding-right: 5px;">&#10026;</td>
+										<td style="border: 0; padding-right: 0px;"><a
+												href="https://github.com/AndreWeiner">Github</a></td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+				</section>
+			</section>
+
+		</div>
+
+	</div>
+
+	<script src="js/reveal.js"></script>
+
+	<script>
+
+		// More info https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			center: true,
+			hash: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// More info https://github.com/hakimel/reveal.js#dependencies
+			dependencies: [
+				{ src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/highlight/highlight.js', async: true },
+				{ src: 'plugin/search/search.js', async: true },
+				{ src: 'plugin/zoom-js/zoom.js', async: true },
+				{ src: 'plugin/notes/notes.js', async: true },
+				{ src: 'plugin/math/math.js', async: true }]
+		});
+		Reveal.configure({ slideNumber: true });
+
+	</script>
+
+
+</body>
+
+</html>
