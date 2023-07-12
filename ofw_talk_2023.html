@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Advances in the application of DRL for flow control</title>
+
+	<meta name="description" content="cfc2023">
+	<meta name="author" content="Andre Weiner">
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+
+	<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+</head>
+
+<style>
+	.row_img {
+		display: table;
+	}
+
+	.column_img {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 50%;
+	}
+
+	.column_five {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 20%;
+	}
+
+	.content_img {
+		display: inline-block;
+	}
+
+	.reveal .slide-number {
+		position: absolute;
+		display: block;
+		left: 8px;
+		bottom: 8px;
+		height: 48px;
+		width: 50px;
+		z-index: 31;
+		font-family: Helvetica, sans-serif;
+		font-size: 32px;
+		line-height: 1;
+		color: #fff;
+		background-color: rgba(0, 0, 0, 0);
+		padding: 5px;
+	}
+</style>
+
+<body>
+
+	<div class="reveal" data-video="small top-right">
+
+		<!-- Any section element inside of this container is displayed as a slide -->
+		<div class="slides">
+			<!-- title slide -->
+			<section data-video="small top-right">
+				<h3>Advances in the application of DRL for flow control</h3>
+				<p>
+					<small><u>Andre Weiner,</u>, Tom Krogmann, Janis Geise</small><br>
+					<small>TU Braunschweig, <a href="https://www.tu-braunschweig.de/en/ism">Institute of Fluid
+							Mechanics</a></small>
+							<style>
+								.row_logo {
+									display: table;
+								}
+		
+								.column_logo {
+									display: table-cell;
+									vertical-align: middle;
+									text-align: center;
+									width: 50%;
+								}
+		
+								.content_logo {
+									display: inline-block;
+								}
+							</style>
+				<div class="row_logo">
+					<div class="column_logo">
+						<div class="content_logo">
+							<img src="images/tubs_logo.png" alt="tubs_logo"
+								style="background:none; border:none; box-shadow:none;">
+						</div>
+					</div>
+					<div class="column_logo">
+						<div class="content_logo">
+							<table>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9993;</th>
+									<td style="border: 0; padding-right: 20px;"><a
+											href="mailto:a.weiner@tu-braunschweig.de">Mail</a></th>
+									<td style="border: 0; padding-right: 5px;">&#9741;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://www.linkedin.com/in/andre-weiner-a79752133/">LinkedIn</a></td>
+								</tr>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9997;</td>
+									<td style="border: 0; padding-right: 20px;"><a href="https://ml-cfd.com/">Blog</a>
+									</td>
+									<td style="border: 0; padding-right: 5px;">&#10026;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://github.com/AndreWeiner">Github</a></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- outline -->
+			<section>
+				<h2>Outline</h2>
+				<ol>
+					<li>DRL for closed-loop active flow control</li>
+					<li>Optimal sensor placement</li>
+					<li>Model-based PPO</li>
+				</ol>
+			</section>
+
+			<!-- Closed-loop active flow control -->
+			<section>
+				<section>
+					<h2>Closed-loop active flow control</h2>
+				</section>
+				<section>
+					<p>motivation for closed-loop active flow control</p>
+					<ul>
+						<li>adaptation to more than one design point</li>
+						<li>more efficient than open-loop control</li>
+					</ul>
+					<p><span style="color: red;">How to find the control law?</span></p>
+				</section>
+				<section>
+					<img src="images/ofw_ssd/ppo_overview.png" alt="ppo_overview"
+						style="background:none; border:none; box-shadow:none; width: 400px">
+					<p>Proximal policy optimization (PPO) workflow (GAE - generalized advantage estimate).</p>
+				</section>
+				<section>
+					<p>Training cost <a href="https://www.cfd-online.com/Wiki/DrivAer_Model">DrivAer model</a></p>
+					<ul>
+						<li>$8$ hours/simulation (2000 MPI ranks)</li>
+						<li>$10$ parallel simulations</li>
+						<li>$3$ episodes/day</li>
+						<li>$60$ days/training (180 episodes)</li>
+						<li>$60\times 24\times 10\times 2000 \approx 30\times 10^6 $ core hours</li>
+					</ul>
+					<p><span style="color: red;">CFD environments are expensive!</span></p>
+				</section>
+
+
+			</section>
+
+			<!-- RL basics -->
+			<section>
+				<section>
+					<h2>Optimal sensor placement</h2>
+					<p>
+						Tom Krogmann, <a href="https://github.com/TomKrogmann/Optimal_Sensor_Placement_for_Active_Flow_Control_in_Deep_Reinforcement_Learning">Github</a>,
+						<a href="https://zenodo.org/record/7636959">10.5281/zenodo.7636959</a>
+					</p>
+				</section>
+				<section>
+					<p>Challenge with optimal sensor placement and flow control:<br>
+						<span style="color: red;">actuation changes the dynamical system</span></p>
+				</section>
+				<section>
+					<p>Idea: combined sensor placement and flow control optimization via <span style="color: red;">attention layer</span></p>
+					<p>$$\mathbf{f} = \mathbf{W}_2\mathrm{tanh}(\mathbf{W}_1\mathbf{x}_{in})$$</p>
+					<p>$\mathbf{W}_1\in \mathbb{R}^{N_b\times N_{in}}$, $\mathbf{W}_2\in \mathbb{R}^{N_{in} \times N_b}$, $N_b < N_{in}$</p>
+					<p>$$ \kappa_i = \mathrm{exp}(f_i)/\sum_i\mathrm{exp}(f_i)$$</p>
+					<p>$\kappa_i$ - attention weight of sensor $i$</p>
+				</section>
+				<section>
+					<img src="images/drl_feb_2023/pinnball_attention.png" alt="rl_overview"
+									style="background:none; border:none; box-shadow:none; width: 100%">
+					<p>Time-averaged attention weights $\bar{\kappa}$.</p>
+				</section>
+				<section>
+					<img src="images/ofw2023/pinball_attention_baseline.png" alt="rl_overview"
+									style="background:none; border:none; box-shadow:none; width: 80%">
+					<p>Results obtained with top 7 sensors (MDI - mean decrease of impurity, modes - QR column pivoting).</p>
+				</section>
+			</section>
+
+			<!-- Accelerated learning with ROMs -->
+			<section>
+				<section>
+					<h2>Model-based PPO</h2>
+					<p>
+						Janis Geise, <a href="https://github.com/JanisGeise/drlfoam/tree/mb_drl/drlfoam">Github</a>,
+						<a href="https://zenodo.org/record/7642927">10.5281/zenodo.7642927</a>
+					</p>
+				</section>
+				<section>
+					<p><b>Idea:</b> replace CFD with model(s) in some episodes</p>
+					<pre class="python"><code>
+for e in episodes:
+    if models_reliable():
+        sample_trajectories_from_models()
+    else:
+        sample_trajectories_from_simulation()
+        update_models()
+    update_policy()
+					</code></pre>
+					<p>Based on <a href="https://arxiv.org/abs/1802.10592">Model Ensemble TRPO</a>.</p>
+				</section>
+				<section>
+					<p>When are the models reliable?</p>
+					<ol>
+						<li>evaluate policy for every model</li>
+						<li>compare to previous policy loss</li>
+						<li>switch if loss did not decrease for<br>at least $50\%$ of the models</li>
+					</ol>
+				</section>
+				<section>
+					<p>How to sample from the ensemble?</p>
+					<ol>
+						<li>pick initial sequence from CFD</li>
+						<li>fill buffer with trajectories
+							<ol>
+								<li>select random model</li>
+								<li>sample action</li>
+								<li>predict next state</li>
+							</ol>
+						</li>
+					</ol>
+				</section>
+				<section>
+					<p>Recipe to create env. models:</p>
+					<ul>
+						<li>input/output normalization</li>
+						<li>fully-connected, feed-forward</li>
+						<li>time delays (~30)</li>
+						<li>layer normalization</li>
+						<li>batch training (size ~100)</li>
+						<li>learning rate decay (on plateau)</li>
+						<li>"early stopping"</li>
+					</ul>
+				</section>
+				<section>
+					<img src="images/drl_feb_2023/cylinder_probes.png" alt="rl_overview"
+							style="background:none; border:none; box-shadow:none; width: 100%">
+					<p>Cylinder benchmark case; $Re=100$.</p>
+				</section>
+				<section>
+					<p>control objective</p>
+					<p>$$r = c_{d,ref} - (c_d + 0.1|c_l|)$$</p>
+				</section>
+				<section>
+					<img src="images/ofw2023/rewards_vs_episode.png" alt="best_policy"
+									style="background:none; border:none; box-shadow:none; width: 70%">
+					<p>Rewards over episodes; mean/std. over 10 trajectories and 5 seeds; markers indicate CFD episodes.</p>
+				</section>
+				<section>
+					<img src="images/ofw2023/discarded_trajectories.png" alt="best_policy"
+									style="background:none; border:none; box-shadow:none; width: 100%">
+					<p>Number of discarded trajectories $N_r$ for various ensembles.</p>
+				</section>
+				<section>
+					<img src="images/ofw2023/pinball_setup.png" alt="rl_overview"
+							style="background:none; border:none; box-shadow:none; width: 100%">
+					<p>Pinball benchmark case; $Re=100$.</p>
+				</section>
+				<section>
+					<img src="images/ofw2023/cd_cl_ep_pinball.png" alt="av_policy"
+									style="background:none; border:none; box-shadow:none; width: 100%">
+					<p>Mean drag/lift over episodes.</p>
+				</section>
+				<section>
+					<img src="images/ofw2023/execution_times.png" alt="av_policy"
+									style="background:none; border:none; box-shadow:none; width: 70%">
+					<p>Execution time $t_{exec}$ for various ensembles normalized by model-free training time $t_{MF}$.</p>
+				</section>
+				<section>
+					<video height="500" controls mute loop>
+						<source src="images/ofw2023/pinball_MF.mp4">
+					</video>
+					<p>Evaluation of final policy.</p>
+				</section>
+			</section>
+
+			<!-- end -->
+			<section>
+				<section>
+					<h1>THE END</h1>
+					<h3>Thank you for you attention!</h3>
+					<img src="images/of_conf_2020/for2895_logo.png" alt="for2895"
+						style="background:none; border:none; box-shadow:none; width: 70%">
+					<div class="row_img">
+						<div class="column_img">
+							<div class="content_logo">
+								<table>
+									<tr>
+										<td style="border: 0; padding-right: 5px;">&#9993;</th>
+										<td style="border: 0; padding-right: 20px;"><a
+												href="mailto:a.weiner@tu-braunschweig.de">Mail</a></th>
+										<td style="border: 0; padding-right: 5px;">&#9741;</td>
+										<td style="border: 0; padding-right: 0px;"><a
+												href="https://www.linkedin.com/in/andre-weiner-a79752133/">LinkedIn</a></td>
+										<td style="border: 0; padding-right: 5px;">&#9997;</td>
+										<td style="border: 0; padding-right: 20px;"><a
+												href="https://ml-cfd.com/">Blog</a></td>
+										<td style="border: 0; padding-right: 5px;">&#10026;</td>
+										<td style="border: 0; padding-right: 0px;"><a
+												href="https://github.com/AndreWeiner">Github</a></td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+				</section>
+			</section>
+
+		</div>
+
+	</div>
+
+	<script src="js/reveal.js"></script>
+
+	<script>
+
+		// More info https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			center: true,
+			hash: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// More info https://github.com/hakimel/reveal.js#dependencies
+			dependencies: [
+				{ src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/highlight/highlight.js', async: true },
+				{ src: 'plugin/search/search.js', async: true },
+				{ src: 'plugin/zoom-js/zoom.js', async: true },
+				{ src: 'plugin/notes/notes.js', async: true },
+				{ src: 'plugin/math/math.js', async: true }]
+		});
+		Reveal.configure({ slideNumber: true });
+
+	</script>
+
+
+</body>
+
+</html>
