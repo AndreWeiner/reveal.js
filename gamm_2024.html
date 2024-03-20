@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Model-based deep reinforcement learning for flow control</title>
+
+	<meta name="description" content="gamm2024">
+	<meta name="author" content="Andre Weiner">
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+<body>
+
+	<div class="reveal">
+		<div class="slides">
+			<!-- title slide -->
+			<section>
+				<h3>Model-based reinforcement learning for flow control</h3>
+				<p>
+					<small><u>Andre Weiner</u>, Janis Geise</small><br>
+					<small>TU Dresden, <a href="https://tu-dresden.de/ing/maschinenwesen/ism/psm/die-professur">Chair of Fluid
+							Mechanics</a></small>
+							<style>
+								.row_logo {
+									display: table;
+								}
+		
+								.column_logo {
+									display: table-cell;
+									vertical-align: middle;
+									text-align: center;
+									width: 50%;
+								}
+		
+								.content_logo {
+									display: inline-block;
+								}
+							</style>
+				<div class="row_logo">
+					<div class="column_logo">
+						<div class="content_logo">
+							<img src="images/TUD_white.png" alt="tubs_logo"
+								style="background:none; border:none; box-shadow:none;">
+						</div>
+					</div>
+					<div class="column_logo">
+						<div class="content_logo">
+							<table>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9993;</th>
+									<td style="border: 0; padding-right: 20px;"><a
+											href="mailto:andre.weiner@tu-dresden.de">Mail</a></th>
+									<td style="border: 0; padding-right: 5px;">&#9741;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://www.linkedin.com/in/andre-weiner-a79752133/">LinkedIn</a></td>
+								</tr>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9997;</td>
+									<td style="border: 0; padding-right: 20px;"><a href="https://ml-cfd.com/">Blog</a>
+									</td>
+									<td style="border: 0; padding-right: 5px;">&#10026;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://github.com/AndreWeiner">Github</a></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- outline -->
+			<section>
+				<h2>Outline</h2>
+				<ol>
+					<li>closed-loop active flow control (AFC)</li>
+					<li>proximal policy optimization (PPO)</li>
+					<li>model ensemble PPO (MEPPO)</li>
+					<li>application: fluidic pinball</li>
+				</ol>
+			</section>
+
+			<!-- Closed-loop active flow control -->
+			<section>
+				<section>
+					<h2>Closed-loop active flow control (AFC)</h2>
+				</section>
+				<section>
+					<img src="images/gamm_2024/cylinder_setup.png" alt="rl_overview"
+							style="background:none; border:none; box-shadow:none; width: 100%">
+					<p>Flow past a cylinder in a narrow channel at $Re=\bar{U}_\mathrm{in}d/\nu = 100$.</p>
+				</section>
+				<section>
+					<video height="500" controls mute loop>
+						<source src="images/ofw2023/cylinder_MF_20fps_short.mp4">
+					</video>
+					<p>Closed-loop control starts at $t=4s$.</p>
+				</section>
+				<section>
+					<p>motivation for closed-loop AFC</p>
+					<ul>
+						<li>(potentially) more efficient than open-loop control</li>
+						<li>optimal control under changing conditions</li>
+					</ul>
+					<p><span style="color: red;">How to design the control system?</span></p>
+					<p><span style="color: #2ca02c;"> $\rightarrow $ end-to-end optimization via simulations</span></p>
+				</section>
+				<section>
+					<p>Training cost <a href="https://www.cfd-online.com/Wiki/DrivAer_Model">DrivAer model</a></p>
+					<ul>
+						<li>$5$ hours/simulation (1000 MPI ranks)</li>
+						<li>$10$ parallel simulations</li>
+						<li>$100$ iterations <span style="color: red;">$\rightarrow 20$ days</span> turnaround time</li>
+						<li>$20\times 24\times 10\times 1000 \approx 5\times 10^6 $ CPUh</li>
+						<li>$0.01-0.05$ EUR/CPUh <span style="color: red;">$\rightarrow 0.5-2$ mEUR</span></li>
+					</ul>
+					<p><span style="color: red;">CFD simulations are expensive!</span></p>
+				</section>
+
+
+			</section>
+
+			<!-- RL basics -->
+			<section>
+				<section>
+					<h2>Proximal policy optimization (PPO)</h2>
+				</section>
+				<section>
+					<img src="images/reinforcement_web.svg" alt="rl_overview"
+									style="background-color: #fff; border:none; box-shadow:none; padding: 1em; width: 600px">
+					<p>Create an intelligent agent that learns to map <b style="color: red;">states</b> to <b style="color: red;">actions</b> such that expected returns are maximized.</p>
+				</section>
+				<section>
+					<p>experience tuple at step $n$
+						$$ (S_n, A_n, R_{n+1}, S_{n+1}) $$
+					</p>
+					<p class="fragment">trajectory over $N$ steps
+						$$\tau = \left[ (S_0, A_0, R_1, S_1), \ldots ,(S_{N-1}, A_{N-1}, R_N, S_N)\right]$$
+					</p>
+				</section>
+				<section>
+					<p>return - dealing with sequential feedback</p>
+					<p>
+						$$
+						  G_n = R_{n+1} + R_{n+2} + ... + R_N
+						$$
+					</p>
+					<div class="fragment">
+					<p>discounted return
+						$$
+						  G_n = R_{n+1} + \gamma R_{n+2} + \gamma^2 R_{n+3} + ... \gamma^{N-1}R_N
+						$$
+					</p>
+					<p>$\gamma$ - discounting factor, typically $\gamma = 0.99$</p>
+				    </div>
+				</section>
+				<section>
+					<p>learning what to expect in a given state - value function loss</p>
+					<p>
+						$$
+						  L_V = \frac{1}{N_\tau N} \sum\limits_{\tau = 1}^{N_\tau}\sum\limits_{n = 1}^{N} \left( V(S_n^\tau) - G_n^\tau \right)^2
+						$$
+					</p>
+					<ul>
+						<li>$\tau$ - trajectory (single simulation)</li>
+						<li>$S_n$ - state/observation (pressure)</li>
+						<li>$V$ - parametrized value function</li>
+						<li>clipping not included</li>
+					</ul>
+				</section>
+				<section>
+					<p>Was the selected action a good one?</p>
+					<p>
+						$$\delta_n = R_n + \gamma V(S_{n+1}) - V(S_n) $$
+						$$\delta_{n+1} = R_n + \gamma R_{n+1} + \gamma^2 V(S_{n+2}) - V(S_n) $$
+					</p>
+					<div class="fragment">
+					<p>
+						$$
+						  A_n^{GAE} = \sum\limits_{l=0}^{N-n} (\gamma \lambda)^l \delta_{n+l}
+						$$
+					</p>
+					<ul>
+						<li>$\delta_n$ - one-step advantage estimate</li>
+						<li>$A_n^{GAE}$ - generalized advantage estimate</li>
+					</ul>
+					</div>
+				</section>
+				<section>
+					<img src="images/ofw_ssd/policy_network.png" alt="ppo_overview"
+						style="background:none; border:none; box-shadow:none; width: 500px">
+					<p>The policy network parametrizes a PDF over possible actions.</p>
+				</section>
+				<section>
+					<p>make good actions more likely - policy objective function</p>
+					<p><small>
+						$$
+						  J_\pi = \frac{1}{N_\tau N} \sum\limits_{\tau = 1}^{N_\tau}\sum\limits_{n = 1}^{N} \mathrm{min}\left[ \frac{\pi(a_n|s_n)}{\pi^{old}(a_n|s_n)} A^{GAE,\tau}_n,
+						  \mathrm{clamp}\left(\frac{\pi(a_n|s_n)}{\pi^{old}(a_n|s_n)}, 1-\epsilon, 1+\epsilon\right) A^{GAE,\tau}_n\right]
+						$$
+					</small>
+					</p>
+					<ul>
+						<li>$\pi$ - current policy</li>
+						<li>$\pi^{old}$ - old policy (previous episode)</li>
+						<li>entropy not included</li>
+						<li>$J_\pi$ is <b>maximized</b></li>
+					</ul>
+				</section>
+			</section>
+
+			<!-- Accelerated learning with ROMs -->
+			<section>
+				<section>
+					<h2>Model ensemble PPO (MEPPO)</h2>
+					<a href="https://arxiv.org/html/2402.16543v1">https://arxiv.org/html/2402.16543v1</a>
+				</section>
+				<section>
+					<p><b style="color: red;">Idea:</b> replace CFD with model(s) in some episodes</p>
+					<pre class="python"><code>
+for e in episodes:
+    if models_reliable():
+        sample_trajectories_from_models()
+    else:
+        sample_trajectories_from_simulation()
+        update_models()
+    update_policy()
+					</code></pre>
+					<p>Based on <a href="https://arxiv.org/abs/1802.10592">Model Ensemble TRPO</a>.</p>
+				</section>
+				<section>
+					<p>auto-regressive surrogate models with weights $\theta_m$</p>
+					<p>
+						$$
+						m_{\theta_m} : (\underbrace{S_{n-d}, \ldots, S_{n-1}, S_n}_{\hat{S}_n}, A_n) \rightarrow (S_{n+1}, R_{n+1})
+						$$
+					</p>
+					<div class="fragment">
+						<p>$\mathbf{x}_n = [\hat{S}_n, A_n]$ and $\mathbf{y}_n = [S_{n+1}, R_{n+1}]$</p>
+					<p>
+						$$
+						L_m = \frac{1}{|D|}\sum\limits_{i}^{|D|} (\mathbf{y}_i - m_{\theta_m}(\mathbf{x}_i))^2
+						$$
+					</p>
+				</div>
+				</section>
+				<section>
+					<p>How to sample from the ensemble?</p>
+					<ol>
+						<li>pick initial sequence from CFD</li>
+						<li>generate model trajectories
+							<ol>
+								<li style="color: red;">select random model</li>
+								<li>sample action</li>
+								<li>predict next state</li>
+							</ol>
+						</li>
+						</li>
+					</ol>
+				</section>
+				<section>
+					<p>When are the models reliable?</p>
+					<ol>
+						<li>evaluate policy for every model</li>
+						<li>compare to previous policy loss</li>
+						<li>switch if loss did not decrease for<br>at least $N_\mathrm{thr}$ of the models</li>
+					</ol>
+				</section>
+			</section>
+
+			<section>
+				<section>
+					<h2>Application: fluidic pinball</h2>
+				</section>
+				<section>
+					<img src="images/gamm_2024/pinball_setup.png" alt="rl_overview"
+							style="background:none; border:none; box-shadow:none; width: 80%">
+					<p>Fluidic pinball at $Re=\bar{U}_\mathrm{in}d/\nu = 100$.</p>
+				</section>
+				<section>
+					<p>reward at step $n$</p>
+					<p>
+						$$
+						c_x = \sum\limits_{i=1}^3 c_{x,i},\quad c_y = \sum\limits_{i=1}^3 c_{y,i}
+						$$
+					</p>
+					<p>
+						$$
+						R_n = 1.5 - (c_{x,n} + 0.5 |c_{y,n}|)
+						$$
+					</p>
+				</section>
+				<section>
+					<img src="images/gamm_2024/rewards_pinball.png" alt="rl_overview"
+							style="background: white; border:none; padding: 10px; box-shadow:none; width: 100%">
+					<p>Mean reward $R$ per episode; $N_\mathrm{m}$ - ensemble size; $N_\mathrm{thr}$ - switching criterion.</p>
+				</section>
+				<section>
+					<img src="images/gamm_2024/timings_pinball.png" alt="rl_overview"
+							style="background:none; border:none; box-shadow:none; width: 80%">
+					<p>Composition of model-based training time $T_\mathrm{MB}$ relative to model-free training time  $T_\mathrm{MF}$.</p>
+				</section>
+				<section>
+					<video height="500" controls mute loop>
+						<source src="images/ofw2023/pinball_MF.mp4">
+					</video>
+					<p>Closed-loop control starts at $t=200s$.</p>
+				</section>
+				<section>
+					<img src="images/gamm_2024/velocity_pinball.png" alt="rl_overview"
+							style="background:none; border:none; box-shadow:none; width: 90%">
+					<p>Snapshot of velocity fields (best policies).</p>
+				</section>
+			</section>
+
+			<section>
+				<p>toward realistic AFC applications</p>
+				<ul>
+					<li>improved surrogate modeling</li>
+					<li>hyperparameter optimization</li>
+					<li>"smart" trajectory sampling</li>
+				</ul>
+			</section>
+
+			<!-- end -->
+			<section>
+				<section>
+					<h3>Thank you for you attention!</h3>
+					<div class="row_logo">
+						<div class="column_logo">
+								<img src="images/gamm_2024/gamm_slides.png" alt="slides"
+									style="background:none; border:none; box-shadow:none; width: 60%">
+								<p>Slides</p>
+						</div>
+						<div class="column_logo">
+								<img src="images/gamm_2024/janis_github.png" alt="slides"
+									style="background:none; border:none; box-shadow:none; width: 60%">
+									<p>GitHub</p>
+						</div>
+					</div>
+				</section>
+			</section>
+
+		</div>
+
+	</div>
+
+	<script src="js/reveal.js"></script>
+
+	<script>
+
+		// More info https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			slideNumber: "c",
+			center: true,
+			hash: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// More info https://github.com/hakimel/reveal.js#dependencies
+			dependencies: [
+				{ src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/highlight/highlight.js', async: true },
+				{ src: 'plugin/search/search.js', async: true },
+				{ src: 'plugin/zoom-js/zoom.js', async: true },
+				{ src: 'plugin/notes/notes.js', async: true },
+				{ src: 'plugin/math/math.js', async: true }]
+		});
+
+	</script>
+
+	<style type="text/css">
+		.reveal .slide-number {
+			font-size: 1em;
+			color: #42affa;
+			right: auto;
+			width: 1.5em;
+			height: 1.5em;
+			background-color: #191919;
+			display: grid !important;
+			place-items: center;
+		}
+	</style>
+</body>
+
+
+</body>
+
+</html>
