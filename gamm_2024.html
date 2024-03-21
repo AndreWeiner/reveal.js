@@ -202,8 +202,8 @@
 					<p>make good actions more likely - policy objective function</p>
 					<p><small>
 						$$
-						  J_\pi = \frac{1}{N_\tau N} \sum\limits_{\tau = 1}^{N_\tau}\sum\limits_{n = 1}^{N} \mathrm{min}\left[ \frac{\pi(a_n|s_n)}{\pi^{old}(a_n|s_n)} A^{GAE,\tau}_n,
-						  \mathrm{clamp}\left(\frac{\pi(a_n|s_n)}{\pi^{old}(a_n|s_n)}, 1-\epsilon, 1+\epsilon\right) A^{GAE,\tau}_n\right]
+						  J_\pi = \frac{1}{N_\tau N} \sum\limits_{\tau = 1}^{N_\tau}\sum\limits_{n = 1}^{N} \mathrm{min}\left[ \frac{\pi(A_n|S_n)}{\pi^{old}(A_n|S_n)} A^{GAE,\tau}_n,
+						  \mathrm{clamp}\left(\frac{\pi(A_n|S_n)}{\pi^{old}(A_n|S_n)}, 1-\epsilon, 1+\epsilon\right) A^{GAE,\tau}_n\right]
 						$$
 					</small>
 					</p>
@@ -224,13 +224,14 @@
 				</section>
 				<section>
 					<p><b style="color: red;">Idea:</b> replace CFD with model(s) in some episodes</p>
+					<p><b style="color: red;">Challenge:</b> dealing with surrogate model errors</p>
 					<pre class="python"><code>
 for e in episodes:
-    if models_reliable():
-        sample_trajectories_from_models()
-    else:
+    if not models_reliable():
         sample_trajectories_from_simulation()
         update_models()
+    else:
+        sample_trajectories_from_models()
     update_policy()
 					</code></pre>
 					<p>Based on <a href="https://arxiv.org/abs/1802.10592">Model Ensemble TRPO</a>.</p>
@@ -282,7 +283,7 @@ for e in episodes:
 				<section>
 					<img src="images/gamm_2024/pinball_setup.png" alt="rl_overview"
 							style="background:none; border:none; box-shadow:none; width: 80%">
-					<p>Fluidic pinball at $Re=\bar{U}_\mathrm{in}d/\nu = 100$.</p>
+					<p>Fluidic pinball at $Re=\bar{U}_\mathrm{in}d/\nu = 100$; $\omega^\ast_i = \omega d/U_\mathrm{in} \in [-0.5, 0.5]$.</p>
 				</section>
 				<section>
 					<p>reward at step $n$</p>
