@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+
+	<title>OpenFOAM TC data-driven modeling</title>
+
+	<meta name="description" content="ism_seminar_2021">
+	<meta name="author" content="Andre Weiner">
+
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/white.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+
+	<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+</head>
+
+<style>
+	.row_img {
+		display: table;
+	}
+
+	.column_img {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 50%;
+	}
+
+	.column_five {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		width: 20%;
+	}
+
+	.content_img {
+		display: inline-block;
+	}
+
+	.reveal .slide-number {
+		position: absolute;
+		display: block;
+		left: 8px;
+		bottom: 8px;
+		height: 48px;
+		width: 50px;
+		z-index: 31;
+		font-family: Helvetica, sans-serif;
+		font-size: 32px;
+		line-height: 1;
+		color: #000000;
+		background-color: rgba(0, 0, 0, 0);
+		padding: 5px;
+	}
+
+	.reveal .slides section .fragment.step-fade-in-then-out {
+		opacity: 0;
+		display: none;
+	}
+
+	.reveal .slides section .fragment.step-fade-in-then-out.current-fragment {
+		opacity: 1;
+		display: inline;
+	}
+</style>
+
+<body>
+
+	<div class="reveal" data-video="small top-right">
+
+		<!-- Any section element inside of this container is displayed as a slide -->
+		<div class="slides">
+			<!-- title slide -->
+			<section>
+				<h3>Data-driven modeling</h3>
+				<p>OpenFOAM special interest group</p>
+				<p><b>9th</b> meeting</p>
+			</section>
+
+			<!-- agenda-->
+			<section>
+				<p>Plan for today</p>
+				<ul>
+					<li>introduction</li>
+					<li>past/ongoing/upcoming activities
+						<ul>
+							<li>OpenFoam-SmartSim submodule</li>
+							<li>workshop participation and trainings</li>
+							<li>next hackathon</li>
+						</ul>
+					</li>
+					<li>open discussion</li>
+				</ul>
+			</section>
+
+			<!-- introduction -->
+			<section>
+				<h3>Hi, my name is ...</h3>
+				<ul>
+					<li>about yourself</li>
+					<li>experience with OpenFOAM</li>
+					<li>experience with ML (and OF/CFD)</li>
+					<li>...</li>
+				</ul>
+				<p>We have scheduled only 1h for the meeting :)</p>
+			</section>
+			<section>
+				<section>
+					<h3>ongoing/upcoming activities</h3>
+				</section>
+				<section>
+					<h3>SmartSim module for OpenFOAM</h3>
+					<ul>
+						<li>code examples: <a href="https://github.com/OFDataCommittee/openfoam-smartsim">openfoam-smartsim</a></li>
+						<li>preprint: <a href="https://arxiv.org/abs/2402.16196">arXiv:2402.16196</a></li>
+						<li>OF-submodule application in preparation</li>
+					</ul>
+					<p>Continued work on partitioned SVD and reinforcement learning.</p>
+				</section>
+				<section>
+					<h3>workshop participation/trainings</h3>
+					<ul>
+						<li>June 25-28 in Beijing (hybrid)</li>
+						<li>participation in person/online?</li>
+						<li>training contributions?</li>
+					</ul>
+					<p><a href="https://openfoamworkshop.org/">official workshop website</a></p>
+				</section>
+				<section>
+					<h3>Next hackathon</h3>
+					<ul>
+						<li>suggestion: middle of July</li>
+						<li>hybrid event in Darmstadt or Dresden?</li>
+						<li>projects based on OF-SmartSim module?</li>
+						<li>bring your own project?</li>
+					</ul>
+				</section>
+			</section>
+
+			<section>
+				<h3>Closing words</h3>
+				<p>next meeting: June/July 2024</p>
+				<p>possibly during OF workshop</p>
+			</section>
+
+		</div>
+
+	</div>
+
+	<script src="js/reveal.js"></script>
+
+	<script>
+
+		// More info https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			center: true,
+			hash: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// More info https://github.com/hakimel/reveal.js#dependencies
+			dependencies: [
+				{ src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/highlight/highlight.js', async: true },
+				{ src: 'plugin/search/search.js', async: true },
+				{ src: 'plugin/zoom-js/zoom.js', async: true },
+				{ src: 'plugin/notes/notes.js', async: true },
+				{ src: 'plugin/math/math.js', async: true }]
+		});
+		Reveal.configure({ slideNumber: true });
+
+	</script>
+
+
+</body>
+
+</html>
