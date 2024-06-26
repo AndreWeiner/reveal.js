@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>An optimized dynamic mode decomposition for flow analysis</title>
+
+	<meta name="description" content="gamm2024">
+	<meta name="author" content="Andre Weiner">
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+<body>
+
+	<div class="reveal">
+		<div class="slides">
+			<!-- title slide -->
+			<section>
+				<h3>An optimized dynamic mode decomposition for flow analysis</h3>
+				<p>
+					<small><u>Andre Weiner</u>, Janis Geise, Richard Semaan</small><br>
+					<small>TU Dresden, <a href="https://tu-dresden.de/ing/maschinenwesen/ism/psm/die-professur">Chair of Fluid
+							Mechanics</a></small>
+							<style>
+								.row_logo {
+									display: table;
+								}
+		
+								.column_logo {
+									display: table-cell;
+									vertical-align: middle;
+									text-align: center;
+									width: 50%;
+								}
+		
+								.content_logo {
+									display: inline-block;
+								}
+							</style>
+				<div class="row_logo">
+					<div class="column_logo">
+						<div class="content_logo">
+							<img src="images/TUD_white.png" alt="tubs_logo"
+								style="background:none; border:none; box-shadow:none;">
+						</div>
+					</div>
+					<div class="column_logo">
+						<div class="content_logo">
+							<table>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9993;</th>
+									<td style="border: 0; padding-right: 20px;"><a
+											href="mailto:andre.weiner@tu-dresden.de">Mail</a></th>
+									<td style="border: 0; padding-right: 5px;">&#9741;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://www.linkedin.com/in/andre-weiner-a79752133/">LinkedIn</a></td>
+								</tr>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9997;</td>
+									<td style="border: 0; padding-right: 20px;"><a href="https://ml-cfd.com/">Blog</a>
+									</td>
+									<td style="border: 0; padding-right: 5px;">&#10026;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://github.com/AndreWeiner">Github</a></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<section>
+					<video width="100%" controls mute loop autoplay>
+						<source src="images/ofw2024/f1_f2_f3_dmd.mp4">
+					</video>
+					<p>A simple 1D test signal.</p>
+				</section>
+				<section>
+					<video width="100%" controls mute loop autoplay>
+						<source src="images/ofw2024/f1_2.3j.mp4">
+					</video>
+					<p>First component - jumping rope.</p>
+				</section>
+				<section>
+					<video width="100%" controls mute loop autoplay>
+						<source src="images/ofw2024/f2_0.6j.mp4">
+					</video>
+					<p>Second component - see-saw.</p>
+				</section>
+				<section>
+					<video width="100%" controls mute loop autoplay>
+						<source src="images/ofw2024/f3_2.8j.mp4">
+					</video>
+					<p>Third component - flipping wave.</p>
+				</section>
+				<section>
+					<video width="100%" controls mute loop autoplay>
+						<source src="images/ofw2024/f1_f2_f3.mp4">
+					</video>
+					<p>Superposition yields the original signal.</p>
+				</section>
+			</section>
+			
+
+			<!-- outline -->
+			<section>
+				<h2>Outline</h2>
+				<ol>
+					<li>dynamic mode decomposition</li>
+					<li>optimized DMD and benchmarks</li>
+					<li>example: surface-mounted cube</li>
+				</ol>
+			</section>
+
+			<!-- dynamic mode decomposition -->
+			<section>
+				<section>
+					<h2>Dynamic Mode Decomposition</h2>
+				</section>
+				<section>
+					<div class="row_logo">
+						<div class="column_logo">
+							<div class="content_logo">
+								<div>
+									<p>$\mathbf{x}_n = \mathbf{x}(t=n\Delta t)$</p>
+									<img src="images/ofw2024/cylinder_x0.png" alt="sh_glob" height="200px" style="background:none; border:none; box-shadow:none;">
+								</div>
+							</div>
+						</div>
+						<div class="column_logo">
+							<div class="content_logo">
+								<div class="fragment">
+									<p>$\mathbf{x}_{n+1} = \mathbf{x}(t=(n+1)\Delta t)$</p>
+									<img src="images/ofw2024/cylinder_x1.png" alt="sh_glob" height="200px" style="background:none; border:none; box-shadow:none;">
+								</div>
+								
+							</div>
+						</div>
+					</div>
+					<div class="fragment">
+						<p><span style="color: red;"> $\quad\mathbf{x}_{n+1} = \mathbf{Ax}_n $ </span>
+						</p>
+						<ul>
+							<li>$\mathbf{x}\in \mathbb{R}^M$ - state vector</li>
+							<li>$\mathbf{A}\in \mathbb{R}^{M\times M}$ - linear operator</li>
+						</ul>
+					</div>
+				</section>
+				<section>
+					<p>Least-squares definition of $\mathbf{A}$</p>
+					<p>
+						$$
+						  \underbrace{[\mathbf{x}_2, ..., \mathbf{x}_N]}_{\mathbf{Y}} = A \underbrace{[\mathbf{x}_1, ..., \mathbf{x}_{N-1}]}_{\mathbf{X}}
+						$$
+					</p>
+					<p>
+						$$
+						\underset{\mathbf{A}}{\mathrm{argmin}} ||\mathbf{Y}-\mathbf{AX}||_F = \mathbf{YX}^\dagger
+						$$
+					</p>
+					<p>$^\dagger$ denotes the pseudo inverse</p>
+				</section>
+				<section>
+					<p>Useful properties of the eigendecomposition
+						$$
+						  \mathbf{A} = \mathbf{\Phi\Lambda\Phi}^{-1}
+						$$
+					</p>
+					<p class="fragment">
+						$$
+						  \mathbf{x}_2 = \mathbf{Ax}_1 = \mathbf{\Phi\Lambda\Phi}^{-1} \mathbf{x}_1
+						$$
+					</p>
+					<p class="fragment">
+						$$
+						  \mathbf{x}_3 = \mathbf{AAx}_1 = \mathbf{\Phi\Lambda\Phi}^{-1}\mathbf{\Phi\Lambda\Phi}^{-1} \mathbf{x}_1 = \mathbf{\Phi\Lambda}^{2}\mathbf{\Phi}^{-1} \mathbf{x}_1
+						$$
+					</p>
+					<p class="fragment">
+						$$
+						  \mathbf{x}_n = \mathbf{\Phi\Lambda}^{n-1}\mathbf{\Phi}^{-1} \mathbf{x}_1
+						$$
+						Only the $\mathbf{\Lambda}$ term encodes time dependency!
+					</p>
+				</section>
+				<section>
+					<p>Dealing with large snapshots - DMD:</p>
+					<ol>
+						<li>$\mathbf{X} = \mathbf{U\Sigma V}^T$</li>
+						<li class="fragment">$\tilde{\mathbf{A}} = \mathbf{U}_r^T \mathbf{AU}_r = \mathbf{U}_r^T \mathbf{YX}^\dagger\mathbf{U}_r$, $\quad \tilde{\mathbf{A}} \in \mathbb{R}^{r\times r}$</li>
+						<li class="fragment">$\tilde{\mathbf{A}} = \mathbf{U}_r^T\mathbf{Y}\mathbf{V}_r\mathbf{\Sigma}_r^{-1}\mathbf{U}_r^T\mathbf{U}_r = \mathbf{U}_r^T\mathbf{Y}\mathbf{V}_r\mathbf{\Sigma}_r^{-1}$</li>
+						<li class="fragment">$\tilde{\mathbf{A}} =\mathbf{W\Lambda}_r\mathbf{W}^{-1}$, $\quad \mathbf{W}, \mathbf{\Lambda}_r \in \mathbb{C}^{r\times r}$</li>
+						<li class="fragment">$\mathbf{\Phi}_r = \mathbf{U}_r\mathbf{W}$</li>
+					</ol>
+				</section>
+				<section>
+					<p>Issues with the standard DMD:</p>
+					<ul>
+						<li>poor reconstruction accuracy</li>
+						<li>data overfitting</li>
+						<li>sensitive w.r.t. noise/nonlinearity</li>
+						<li>sensitive w.r.t. truncation ($r$)</li>
+					</ul>
+				</section>
+
+			</section>
+
+			<!-- optimized dynamic mode decomposition -->
+			<section>
+				<section>
+					<h2>Optimized DMD</h2>
+				</section>
+				<section>
+					<p>Reconstruction of a single snapshot:
+						$$
+							\mathbf{x}_n \approx \mathbf{\Phi}_r\mathbf{\Lambda}_r^{n-1}\mathbf{b}_r
+						$$
+						with $\mathbf{b}_r = \mathbf{\Phi}^{-1} \mathbf{x}_1$
+					</p>
+				</section>
+				<section>
+					<p>reconstruction of the full dataset</p>
+					<small>
+						<p>
+$$
+\underbrace{
+	\begin{bmatrix}
+	x_{11} & \ldots & x_{1N}\\
+	\vdots & \ddots & \vdots\\
+	x_{M1} & \ldots & x_{MN}
+	\end{bmatrix}
+	}_{\mathbf{M}}
+\approx
+\underbrace{
+\begin{bmatrix}
+\phi_{11} & \ldots & \phi_{1r}\\
+\vdots & \ddots & \vdots\\
+\phi_{M1} & \ldots & \phi_{Mr}
+\end{bmatrix}
+}_{\mathbf{\Phi}_r}
+\underbrace{
+\begin{bmatrix}
+b_1& & \\
+ & \ddots & \\
+ &  & b_r
+\end{bmatrix}
+}_{\mathbf{D_b}}
+\underbrace{
+\begin{bmatrix}
+\lambda_{1}^0 & \ldots & \lambda_{1}^{N-1}\\
+\vdots &  & \vdots\\
+\lambda_r^0 & \ldots & \lambda_r^{N-1}
+\end{bmatrix}
+}_{\mathbf{V_\lambda}}
+$$
+						</p>
+					</small>
+					<p>with $\mathbf{b}_r = \mathbf{\Phi}_r^{-1}\mathbf{x}_1$, $M$ - length of $\mathbf{x}$, $N$ - number of snapshots, $r$ - truncation rank</p>
+				</section>
+				<section>
+					<p>Operator definition in the optimized DMD:</p>
+							$\mathbf{M} = \left[ \mathbf{x}_1, \ldots, \mathbf{x}_{N} \right]^T\approx \mathbf{\Phi}_r\mathbf{D_b}\mathbf{V}_{\mathbf{\lambda}_r}$<br>
+							<p>
+								$$
+								\underset{\mathbf{\lambda}_r,\mathbf{\Phi}_r,\mathbf{b}_r}{\mathrm{argmin}}\left|\left| \mathbf{M}-\mathbf{\Phi}_r\mathbf{D_b}\mathbf{V}_{\mathbf{\lambda}_r} \right|\right|_F
+								$$
+							</p>
+							<p class="fragment" style="color: red;">$\rightarrow$ "optDMD" problem is nonlinear and non-convex</p>
+				</section>
+				<section>
+					<p>idea: borrow techniques from ML/DL</p>
+					<ul>
+						<li>stochastic gradient descent</li>
+						<li>automatic differentiation</li>
+						<li>train-validation-split</li>
+						<li>early stopping</li>
+					</ul>
+					<p>$\rightarrow$ refer to <a href=" 	
+						https://doi.org/10.48550/arXiv.2312.12928">10.48550/arXiv.2312.12928</a> for details</p>
+				</section>
+				<section>
+					<img src="images/ofw2024/noisy_data_dark.png" alt="rl_overview"
+					style="background:none; border:none; box-shadow:none; width: 80%">
+				</section>
+				<section>
+					<img src="images/ofw2024/reconstruction_error_cylinder_dark.png" alt="rl_overview"
+					style="background:none; border:none; box-shadow:none; width: 100%">
+				</section>
+				<section>
+					<img src="images/ofw2024/eigvals_20_dark.png" alt="rl_overview"
+					style="background:none; border:none; box-shadow:none; width: 80%">
+				</section>
+			</section>
+
+			<section>
+				<section>
+					<h2>Surface-mounted cube</h2>
+				</section>
+				<section>
+					<img src="images/ofw2024/cube_lic.png" alt="probes" width="100%" style="background:none; border:none; box-shadow:none;">
+					<p>Surface-mounted cube at $Re_h = 40000$; <a href="https://www.openfoam.com/documentation/guides/latest/doc/verification-validation-turbulent-surface-mounted-cube.html"> image source</a></p>
+				</section>
+				<section>
+					<video width="100%" controls mute loop autoplay>
+						<source src="images/ofw2024/velocity_mag_web.mp4">
+					</video>
+				</section>
+				<section>
+					<img src="images/ofw2024/coeffs_filtered_mssa.png" alt="probes" width="100%" style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<img src="images/ofw2024/coeffs_spectra.png" alt="probes" width="100%" style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<img src="images/ofw2024/optDMD_loss.png" alt="probes" width="90%" style="background:none; border:none; box-shadow:none;">
+					<p>reconstruction error improves from <span style="color: red;">$25\%$ to $5\%$</span></p>
+				</section>
+				<section>
+					<img src="images/ofw2024/dmd_spectra.png" alt="probes" width="100%" style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<img src="images/ofw2024/dmd_modes_vel.png" alt="probes" width="100%" style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<video width="100%" controls mute loop>
+						<source src="images/ofw2024/dmd_mode_443_web.mp4">
+					</video>
+				</section>	
+				<section>
+					<video width="100%" controls mute loop>
+						<source src="images/ofw2024/dmd_mode_343_web.mp4">
+					</video>
+				</section>
+			</section>
+
+			<!-- end -->
+			<section>
+				<section>
+					<h3>Thank you for you attention!</h3>
+					<div class="row_logo" style="width: 100%;">
+						<div class="column_logo">
+								<img src="images/ofw2024/slides_ofw2024_qr.png" alt="slides"
+									style="background:none; border:none; box-shadow:none; width: 75%">
+								<p>Slides</p>
+						</div>
+						<div class="column_logo">
+								<img src="images/ofw2024/github_optdmd.png" alt="slides"
+									style="background:none; border:none; box-shadow:none; width: 75%">
+								<p>GitHub</p>
+						</div>
+					</div>
+				</section>
+			</section>
+
+		</div>
+
+	</div>
+
+	<script src="js/reveal.js"></script>
+
+	<script>
+
+		// More info https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			slideNumber: "c",
+			center: true,
+			hash: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// More info https://github.com/hakimel/reveal.js#dependencies
+			dependencies: [
+				{ src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/highlight/highlight.js', async: true },
+				{ src: 'plugin/search/search.js', async: true },
+				{ src: 'plugin/zoom-js/zoom.js', async: true },
+				{ src: 'plugin/notes/notes.js', async: true },
+				{ src: 'plugin/math/math.js', async: true }]
+		});
+
+	</script>
+
+	<style type="text/css">
+		.reveal .slide-number {
+			font-size: 1em;
+			color: #42affa;
+			right: auto;
+			width: 1.5em;
+			height: 1.5em;
+			background-color: #191919;
+			display: grid !important;
+			place-items: center;
+		}
+	</style>
+</body>
+
+
+</body>
+
+</html>
