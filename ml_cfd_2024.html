@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>ML in CFD: a brief introduction and selected applications</title>
+
+	<meta name="description" content="intro2024">
+	<meta name="author" content="Andre Weiner">
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+<body>
+
+	<div class="reveal">
+		<div class="slides">
+			<!-- title slide -->
+			<section>
+				<h3><span style="color: #fa8174;">ML in CFD:</span> a brief introduction and selected applications</h3>
+				<p>
+					<u>Andre Weiner</u>, Janis Geise<br>
+					TU Dresden, <a href="https://tu-dresden.de/ing/maschinenwesen/ism/psm/die-professur">Chair of Fluid
+							Mechanics</a>
+							<style>
+								.row_logo {
+									display: table;
+								}
+		
+								.column_logo {
+									display: table-cell;
+									vertical-align: middle;
+									text-align: center;
+									width: 50%;
+								}
+		
+								.content_logo {
+									display: inline-block;
+								}
+							</style>
+				<div class="row_logo">
+					<div class="column_logo">
+						<div class="content_logo">
+							<img src="images/TUD_white.png" alt="tubs_logo"
+								style="background:none; border:none; box-shadow:none;">
+						</div>
+					</div>
+					<div class="column_logo">
+						<div class="content_logo">
+							<table>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9993;</th>
+									<td style="border: 0; padding-right: 20px;"><a
+											href="mailto:andre.weiner@tu-dresden.de">Mail</a></th>
+									<td style="border: 0; padding-right: 5px;">&#9741;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://www.linkedin.com/in/andre-weiner-a79752133/">LinkedIn</a></td>
+								</tr>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9997;</td>
+									<td style="border: 0; padding-right: 20px;"><a href="https://ml-cfd.com/">Blog</a>
+									</td>
+									<td style="border: 0; padding-right: 5px;">&#10026;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://github.com/AndreWeiner">Github</a></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- outline -->
+			<section>
+				<h2>Outline</h2>
+				<ol>
+					<li>ML in CFD: why and how</li>
+					<li>closed-loop active flow control</li>
+					<li>reduced-order flow modeling</li>
+				</ol>
+			</section>
+
+			<!-- Closed-loop active flow control -->
+			<section>
+				<section>
+					<h2>Combining ML and CFD <br><span style="color:#fa8174;">why</span> and <span style="color: #fa8174;">how</span></h2>
+				</section>
+				<section>
+					<div>
+						<p>CFD/experiments</p>
+						<ul>
+							<li>produces large amounts of complex data</li>
+							<li>requires data or representations thereof</li>
+						</ul>
+					</div>
+					<div class="fragment">
+						<p>ML</p>
+						<ul>
+							<li>exploits/finds patterns in data</li>
+							<li>creates useful representations of data</li>
+						</ul>
+					</div>
+				</section>
+				<section>
+					<div>
+						<p>primary (physical) data</p>
+						<ul>
+							<li>flow snapshots (volume, boundaries, slices)</li>
+							<li>derived quantities (averages, force coefficients)</li>
+							<li>...</li>
+						</ul>
+					</div>
+					<div class="fragment">
+						<p>secondary data (the rest)</p>
+						<ul>
+							<li>log files (residuals, quality metrics)</li>
+							<li>setting (numerical schemes, physical models)</li>
+							<li>...</li>
+						</ul>
+					</div>
+				</section>
+				<section>
+					<img src="images/ml_cfd_2024/cfd_data_ml.svg" alt="workflow_1"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+					<p>examples: surrogate modeling, flow analysis</p>
+				</section>
+				<section>
+					<img src="images/ml_cfd_2024/data_ml_cfd.svg" alt="workflow_2"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+					<p>examples: boundary conditions, material models</p>
+				</section>
+				<section>
+					<img src="images/ml_cfd_2024/stacked_workflow.svg" alt="workflow_3"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+					<p>examples: scale/complexity-reduced modeling</p>
+				</section>
+				<section>
+					<img src="images/ml_cfd_2024/cfd_data_ml_loop.svg" alt="workflow_4"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+					<p>examples: flow control, parameter optimization</p>
+				</section>
+				<section>
+					<h3>ML is <span style="color: #fa8174;">not</span> a magic problem solver</h3>
+				</section>
+				<section>
+					<p>matching given inputs and <span style="color: #fa8174;">continuous outputs</span></p>
+					<div class="row_logo" style="width: 100%;">
+						<div class="column_logo">
+								<img src="images/ml_cfd_2024/linear_regression_raw.svg" alt="raw"
+									style="background:none; border:none; box-shadow:none; width: 90%">
+						</div>
+						<div class="column_logo">
+								<img class="fragment" src="images/ml_cfd_2024/linear_regression.svg" alt="model"
+									style="background:none; border:none; box-shadow:none; width: 90%">
+						</div>
+					</div>
+				</section>
+				<section>
+					<p>matching given inputs and <span style="color: #fa8174;">discrete outputs</span></p>
+					<div class="row_logo" style="width: 100%;">
+						<div class="column_logo">
+								<img src="images/ml_cfd_2024/linear_classification_raw.svg" alt="raw"
+									style="background:none; border:none; box-shadow:none; width: 90%">
+						</div>
+						<div class="column_logo">
+								<img class="fragment" src="images/ml_cfd_2024/linear_classification.svg" alt="model"
+									style="background:none; border:none; box-shadow:none; width: 90%">
+						</div>
+					</div>
+				</section>
+				<section>
+					<p>finding <span style="color: #fa8174;">low-dimensional</span> representations</p>
+					<div class="row_logo" style="width: 100%;">
+						<div class="column_logo">
+								<img src="images/ml_cfd_2024/pca_raw.svg" alt="raw"
+									style="background:none; border:none; box-shadow:none; width: 90%">
+						</div>
+						<div class="column_logo">
+								<img class="fragment" src="images/ml_cfd_2024/pca.svg" alt="model"
+									style="background:none; border:none; box-shadow:none; width: 90%">
+						</div>
+					</div>
+				</section>
+				<section>
+					<p>grouping <span style="color: #fa8174;">similar</span> data points</p>
+					<div class="row_logo" style="width: 100%;">
+						<div class="column_logo">
+								<img src="images/ml_cfd_2024/clustering_raw.svg" alt="raw"
+									style="background:none; border:none; box-shadow:none; width: 90%">
+						</div>
+						<div class="column_logo">
+								<img class="fragment" src="images/ml_cfd_2024/clustering.svg" alt="model"
+									style="background:none; border:none; box-shadow:none; width: 90%">
+						</div>
+					</div>
+				</section>
+				<section>
+					<p>learning <span style="color: #fa8174;">optimal control</span> in dynamic environments</p>
+					<img src="images/ml_cfd_2024/reinforcement.svg" alt="model"
+									style="background:none; border:none; box-shadow:none; width: 100%">
+				</section>
+				<section>
+					<p>choosing the right model</p>
+					<q>
+						Everything should be made as simple as possible but not simpler.
+					</q>
+					<p class="fragment">$\rightarrow$ <span style="color: #fa8174;">problem-dependent</span> model selection</p>
+				</section>
+				<section>
+					<p>increasing the model complexity</p>
+					<ul>
+						<li><span style="color: #8dd3c7;">can improve prediction accuracy</span></li>
+						<li class="fragment"><span style="color: #fa8174;">increases the cost of learning</span></li>
+						<li class="fragment"><span style="color: #fa8174;">requires more data</span></li>
+						<li class="fragment"><span style="color: #fa8174;">reduces interpretability</span></li>
+					</ul>
+				</section>
+				<section>
+					<p>hints to create <span style="color: #fa8174;">sensible</span> ML applications</p>
+					<ul>
+						<li>ML shines in higher dimensions</li>
+						<li>combination of multiple ML techniques</li>
+						<li>combine the strengths of ML and <br>standard (classical) approaches</li>
+					</ul>
+				</section>
+			</section>
+
+			<!-- Closed-loop active flow control -->
+			<section>
+				<section>
+					<h2>Closed-loop active flow control (AFC)</h2>
+				</section>
+				<section>
+					<p>motivation for closed-loop AFC</p>
+					<ul>
+						<li>(potentially) more efficient than open-loop control</li>
+						<li>optimal control under changing conditions</li>
+					</ul>
+					<p><span style="color: #fa8174;">How to design the control system?</span></p>
+					<p class="fragment"><span style="color: #8dd3c7;"> $\rightarrow $ end-to-end optimization via CFD</span></p>
+				</section>
+				<section>
+					<img src="images/ml_cfd_2024/reinforcement.svg" alt="model"
+							style="background:none; border:none; box-shadow:none; width: 100%">
+				</section>
+				<section>
+					<img src="images/gamm_2024/pinball_setup.png" alt="rl_overview"
+							style="background:none; border:none; box-shadow:none; width: 75%">
+					<p>Fluidic pinball at $Re=\bar{U}_\mathrm{in}d/\nu = 100$; $\omega^\ast_i = \omega d/U_\mathrm{in} \in [-0.5, 0.5]$.</p>
+				</section>
+				<section>
+					<p>reward at step $n$</p>
+					<p>
+						$$
+						c_x = \sum\limits_{i=1}^3 c_{x,i},\quad c_y = \sum\limits_{i=1}^3 c_{y,i}
+						$$
+					</p>
+					<p>
+						$$
+						R_n = 1.5 - (c_{x,n} + 0.5 |c_{y,n}|)
+						$$
+					</p>
+				</section>
+				<section>
+					<p><span style="color: #fa8174;">experience tuple</span> at step $n$
+						$$ (S_n, A_n, R_{n+1}, S_{n+1}) $$
+					</p>
+					<p class="fragment"><span style="color: #fa8174;">trajectory</span> over $N$ steps
+						$$\tau = \left[ (S_0, A_0, R_1, S_1), \ldots ,(S_{N-1}, A_{N-1}, R_N, S_N)\right]$$
+					</p>
+				</section>
+				<section>
+					<p>dealing with <span style="color: #fa8174;">delayed feedback</span></p>
+					<p>
+						$$
+						  G_n = R_{n+1} + R_{n+2} + ... + R_N
+						$$
+					</p>
+					<div class="fragment">
+					<p>introducing a notion of <span style="color: #fa8174;">urgency</span>
+						$$
+						  G_n = R_{n+1} + \gamma R_{n+2} + \gamma^2 R_{n+3} + ... \gamma^{N-1}R_N
+						$$
+					</p>
+					<p>$\gamma$ - discounting factor, typically $\gamma = 0.99$</p>
+				    </div>
+				</section>
+				<section>
+					<p>learning what to <span style="color: #fa8174;">expect</span> in a given state</p>
+					<p>
+						$$
+						  \underset{\theta}{\mathrm{argmin}}\left[\frac{1}{N_\tau N} \sum\limits_{\tau = 1}^{N_\tau}\sum\limits_{n = 1}^{N} \left( V_\theta(S_n^\tau) - G_n^\tau \right)^2\right]
+						$$
+					</p>
+					<ul>
+						<li>$V_\theta$ - value network</li>
+						<li>some terms omitted</li>
+					</ul>
+				</section>
+				<section>
+					<p>Was the selected action <span style="color: #fa8174;">advantageous</span>?</p>
+					<p>$$\delta_n \approx R_n + \gamma V_\theta (S_{n+1}) - V_\theta (S_n) $$ </p>
+						
+					<p class="fragment">$$\delta_{n+1} \approx R_n + \gamma R_{n+1} + \gamma^2 V_\theta (S_{n+2}) - V_\theta (S_n) $$</p>
+					<div class="fragment">
+					<p>
+						$$
+						  A_n^{GAE} = \sum\limits_{l=0}^{N-n} (\gamma \lambda)^l \delta_{n+l}
+						$$
+					</p>
+					<ul>
+						<li>$\delta_n$ - one-step advantage estimate</li>
+						<li>$A_n^{GAE}$ - generalized advantage estimate</li>
+					</ul>
+					</div>
+				</section>
+				<section>
+					<p>make good actions <span style="color: #fa8174;">more likely</span></p>
+					<p>
+						$$
+						  \underset{\theta}{\mathrm{argmax}}\left[\frac{1}{N_\tau N} \sum\limits_{\tau = 1}^{N_\tau}\sum\limits_{n = 1}^{N} \frac{\pi_\theta (A_n^\tau|S_n^\tau)}{\pi_{\theta_\mathrm{old}}(A_n^\tau|S_n^\tau)} A^{GAE,\tau}_n\right]
+						$$
+					</p>
+					<ul>
+						<li>$\pi_\theta$ - policy network</li>
+						<li>$\theta_\mathrm{old}$ - old weights (previous episode)</li>
+						<li>some terms omitted</li>
+					</ul>
+				</section>
+				<section>
+					<p>training cost <a href="https://www.cfd-online.com/Wiki/DrivAer_Model">DrivAer model</a></p>
+					<ul>
+						<li>$5$ hours/simulation, 1000 MPI ranks</li>
+						<li class="fragment">$10$ parallel simulations</li>
+						<li class="fragment">$100$ iterations <span style="color: #fa8174;">$\rightarrow 20$ days</span> turnaround time</li>
+						<li class="fragment">$20\times 24\times 10\times 1000 \approx 5\times 10^6 $ CPUh</li>
+						<li class="fragment">$0.01-0.05$ USD/CPUh <span style="color: #fa8174;">$\rightarrow 0.5-2$ mUSD</span></li>
+					</ul>
+					<p class="fragment"><span style="color: #fa8174;">CFD simulations are expensive!</span></p>
+				</section>
+				<section>
+					<img src="images/ml_cfd_2024/mbdrl_sketch.png" alt="rl_overview"
+							style="background:none; border:none; box-shadow:none; width: 75%">
+					<p>model-based learning: <a href="https://doi.org/10.1007/s11012-024-01808-z">10.1007/s11012-024-01808-z</a></p>
+				</section>
+				<section>
+					<img src="images/gamm_2024/timings_pinball.png" alt="rl_overview"
+							style="background:none; border:none; box-shadow:none; width: 80%">
+					<p>composition of model-based training time $T_\mathrm{MB}$ relative to model-free training time  $T_\mathrm{MF}$</p>
+				</section>
+				<section>
+					<video height="500" controls mute loop>
+						<source src="images/ofw2023/pinball_MF.mp4">
+					</video>
+					<p>closed-loop control starts at $t=200s$</p>
+				</section>
+				<section>
+					<img src="images/ml_cfd_2024/control_best_policy.png" alt="rl_overview"
+							style="background:none; border:none; box-shadow:none; width: 100%">
+					<p>actuation and force coefficients (best policies)</p>
+				</section>
+				<section>
+					<img src="images/gamm_2024/velocity_pinball.png" alt="rl_overview"
+							style="background:none; border:none; box-shadow:none; width: 90%">
+					<p>snapshots of velocity fields (best policies)</p>
+				</section>
+			</section>
+			
+			<!-- reduced-order modeling -->
+			 <section>
+				<section>
+					<h2>Reduced-order flow modeling</h2>
+				</section>
+				<section>
+					<div class="row_logo" style="width: 100%;">
+						<div class="column_logo">
+							<p>$\mathbf{x}_n = \mathbf{x}(t=n\Delta t)$</p>
+							<img src="images/ml_cfd_2024/cylinder_x0.png" alt="sh_glob" height="200px" style="background:none; border:none; box-shadow:none;">
+						</div>
+						<div class="column_logo">
+							<div class="fragment">
+								<p>$\mathbf{x}_{n+1} = \mathbf{x}(t=(n+1)\Delta t)$</p>
+								<img src="images/ml_cfd_2024/cylinder_x1.png" alt="sh_glob" height="200px" style="background:none; border:none; box-shadow:none;">
+							</div>
+						</div>
+					</div>
+					<div class="fragment">
+						<p><span style="color: #fa8174; font-size: larger"> $\quad\mathbf{x}_{n+1} = \mathbf{Ax}_n $ </span>
+						</p>
+						<ul>
+							<li>$\mathbf{x}\in \mathbb{R}^M$ - state vector</li>
+							<li>$\mathbf{A}\in \mathbb{R}^{M\times M}$ - linear operator</li>
+						</ul>
+					</div>
+				</section>
+				<section>
+					<p>How to approximate $\mathbf{A}$?</p>
+					<p>
+						$$
+						  \underbrace{[\mathbf{x}_2, ..., \mathbf{x}_N]}_{\mathbf{Y}} = A \underbrace{[\mathbf{x}_1, ..., \mathbf{x}_{N-1}]}_{\mathbf{X}}
+						$$
+					</p>
+					<p>
+						$$
+						\underset{\mathbf{A}}{\mathrm{argmin}} \left[\mathbf{Y}-\mathbf{AX}\right]_F = \mathbf{YX}^\dagger
+						$$
+					</p>
+					<p>best-fit (least squares) linear operator</p>
+				</section>
+				<section>
+					<p>dealing with large states (DMD)</p>
+					<ol>
+						<li>$\mathbf{X} = \mathbf{U\Sigma V}^T$</li>
+						<li class="fragment">$\tilde{\mathbf{x}} = \mathbf{U}_r^T \mathbf{x}$, $\quad \tilde{\mathbf{x}} \in \mathbb{R}^{r}$</li>
+						<li class="fragment">$\tilde{\mathbf{A}} = \mathbf{U}_r^T \mathbf{AU}_r = \tilde{\mathbf{Y}}\tilde{\mathbf{X}}^\dagger$, $\quad \tilde{\mathbf{A}} \in \mathbb{R}^{r\times r}$</li>
+						<li class="fragment">$\mathbf{x} \approx \mathbf{U} \tilde{\mathbf{x}}$</li>
+					</ol>
+					<p class="fragment">ROM: <span style="color: #fa8174; font-size: larger;">$\quad\tilde{\mathbf{x}}_{n+1} = \tilde{\mathbf{A}} \tilde{\mathbf{x}}_{n}$</span></p>
+				</section>
+				<section>
+					<p>issues with the standard DMD:</p>
+					<ul>
+						<li>poor reconstruction accuracy</li>
+						<li>data overfitting</li>
+						<li>sensitive w.r.t. noise/nonlinearity</li>
+						<li>sensitive w.r.t. truncation ($r$)</li>
+					</ul>
+				</section>
+				<section>
+					<p>idea: reduce error propagation (opt. DMD)</p>
+					<ul>
+						<li>$\tilde{\mathbf{M}} = [\tilde{\mathbf{x}}_2, ..., \mathbf{x}_N]$</li>
+						<li>$\hat{\mathbf{M}} = [\tilde{\mathbf{A}}\tilde{\mathbf{x}}_1, ..., \tilde{\mathbf{A}}^{N-1}\tilde{\mathbf{x}}_1]$</li>
+					</ul>
+					<p class="fragment" style="color: #fa8174; font-size: larger;">
+						$$
+						\underset{\tilde{\mathbf{A}}}{\mathrm{argmin}}\left[ \tilde{\mathbf{M}} - \hat{\mathbf{M}}(\tilde{\mathbf{A}})\right]_F
+						$$
+					</p>
+				</section>
+				<section>
+					<p>solution: borrow techniques from ML/DL</p>
+					<ul>
+						<li>stochastic gradient descent</li>
+						<li>automatic differentiation</li>
+						<li>train-validation-split</li>
+						<li>early stopping</li>
+					</ul>
+					<p>$\rightarrow$ refer to <a href=" 	
+						https://doi.org/10.48550/arXiv.2312.12928">10.48550/arXiv.2312.12928</a> for details</p>
+				</section>
+				<section>
+					<video width="100%" controls mute loop>
+						<source src="images/ml_cfd_2024/velocity_mag_web.mp4">
+					</video>
+					<p>surface-mounted cube at $Re_h = 40000$ (<a href="https://www.openfoam.com/documentation/guides/latest/doc/verification-validation-turbulent-surface-mounted-cube.html">source</a>)</p>
+				</section>
+				<section>
+					<img src="images/ml_cfd_2024/coeffs_spectra.png" alt="probes" width="100%" style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<img src="images/ml_cfd_2024/optDMD_loss.png" alt="probes" width="90%" style="background:none; border:none; box-shadow:none;">
+					<p>reconstruction error improves from <span style="color: #fa8174;">$25\%$ to $5\%$</span></p>
+				</section>
+				<section>
+					<img src="images/ml_cfd_2024/dmd_spectra.png" alt="probes" width="100%" style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<img src="images/ml_cfd_2024/dmd_modes_vel.png" alt="probes" width="100%" style="background:none; border:none; box-shadow:none;">
+				</section>
+				<section>
+					<video width="100%" controls mute loop>
+						<source src="images/ml_cfd_2024/dmd_mode_443_web.mp4">
+					</video>
+				</section>	
+				<section>
+					<video width="100%" controls mute loop>
+						<source src="images/ml_cfd_2024/dmd_mode_343_web.mp4">
+					</video>
+				</section>
+			 </section>
+
+			<section>
+				<p>some useful links</p>
+				<ul>
+					<li><a href="https://wiki.openfoam.com/Data_Driven_Modelling_Special_Interest_Group">data-driven modeling SIG</a></li>
+					<li><a href="https://doi.org/10.1007/s11012-024-01797-z">ML-CFD coupling</a></li>
+					<li><a href="https://github.com/AndreWeiner/ml-cfd-lecture">ML-CFD lecture</a></li>
+					<li><a href="https://github.com/FlowModelingControl/flowtorch">flowTorch library</a></li>
+				</ul>
+			</section>
+
+			<!-- end -->
+			<section>
+				<h1>THE END</h1>
+				<h3>Thank you for you attention!</h3>
+				<div class="row_img">
+					<div class="column_img">
+						<div class="content_logo">
+							<table>
+								<tr>
+									<td style="border: 0; padding-right: 5px;">&#9993;</th>
+									<td style="border: 0; padding-right: 20px;"><a
+											href="mailto:andre.weiner@tu-dresden.de">Mail</a></th>
+									<td style="border: 0; padding-right: 5px;">&#9741;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://www.linkedin.com/in/andre-weiner-a79752133/">LinkedIn</a></td>
+									<td style="border: 0; padding-right: 5px;">&#9997;</td>
+									<td style="border: 0; padding-right: 20px;"><a
+											href="https://ml-cfd.com/">Blog</a></td>
+									<td style="border: 0; padding-right: 5px;">&#10026;</td>
+									<td style="border: 0; padding-right: 0px;"><a
+											href="https://github.com/AndreWeiner">Github</a></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+
+	</div>
+
+	<script src="js/reveal.js"></script>
+
+	<script>
+
+		// More info https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			slideNumber: "c",
+			center: true,
+			hash: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// More info https://github.com/hakimel/reveal.js#dependencies
+			dependencies: [
+				{ src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/highlight/highlight.js', async: true },
+				{ src: 'plugin/search/search.js', async: true },
+				{ src: 'plugin/zoom-js/zoom.js', async: true },
+				{ src: 'plugin/notes/notes.js', async: true },
+				{ src: 'plugin/math/math.js', async: true }]
+		});
+
+	</script>
+
+	<style type="text/css">
+		.reveal .slide-number {
+			font-size: 1em;
+			color: #42affa;
+			right: auto;
+			width: 1.5em;
+			height: 1.5em;
+			background-color: #191919;
+			display: grid !important;
+			place-items: center;
+		}
+	</style>
+</body>
+
+
+</body>
+
+</html>
