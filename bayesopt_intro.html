@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>ML in CFD: a brief introduction and selected applications</title>
+
+	<meta name="description" content="intro2024">
+	<meta name="author" content="Andre Weiner">
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+<body>
+
+	<div class="reveal">
+		<div class="slides">
+			<!-- title slide -->
+			<section>
+				<div style="margin-top: 3em;">
+					<h3>A brief intro to<br><span style="color: #fa8174;">Bayesian optimization</span></h3>
+				</div>
+				<p><small>Andre Weiner,
+					TU Dresden, <a href="https://tu-dresden.de/ing/maschinenwesen/ism/psm/die-professur">Chair of Fluid
+							Mechanics</a></small></p>
+							<style>
+								.row_logo {
+									display: table;
+								}
+		
+								.column_logo {
+									display: table-cell;
+									vertical-align: middle;
+									text-align: center;
+									width: 50%;
+								}
+								.content_logo {
+									display: inline-block;
+								}
+							</style>
+				<div class="row_logo">
+					<div class="column_logo">
+						<div class="content_logo">
+							<img src="images/TUD_white.png" alt="tubs_logo"
+								style="background:none; border:none; box-shadow:none; width: 75%;">
+						</div>
+					</div>
+					<div class="column_logo">
+						<div class="content_logo">
+							<img src="images/of_conf_2020/for2895_logo.png" alt="for_logo"
+								style="background:none; border:none; box-shadow:none; width: 75%;">
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- outline -->
+			<section>
+				<section>
+					<h2>Outline</h2>
+					<ol>
+						<li>Gaussian process regression</li>
+						<li>navigating the search space</li>
+						<li>tuning model parameters</li>
+					</ol>
+				</section>
+			</section>
+
+			<!-- Gaussian processes -->
+			<section>
+				<section>
+					<h2>Gaussian process regression</h2>
+				</section>
+				<section>
+					<img src="images/bayes_opt/uvp_gaussian.svg" alt="uvg"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+				</section>
+				<section>
+					<div>
+						<p>process with $d$ random variables</p>
+						<p>$X_1, X_2, \ldots, X_d$</p>
+					</div>
+					<div class="fragment">
+						<p>expectation (mean value)</p>
+						<p>$\mu_i = \mathbb{E}\left[X_i\right]$, $\boldsymbol{\mu} = \left[\mu_1, \mu_2, \ldots, \mu_d\right]^T$, $\boldsymbol{\mu} \in \mathbb{R}^{d\times 1}$</p>
+					</div>
+					<div class="fragment">
+						<p>covariance</p>
+						<p>$\sigma_{ij} = \mathbb{E}\left[(X_i-\mu_i)(X_j-\mu_j)\right]$, $\mathbf{\Sigma} \in \mathbb{R}^{d\times d}$</p>
+					</div>
+				</section>
+				<section>
+					<img src="images/bayes_opt/euclidian_distance_dist.svg" alt="uvg"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+				</section>
+				<section>
+					<img src="images/bayes_opt/mahalanobis_distance_dist.svg" alt="uvg"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+				</section>
+				<section>
+					<p>motivation</p>
+					<p>$\mathbf{y} = \mathbf{x} - \boldsymbol{\mu}$, $\Sigma = \mathbf{Q \Lambda Q}^T$, $\tilde{\mathbf{y}} = \mathbf{Q}^T \mathbf{y}$</p>
+					<div class="fragment">
+						<p>normalization in principal coordinates</p>
+						<p>$\tilde{\mathbf{z}}^T = \tilde{\mathbf{y}}^T \mathbf{\Lambda}^{-1/2}$</p>
+					</div>
+					<div class="fragment">
+						<p>back transformation and substitution</p>
+						<p>$\mathbf{z} = \mathbf{Q}\tilde{\mathbf{z}} = \mathbf{Q}\mathbf{\Lambda}^{-1/2}\mathbf{Q}^T \mathbf{y} = \mathbf{\Sigma}^{-1/2} \mathbf{y} = \mathbf{\Sigma}^{-1/2} (\mathbf{x} - \boldsymbol{\mu})$</p>
+					</div>
+					<div class="fragment">
+						<p>Mahalanobis distance</p>
+						<p style="color: #fa8174;">$d_m^2 = |\mathbf{z}|^2 = \mathbf{z}^T\mathbf{z} = (\mathbf{x} - \boldsymbol{\mu})^T\mathbf{\Sigma}^{-1} (\mathbf{x} - \boldsymbol{\mu})$</p>
+					</div>
+				</section>
+				<section>
+					<p>multivariate Gaussian distribution</p>
+					<p>
+						<small>
+						$$
+  						p(\mathbf{x}) = \frac{1}{\sqrt{(2\pi)^d \mathrm{det}(\mathbf{\Sigma})}}\mathrm{exp}\left( -\frac{1}{2}(\mathbf{x}-\boldsymbol{\mu})^T\mathbf{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu}) \right)
+						$$
+						</small>
+					</p>
+					<img src="images/bayes_opt/mvp_mean_cov.png" alt="uvg" class="fragment"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+				</section>
+				<section>
+					<img src="images/bayes_opt/bivariate_gaussian.png" alt="uvg"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+				</section>
+				<section>
+					<img src="images/bayes_opt/bivariate_gaussian_parallel_coord.png" alt="uvg"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+				</section>
+				<section>
+					<p>Gaussians are closed under conditioning</p>
+					<p>
+						$$
+  \boldsymbol{\mu}=\begin{bmatrix} \boldsymbol{\mu}_A \\ \boldsymbol{\mu}_B  \end{bmatrix}, \quad
+  \mathbf{\Sigma} = \begin{bmatrix} \mathbf{\Sigma}_{AA} & \mathbf{\Sigma}_{AB}\\ \mathbf{\Sigma}_{BA} & \mathbf{\Sigma}_{BB}  \end{bmatrix}
+						$$
+					</p>
+					<p class="fragment">
+						$$
+  \boldsymbol{\mu}_{A|B}= \boldsymbol{\mu}_A + \mathbf{\Sigma}_{AB}\mathbf{\Sigma}^{-1}_{BB}\left(\mathbf{x}_B-\mathbf{\mu}_B\right)
+						$$
+						$$
+  \mathbf{\Sigma}_{A|B} = \mathbf{\Sigma}_{AA} - \mathbf{\Sigma}_{AB} \mathbf{\Sigma}^{-1}_{BB} \mathbf{\Sigma}_{BA}
+						$$
+						<span style="color: #fa8174;">posterior $\quad\mathbf{x} \sim \mathcal{N}(\boldsymbol{\mu}_{A|B}, \mathbf{\Sigma}_{A|B})$</span>
+					</p>
+				</section>
+				<section>
+					<img src="images/bayes_opt/10d_gaussian_parallel_coord.png" alt="uvg"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+				</section>
+				<section>
+					<p>from multivariate Gaussians
+						$$
+						\mathbf{x} \sim \mathcal{N}(\boldsymbol{\mu}, \mathbf{\Sigma})
+						$$
+					</p>
+					<p class="fragment">... to Gaussian processes
+						$$
+						    p(x) \sim \mathcal{GP}(m(x), k(x, x^\prime))
+						$$
+					</p>
+				</section>
+				<section>
+					<p>RBF kernel:
+						$
+  \quad k(x, x^\prime) = \sigma^2 \mathrm{exp}\left(-\frac{|x - x^\prime|^2}{2l^2}\right)
+						$
+					</p>
+					<img src="images/bayes_opt/rbf_kernel.png" alt="uvg"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+				</section>
+				<section>
+					<img src="images/bayes_opt/10d_mvg_to_gp.png" alt="uvg"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+				</section>
+			</section>
+
+			<!-- acquisition policies -->
+			<section>
+				<section>
+					<h2>Navigating the search space</h2>
+				</section>
+				<section>
+					<p>probability of improvement (POI)</p>
+					<p>$$a(x) = \Phi \left( \frac{\mu(x) - f_{\text{best}}}{\sigma(x)} \right)$$</p>
+					<div class="fragment">
+						<p>expected value of improvement (EVP)</p>
+						<p>$$a(x) = \mathbb{E} \left[ \max(0, f(x) - f_{\text{best}}) \right]$$</p>
+					</div>
+					<div class="fragment">
+						<p>upper confidence interval (UCI)</p>
+						<p>$$a(x) = \mu(x) + \beta \sigma(x)$$</p>
+					</div>
+				</section>
+				<section>
+					<img src="images/bayes_opt/policy_comparison.png" alt="uvg"
+						style="background:none; border:none; box-shadow:none; width: 100%">
+				</section>
+				<section>
+					<p>Bayesian optimization loop</p>
+					<ol>
+						<li>initialize prior distribution</li>
+						<li>sample search space at random</li>
+						<li>evaluate objective function</li>
+						<li style="color: #fa8174;">
+							iterate while improving
+							<ol>
+								<li>update prior distribution</li>
+								<li>evaluate acquisition score</li>
+								<li>evaluate objective function</li>
+							</ol>
+						</li>
+					</ol>
+				</section>
+			</section>
+			
+			<!-- tuning model parameters -->
+			 <section>
+				<section>
+					<h2>tuning turbulence model parameters</h2>
+					<p>T. Marić et al.: <a href="https://link.springer.com/article/10.1007/s11012-024-01797-z">Combining ML with CFD using OpenFOAM and SmartSim</a></p>
+				</section>
+				<section>
+					<p>optimizing $k$-$\varepsilon$ model parameters</p>
+					$$
+					\underset{\varepsilon, C_\mu, C_1, C_2}{\mathrm{argmin}} \left(\Delta p_\mathrm{RANS}(\epsilon, C_\mu, C_1, C_2) - \Delta p_\mathrm{LES}\right)^2
+					$$
+					<p>subjected to</p>
+					$$
+					\begin{aligned}
+        				& 2.97 < \varepsilon < 74.28 \\
+                           & 0.05 < C_\mu < 0.15 \\
+                           & 1.1 < C_1 < 1.5 \\
+                           & 2.3 < C_2 < 3.0
+    				\end{aligned}
+					$$
+				</section>
+				<section>
+					<img src="images/bayes_opt/pitzDaily_comparison.png" alt="uvg"
+						style="background:none; border:none; box-shadow:none; width: 70%">
+				</section>
+			 </section>
+
+			<section>
+				<section>
+					<h2>Summary & outlook</h2>
+				</section>
+				<section>
+					<p>Bayesian optimization is suitable if</p>
+					<ul>
+						<li>the objective is expensive to evaluate</li>
+						<li>gradients are unavailable/unstable</li>
+						<li>less than $O(10)$ free parameters</li>
+					</ul>
+				</section>
+				<section>
+					<p>more advanced topics</p>
+					<ul>
+						<li>parallel sampling, batch updates</li>
+						<li>Thomson sampling, entropy search</li>
+						<li>multi-objective optimization</li>
+						<li>multi-fidelity modeling</li>
+						<li>...</li>
+					</ul>
+				</section>
+				
+			</section>
+
+			<!-- end -->
+			<section>
+				<h1>THE END</h1>
+				<h3>Thank you for you attention!</h3>
+				<div class="row_logo">
+					<div class="column_logo">
+						<div class="content_logo">
+							<img src="images/TUD_white.png" alt="tubs_logo"
+								style="background:none; border:none; box-shadow:none; width: 75%;">
+						</div>
+					</div>
+					<div class="column_logo">
+						<div class="content_logo">
+							<img src="images/of_conf_2020/for2895_logo.png" alt="for_logo"
+								style="background:none; border:none; box-shadow:none; width: 75%;">
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+
+	</div>
+
+	<script src="js/reveal.js"></script>
+
+	<script>
+
+		// More info https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			slideNumber: "c",
+			center: true,
+			hash: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// More info https://github.com/hakimel/reveal.js#dependencies
+			dependencies: [
+				{ src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/highlight/highlight.js', async: true },
+				{ src: 'plugin/search/search.js', async: true },
+				{ src: 'plugin/zoom-js/zoom.js', async: true },
+				{ src: 'plugin/notes/notes.js', async: true },
+				{ src: 'plugin/math/math.js', async: true }]
+		});
+
+	</script>
+
+	<style type="text/css">
+		.reveal .slide-number {
+			font-size: 1em;
+			color: #42affa;
+			right: auto;
+			width: 1.5em;
+			height: 1.5em;
+			background-color: #191919;
+			display: grid !important;
+			place-items: center;
+		}
+	</style>
+</body>
+
+
+</body>
+
+</html>
