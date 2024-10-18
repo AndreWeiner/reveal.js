@@ -194,15 +194,28 @@
 					<h2>Navigating the search space</h2>
 				</section>
 				<section>
+					<p>optimization problem</p>
+					<p style="color: #fa8174;">
+						$$
+							x^\ast = \underset{x\in\mathcal{X}}{\mathrm{argmax}}\ f(x)
+						$$
+					</p>
+					<p>
+						$$
+						  f(x)\approx p(x) \sim \mathcal{GP}(m(x), k(x,x))
+						$$
+					</p>
+				</section>
+				<section>
 					<p>probability of improvement (POI)</p>
-					<p>$$a(x) = \Phi \left( \frac{\mu(x) - f_{\text{best}}}{\sigma(x)} \right)$$</p>
+					<p>$a_\mathrm{POI}(x) = \int\limits_{f_\mathrm{best}}^\infty \mathcal{GP}(m(x), k(x,x))\mathrm{d}p$</p>
 					<div class="fragment">
-						<p>expected value of improvement (EVP)</p>
-						<p>$$a(x) = \mathbb{E} \left[ \max(0, f(x) - f_{\text{best}}) \right]$$</p>
+						<p>expected value of improvement (EVI)</p>
+						<p>$a_\mathrm{EVI}(x) = \int\limits_{f_\mathrm{best}}^\infty (p(x) - f_\mathrm{best}) \mathcal{GP}(m(x), k(x,x))\mathrm{d}p$</p>
 					</div>
 					<div class="fragment">
 						<p>upper confidence interval (UCI)</p>
-						<p>$$a(x) = \mu(x) + \beta \sigma(x)$$</p>
+						<p>$a_\mathrm{UCB}(x) = m(x) + \beta \sqrt{k(x,x)}$</p>
 					</div>
 				</section>
 				<section>
@@ -269,11 +282,20 @@
 				<section>
 					<p>more advanced topics</p>
 					<ul>
+						<li>kernel and mean functions</li>
 						<li>parallel sampling, batch updates</li>
 						<li>Thomson sampling, entropy search</li>
 						<li>multi-objective optimization</li>
 						<li>multi-fidelity modeling</li>
 						<li>...</li>
+					</ul>
+				</section>
+				<section>
+					<p>useful resources</p>
+					<ul>
+						<li>C. E. Rasmussen, C. K. I. Williams<br>Gaussian Processes for Machine Learning</li>
+						<li>C. M. Bishop<br>Pattern Recognition and Machine Learning</li>
+						<li>K. Nguyen<br>Bayesian Optimization in Action</li>
 					</ul>
 				</section>
 				
